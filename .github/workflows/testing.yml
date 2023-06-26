@@ -85,7 +85,7 @@ jobs:
     - name: Install Dependencies
       run: just install-backend
     - name: Test with pytest
-      run: just backend-pytest
+      run: just backend-test
 
   frontend-linting:
     strategy:
@@ -99,7 +99,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: "18"
-        cache: "npm"
     - name: Install Dependencies
       run: just install-frontend
     - name: Lint
