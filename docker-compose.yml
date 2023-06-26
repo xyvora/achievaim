@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_INITDB_DATABASE=smartgoalpt
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=mongo_password
+      - MONGO_PORT=27017
+      - MONGO_HOST=db
+  db:
+    image: mongo:6.0
+    environment:
+      - MONGO_INITDB_DATABASE=smartgoalpt
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=mongo_password
+    expose:
+      - 27017
+    ports:
+      - "27017:27017"
+
+networks:
+  smartgoalpt:
