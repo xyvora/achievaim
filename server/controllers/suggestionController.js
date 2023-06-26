@@ -3,7 +3,7 @@ const openai = require('../services/openai');
 exports.generateSuggestions = async (req, res) => {
   try {
     const { input } = req.body;
-    
+
     // Make a call to the OpenAI GPT API to generate suggestions based on the input
     const response = await openai.generateSuggestions(input);
 
