@@ -1,4 +1,4 @@
-const Goal = require('../models/Goal');
+const Goal = require("../models/Goal");
 
 exports.createGoal = async (req, res) => {
   try {
@@ -7,7 +7,7 @@ exports.createGoal = async (req, res) => {
     res.status(201).json(newGoal);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -17,7 +17,7 @@ exports.getGoals = async (req, res) => {
     res.status(200).json(goals);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -33,6 +33,6 @@ exports.updateGoal = async (req, res) => {
     res.status(200).json(updatedGoal);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 };

@@ -1,13 +1,13 @@
 // client/src/utils/api.js
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: "/api",
 });
 
 export const createGoal = async (goal) => {
   try {
-    const response = await api.post('/goals', { goal });
+    const response = await api.post("/goals", { goal });
     return response.data;
   } catch (error) {
     console.error(error);
@@ -17,7 +17,7 @@ export const createGoal = async (goal) => {
 
 export const getGoals = async () => {
   try {
-    const response = await api.get('/goals');
+    const response = await api.get("/goals");
     return response.data;
   } catch (error) {
     console.error(error);
@@ -37,7 +37,7 @@ export const updateGoal = async (goal) => {
 
 export const generateSuggestions = async (input) => {
   try {
-    const response = await api.post('/suggestions', { input });
+    const response = await api.post("/suggestions", { input });
     return response.data;
   } catch (error) {
     console.error(error);

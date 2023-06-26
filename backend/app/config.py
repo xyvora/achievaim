@@ -14,4 +14,4 @@ class Settings(BaseSettings):
 
 
 V1_API_PREFIX: Final[str] = "/api/v1"
-config = Settings()
+config = Settings()  # type: ignore[call-arg]

@@ -5,19 +5,19 @@ updates:
     schedule:
       interval: "weekly"
     labels:
-    - skip-changelog
-    - dependencies
+      - skip-changelog
+      - dependencies
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
       interval: "weekly"
     labels:
-    - skip-changelog
-    - dependencies
+      - skip-changelog
+      - dependencies
   - package-ecosystem: github-actions
-    directory: '/'
+    directory: "/"
     schedule:
       interval: weekly
     labels:
-    - skip-changelog
-    - dependencies
+      - skip-changelog
+      - dependencies

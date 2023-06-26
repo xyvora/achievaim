@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const goalSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -16,4 +16,4 @@ const goalSchema = new mongoose.Schema({
   progress: { type: Number, required: true },
 });
 
-module.exports = mongoose.model('Goal', goalSchema);
+module.exports = mongoose.model("Goal", goalSchema);

@@ -1,4 +1,4 @@
-const openai = require('../services/openai');
+const openai = require("../services/openai");
 
 exports.generateSuggestions = async (req, res) => {
   try {
@@ -10,6 +10,6 @@ exports.generateSuggestions = async (req, res) => {
     res.status(200).json(response);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
