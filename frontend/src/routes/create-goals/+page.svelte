@@ -25,7 +25,6 @@
       repeatsEvery: RepeatsEvery.DAY,
       progress: 0
     };
-    console.log(goalObj);
     await createGoal(goalObj);
     goal = '';
     data.goals = await getGoals();

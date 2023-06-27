@@ -18,6 +18,8 @@ services:
       - MONGO_HOST=db
   db:
     image: mongo:6.0
+    volumes:
+      - db-data:/data/db
     environment:
       - MONGO_INITDB_DATABASE=smartgoalpt
       - MONGO_INITDB_ROOT_USERNAME=mongo
@@ -26,6 +28,9 @@ services:
       - 27017
     ports:
       - "27017:27017"
+
+volumes:
+  db-data:
 
 networks:
   smartgoalpt:
