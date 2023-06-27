@@ -35,9 +35,6 @@
 @db:
   docker compose up db
 
-@dev:
-  docker compose up --build
-
 @docker-stop:
   docker compose down
 

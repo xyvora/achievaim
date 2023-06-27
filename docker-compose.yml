@@ -2,6 +2,7 @@ version: "3"
 
 services:
   backend:
+    image: backend:dev
     build:
       context: ./backend
     container_name: backend

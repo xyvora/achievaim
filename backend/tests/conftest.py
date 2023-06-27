@@ -53,3 +53,29 @@ async def test_client():
 
         async with AsyncClient(app=app, base_url=f"http://localhost{V1_API_PREFIX}") as client:
             yield client
+
+
+@pytest.fixture
+def goal_data():
+    return {
+        "_id": "649a39c599ef045345c94afc",
+        "name": "Goal 1",
+        "duration": 5,
+        "daysOfWeek": {
+            "monday": False,
+            "tuesday": False,
+            "wednesday": True,
+            "thursday": False,
+            "friday": False,
+            "saturday": False,
+            "sunday": False,
+        },
+        "repeatsEvery": "day",
+        "progress": 41.0,
+    }
+
+
+@pytest.fixture
+async def goal(goal_data):
+    goal = await Goal(**goal_data).insert()
+    return goal
