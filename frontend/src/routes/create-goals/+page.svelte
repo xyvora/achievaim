@@ -1,19 +1,33 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { createGoal, getGoals } from '$lib/api';
-  import type { Goal } from '$lib/generated';
+  import type { GoalBase } from '$lib/generated';
 
   export let data: PageData;
 
   let goal = '';
   let suggestions = [];
 
-  const handleSubmit = async () => {
-    if (goal) {
-      await createGoal(goal);
-      goal = '';
-      // goals = await getGoals();
-    }
+  const handleCreateGoal = async () => {
+    let goalObj: GoalBase = {
+      name: goal,
+      duration: 0,
+      daysOfWeek: {
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
+        sunday: false
+      },
+      repeatsEvery: 'day',
+      progress: 0
+    };
+    console.log(goalObj);
+    await createGoal(goalObj);
+    goal = '';
+    data.goals = await getGoals();
   };
 
   const handleGenerateSuggestions = async () => {
@@ -32,25 +46,17 @@
   <title>Create Your Goals</title>
 </head>
 <div clas="overflow-x-auto">
-  <form class="mb-4" on:submit={handleSubmit}>
+  <form class="mb-4" on:submit={handleCreateGoal}>
     <input
       type="text"
       class="px-2 py-1 border border-gray-300 rounded"
       bind:value={goal}
       placeholder="Enter your SMART goal"
     />
-    <button
-      type="submit"
-      id="btnCreateGoal"
-      class="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-600"
-      >Create Goal</button
-    >
+    <button type="submit" id="btnCreateGoal" class="btn btn-primary">Create Goal</button>
   </form>
 
-  <button
-    on:click={handleGenerateSuggestions}
-    id="btnGenerateSuggestions"
-    class="px-4 py-2 font-bold text-white bg-green-500 rounded hover:bg-green-600"
+  <button on:click={handleGenerateSuggestions} id="btnGenerateSuggestions" class="btn btn-secondary"
     >Generate Suggestions</button
   >
 
@@ -59,9 +65,7 @@
     {#each suggestions as suggestion}
       <div class="px-4 py-2 my-2 border border-gray-300 rounded">
         <p>{suggestion}</p>
-        <button
-          on:click={() => selectSuggestion(suggestion)}
-          class="px-4 py-2 mt-2 font-semibold text-white bg-blue-500 rounded hover:bg-blue-600"
+        <button on:click={() => selectSuggestion(suggestion)} class="btn btn-secondary"
           >Select</button
         >
       </div>
