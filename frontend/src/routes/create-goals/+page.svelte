@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import type { PageData } from './$types';
   import { createGoal, getGoals } from '$lib/api';
   import type { Goal } from '$lib/generated';
 
+  export let data: PageData;
+
   let goal = '';
-  let goals: Goal[];
   let suggestions = [];
 
   const handleSubmit = async () => {
@@ -14,10 +15,6 @@
       // goals = await getGoals();
     }
   };
-
-  onMount(async () => {
-    goals = await getGoals();
-  });
 
   const handleGenerateSuggestions = async () => {
     console.log('Handled');
@@ -44,6 +41,7 @@
     />
     <button
       type="submit"
+      id="btnCreateGoal"
       class="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-600"
       >Create Goal</button
     >
@@ -51,6 +49,7 @@
 
   <button
     on:click={handleGenerateSuggestions}
+    id="btnGenerateSuggestions"
     class="px-4 py-2 font-bold text-white bg-green-500 rounded hover:bg-green-600"
     >Generate Suggestions</button
   >
@@ -71,8 +70,8 @@
 
   <div>
     <h3 class="mt-4 text-lg font-semibold">Current Goals:</h3>
-    {#if goals && goals.length > 0}
-      {#each goals as goal}
+    {#if data.goals && data.goals.length > 0}
+      {#each data.goals as goal}
         <div>
           <ul>
             <li>{goal.name}</li>

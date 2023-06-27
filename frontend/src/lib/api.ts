@@ -6,7 +6,11 @@ import type { GoalBase } from '$lib/generated';
 export const createGoal = async (goal: GoalBase): Goal => {
   try {
     const response = await axiosInstance.post('/goal', { goal });
-    return response.data;
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      throw new Error(response.statusText);
+    }
   } catch (error) {
     console.error(error);
     throw error;
@@ -16,7 +20,11 @@ export const createGoal = async (goal: GoalBase): Goal => {
 export const getGoals = async (): Goal[] => {
   try {
     const response = await axiosInstance.get('/goal');
-    return response.data;
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      throw new Error(response.statusText);
+    }
   } catch (error) {
     console.error(error);
     throw error;
