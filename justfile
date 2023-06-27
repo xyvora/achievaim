@@ -40,6 +40,11 @@
   npm run dev && \
   cd ..
 
+@frontend-check:
+  -cd frontend && \
+  npm run check && \
+  cd ..
+
 @frontend-format:
   -cd frontend && \
   npm run format && \
@@ -83,8 +88,10 @@
   just --justfile {{justfile()}} ruff
   echo black
   just --justfile {{justfile()}} black
-  echo frontend liting
+  echo frontend linting
   just --justfile {{justfile()}} frontend-lint
+  echo frontend check
+  just --justfile {{justfile()}} frontend-check
 
 @mypy:
   -cd backend && \

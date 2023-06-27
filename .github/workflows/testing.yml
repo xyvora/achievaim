@@ -103,3 +103,5 @@ jobs:
         run: just install-frontend
       - name: Lint
         run: just frontend-lint
+      - name: Check
+        run: just frontend-check
