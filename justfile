@@ -1,9 +1,6 @@
 @api: && docker-stop
   -docker compose up --build
 
-@api-detached: && docker-stop
-  -docker compose up -d --build
-
 @backend-test: ci-db && docker-stop
   -cd backend && \
   poetry run pytest && \
@@ -38,6 +35,11 @@
 @docker-stop:
   docker compose down
 
+@frontend-dev:
+  -cd frontend && \
+  npm run dev && \
+  cd ..
+
 @frontend-format:
   -cd frontend && \
   npm run format && \
@@ -51,6 +53,11 @@
 @frontend-test: api && docker-stop
   -cd frontend && \
   npm run test && \
+  cd ..
+
+@generate-types:
+  -cd frontend && \
+  npm run generate-types && \
   cd ..
 
 @install:
