@@ -1,10 +1,10 @@
 <script lang="ts">
-  // import { onMount } from 'svelte';
-  import { createGoal } from '$lib/api';
-  // import { Goal } from '$lib/generated/models/Goal';
+  import { onMount } from 'svelte';
+  import { createGoal, getGoals } from '$lib/api';
+  import type { Goal } from '$lib/generated';
 
   let goal = '';
-  // let goals: Goal[];
+  let goals: Goal[];
   let suggestions = [];
 
   const handleSubmit = async () => {
@@ -15,14 +15,15 @@
     }
   };
 
-  /* onMount(async () => {
+  onMount(async () => {
     goals = await getGoals();
-  }); */
+  });
 
   const handleGenerateSuggestions = async () => {
-    if (goal) {
+    console.log('Handled');
+    /* if (goal) {
       suggestions = await generateSuggestions(goal);
-    }
+    } */
   };
 
   const selectSuggestion = (suggestion) => {
