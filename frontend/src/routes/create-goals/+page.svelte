@@ -1,12 +1,13 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { createGoal, getGoals } from '$lib/api';
+  import { RepeatsEvery } from '$lib/generated';
   import type { GoalBase } from '$lib/generated';
 
   export let data: PageData;
 
   let goal = '';
-  let suggestions = [];
+  let suggestions: string[] = [];
 
   const handleCreateGoal = async () => {
     let goalObj: GoalBase = {
@@ -21,7 +22,7 @@
         saturday: false,
         sunday: false
       },
-      repeatsEvery: 'day',
+      repeatsEvery: RepeatsEvery.DAY,
       progress: 0
     };
     console.log(goalObj);
@@ -37,7 +38,7 @@
     } */
   };
 
-  const selectSuggestion = (suggestion) => {
+  const selectSuggestion = (suggestion: string) => {
     goal = suggestion;
   };
 </script>
@@ -45,7 +46,7 @@
 <head>
   <title>Create Your Goals</title>
 </head>
-<div clas="overflow-x-auto">
+<div class="overflow-x-auto">
   <form class="mb-4" on:submit={handleCreateGoal}>
     <input
       type="text"

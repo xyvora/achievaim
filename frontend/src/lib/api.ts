@@ -1,7 +1,7 @@
 import { axiosInstance } from '$lib/axios-config';
-import type { Goal, GoalBase } from '$lib/generated';
+import type { GoalBase } from '$lib/generated';
 
-export const createGoal = async (goal: GoalBase): Goal => {
+export const createGoal = async (goal: GoalBase) => {
   try {
     const response = await axiosInstance.post('/goal', goal);
     if (response.status == 200) {
@@ -15,7 +15,7 @@ export const createGoal = async (goal: GoalBase): Goal => {
   }
 };
 
-export const getGoals = async (): Goal[] => {
+export const getGoals = async () => {
   try {
     const response = await axiosInstance.get('/goal');
     if (response.status == 200) {

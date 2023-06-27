@@ -1,3 +1,4 @@
+import type { PageLoad } from './$types';
 import { getGoals } from '$lib/api';
 import type { Goal } from '$lib/generated';
 
