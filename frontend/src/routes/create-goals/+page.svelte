@@ -68,6 +68,21 @@
       </div>
     {/each}
   </div>
+
+  <div>
+    <h3 class="mt-4 text-lg font-semibold">Current Goals:</h3>
+    {#if goals && goals.length > 0}
+      {#each goals as goal}
+        <div>
+          <ul>
+            <li>{goal.name}</li>
+          </ul>
+        </div>
+      {/each}
+    {:else}
+      <div>No goals found</div>
+    {/if}
+  </div>
 </div>
 
 <style>
