@@ -119,6 +119,6 @@ jobs:
         with:
           node-version: "18"
       - name: Install Dependencies
-        run: just frontend
+        run: just install-frontend
       - name: Frontend Tests
         run: just frontent-test
