@@ -121,4 +121,4 @@ jobs:
       - name: Install Dependencies
         run: just install-frontend
       - name: Frontend Tests
-        run: just frontent-test
+        run: just frontend-test
