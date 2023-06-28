@@ -55,7 +55,7 @@
   npm run lint && \
   cd ..
 
-@frontend-test: api && docker-stop
+@frontend-test:
   -cd frontend && \
   npm run test && \
   cd ..
