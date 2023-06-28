@@ -1,0 +1,72 @@
+[tool.poetry]
+name = "SMARTGoalPT"
+version = "0.1.0"
+description = "API for SMARTGoalPT"
+authors = ["Bejamin Kennedy <benjaminjoelkennedy@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+beanie = "1.19.2"
+fastapi = {version = "0.98.0", extras = ["all"]}
+camel-converter = {version = "3.0.1", extras = ["pydantic"]}
+pydantic = "1.10.9"
+
+[tool.poetry.group.dev.dependencies]
+black = "23.3.0"
+mypy = "1.3.0"
+pytest = "7.3.2"
+pytest-cov = "4.1.0"
+ruff = "0.0.272"
+pytest-asyncio = "0.21.0"
+httpx = "0.24.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.egg
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.nox
+  | \.tox
+  | \.venv
+  | \venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | setup.py
+)/
+'''
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_untyped_defs = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_defs = false
+
+[[tool.mypy.overrides]]
+module = ["motor.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+addopts = "--cov=app --cov-report term-missing"
+asyncio_mode = "auto"
+
+[tool.ruff]
+select = ["E", "F", "UP", "I001", "T201", "T203"]
+ignore = ["E501"]
+line-length = 100
+target-version = "py311"
+fix = true
