@@ -10,7 +10,7 @@ readme = "README.md"
 python = "^3.11"
 beanie = "1.19.2"
 fastapi = {version = "0.98.0", extras = ["all"]}
-camel-converter = {version = "3.0.1", extras = ["pydantic"]}
+camel-converter = {version = "3.0.2", extras = ["pydantic"]}
 pydantic = "1.10.10"
 
 [tool.poetry.group.dev.dependencies]
