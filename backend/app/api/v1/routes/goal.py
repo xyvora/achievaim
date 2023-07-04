@@ -9,11 +9,11 @@ from starlette.status import (
 )
 
 from app.api.deps import logger
-from app.config import V1_API_PREFIX
+from app.core.config import config
 from app.models.goals import Goal, GoalBase, GoalUpdate
 from app.utils import APIRouter
 
-router = APIRouter(tags=["Goal"], prefix=f"{V1_API_PREFIX}/goal")
+router = APIRouter(tags=["Goal"], prefix=f"{config.V1_API_PREFIX}/goal")
 
 
 @router.get("/")

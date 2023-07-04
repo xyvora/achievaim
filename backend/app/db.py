@@ -1,7 +1,7 @@
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from app.config import config
+from app.core.config import config
 from app.models.goals import Goal
 
 db_client = AsyncIOMotorClient(
