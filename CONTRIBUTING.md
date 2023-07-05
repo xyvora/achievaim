@@ -48,6 +48,12 @@ and backend dependencies.
 just install
 ```
 
+Add a file named `.env` to the `frontend` directory and inside it add the following:
+
+```sh
+VITE_API_PATH=http://127.0.0.1:8000/api/v1
+```
+
 ### Creating a branch
 
 You want your main branch to reflect only production-ready code, so create a feature branch for
