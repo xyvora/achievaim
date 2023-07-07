@@ -1,8 +1,12 @@
 from collections.abc import Callable
 from typing import Any
 
+from bson import ObjectId
+from bson.errors import InvalidId
 from fastapi import APIRouter as FastAPIRouter
 from fastapi.types import DecoratedCallable
+
+from app.api.deps import logger
 
 
 class APIRouter(FastAPIRouter):
@@ -26,3 +30,11 @@ class APIRouter(FastAPIRouter):
             return add_path(func)
 
         return decorator
+
+
+def str_to_oid(id_str: str) -> ObjectId:
+    try:
+        return ObjectId(id_str)
+    except InvalidId:
+        logger.info(f"{id_str} is not a valid ObjectId")
+        raise
