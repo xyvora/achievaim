@@ -54,77 +54,81 @@ async def test_create_goal_duplicate(test_client, user_data):
 
 
 async def test_delete_goal_by_id(test_client, user_with_goals):
-    response = await test_client.delete(f"goal/{user_with_goals.id}")
+    response = await test_client.delete(f"goal/{user_with_goals.id}/{user_with_goals.goals[0].id}")
     assert response.status_code == 204
 
 
-async def test_delete_goal_by_id_not_found(test_client):
-    response = await test_client.delete(f"goal/{ObjectId()}")
+async def test_delete_goal_by_id_not_found(test_client, user_no_goals):
+    response = await test_client.delete(f"goal/{user_no_goals.id}/{ObjectId()}")
     assert response.status_code == 404
 
 
 async def test_delete_goal_by_id_invalid_oid(test_client):
-    response = await test_client.delete("goal/bad")
+    response = await test_client.delete("goal/bad/bad")
     assert response.status_code == 400
 
 
 async def test_delete_goal_by_name(test_client, user_with_goals):
-    response = await test_client.delete(f"goal/name/{user_with_goals.goals[0].name}")
+    response = await test_client.delete(
+        f"goal/{user_with_goals.id}/goal-name/{user_with_goals.goals[0].name}"
+    )
     assert response.status_code == 204
 
 
-async def test_delete_goal_by_name_not_found(test_client):
-    response = await test_client.delete("goal/name/bad")
+async def test_delete_goal_by_name_not_found(test_client, user_with_goals):
+    response = await test_client.delete(f"goal/{user_with_goals.id}/goal-name/bad")
     assert response.status_code == 404
 
 
-async def test_get_all_goals(test_client, goal):
-    response = await test_client.get("goal/")
-    assert response.json()[0]["name"] == goal.name
+async def test_get_all_goals(test_client, user_with_goals):
+    response = await test_client.get(f"goal/{user_with_goals.id}")
+    assert response.json()[0]["name"] == user_with_goals.goals[0].name
 
 
-async def test_get_goal_by_id(test_client, goal):
-    response = await test_client.get(f"goal/{goal.id}")
-    assert response.json()["name"] == goal.name
-
-
-async def test_get_goal_by_id_not_found(test_client):
-    response = await test_client.get(f"goal/{ObjectId()}")
+async def test_get_goal_by_id_not_found(test_client, user_no_goals):
+    response = await test_client.get(f"goal/{user_no_goals.id}/bad")
     assert response.status_code == 404
 
 
 async def test_get_goal_by_id_bad_oid(test_client):
-    response = await test_client.get("goal/bad")
+    response = await test_client.get("goal/bad/bad")
     assert response.status_code == 400
 
 
-async def test_get_goal_by_name(test_client, goal):
-    response = await test_client.get(f"goal/name/{goal.name}")
-    assert response.json()["name"] == goal.name
+async def test_get_goal_by_id(test_client, user_with_goals):
+    response = await test_client.get(f"goal/{user_with_goals.id}/{user_with_goals.goals[0].id}")
+    assert response.json()["name"] == user_with_goals.goals[0].name
 
 
-async def test_get_goal_by_name_not_found(test_client):
-    response = await test_client.get("goal/name/bad")
+async def test_get_goal_by_name(test_client, user_with_goals):
+    response = await test_client.get(
+        f"goal/{user_with_goals.id}/goal-name/{user_with_goals.goals[0].name}"
+    )
+    assert response.json()["name"] == user_with_goals.goals[0].name
+
+
+async def test_get_goal_by_name_not_found(test_client, user_no_goals):
+    response = await test_client.get(f"goal/{user_no_goals.id}/goal-name/bad")
     assert response.status_code == 404
 
 
-async def test_update_goal(test_client, goal, user_data):
-    user_data.pop("_id")
-    user_data["id"] = str(goal.id)
-    user_data["name"] = "Test"
-    response = await test_client.put("goal/", json=user_data)
-    assert response.json()["name"] == user_data["name"]
+async def test_update_goal(test_client, user_with_goals, user_data):
+    goal_data = deepcopy(user_data["goals"][0])
+    goal_data["user_id"] = str(user_with_goals.id)
+    goal_data["name"] = "Test"
+    response = await test_client.put("goal/", json=goal_data)
+    assert response.json()["name"] == "Test"
 
 
-async def test_update_goal_not_found(test_client, user_data):
-    user_data["id"] = user_data.pop("_id")
-    response = await test_client.put("goal/", json=user_data)
+async def test_update_goal_not_found(test_client, user_no_goals, user_data):
+    goal_data = deepcopy(user_data["goals"][0])
+    goal_data["user_id"] = str(user_no_goals.id)
+    response = await test_client.put("goal/", json=goal_data)
     assert response.status_code == 404
 
 
 async def test_update_goal_bad_oid(test_client, user_data):
-    user_data.pop("_id")
-    user_data["id"] = "bad"
-    user_data["name"] = "Test"
-    response = await test_client.put("goal/", json=user_data)
-    assert response.status_code == 400
+    goal_data = deepcopy(user_data["goals"][0])
+    goal_data["user_id"] = "bad"
+    response = await test_client.put("goal/", json=goal_data)
+    assert response.status_code == 422

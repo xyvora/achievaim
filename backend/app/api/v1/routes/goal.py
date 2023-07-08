@@ -46,7 +46,37 @@ async def get_user_goals(user_id: str) -> list[Goal]:
     return user.goals
 
 
-@router.get("/{user_id}/{goal_name}")
+@router.get("/{user_id}/{goal_id}")
+async def get_goal_by_id(user_id: str, goal_id: str) -> Goal:
+    """Get a specifiic goal by goal ID."""
+    try:
+        oid = str_to_oid(user_id)
+    except InvalidId:
+        raise HTTPException(
+            status_code=HTTP_400_BAD_REQUEST, detail=f"{user_id} is not a valid ID format"
+        )
+
+    user = await User.find_one(User.id == oid)
+
+    if not user:
+        logger.info("User %s not found", user_id)
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="User not found")
+
+    if not user.goals:
+        logger.info("No goals found for user %s", user_id)
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="No goals found for user")
+
+    for goal in user.goals:
+        if goal.id == goal_id:
+            return goal
+
+    logger.info("No goal named %s found for ID %s", goal_id, user_id)
+    raise HTTPException(
+        status_code=HTTP_404_NOT_FOUND, detail=f"No goal ID {goal_id} found for user {user_id}"
+    )
+
+
+@router.get("/{user_id}/goal-name/{goal_name}")
 async def get_goal_by_name(user_id: str, goal_name: str) -> Goal:
     """Get a specifiic goal."""
     try:
@@ -212,7 +242,7 @@ async def update_goal(goal: GoalWithUserId) -> Goal:
     logger.info("Retrieving user %s", goal.user_id)
     user = await User.find_one(User.id == goal.user_id)
 
-    _validate_unique_goal(user, goal.name, goal.id)
+    _validate_unique_goal(user, goal.name)
 
     if not user:
         logger.info("User with ID %s not found", goal.user_id)
