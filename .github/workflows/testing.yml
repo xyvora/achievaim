@@ -85,7 +85,7 @@ jobs:
       - name: Install Dependencies
         run: just install-backend
       - name: Test with pytest
-        run: just backend-test
+        run: just backend-test-ci
 
   frontend-linting:
     strategy:
@@ -121,4 +121,4 @@ jobs:
       - name: Install Dependencies
         run: just install-frontend
       - name: Frontend Tests
-        run: just frontend-test
+        run: just frontend-test-ci

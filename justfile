@@ -6,6 +6,12 @@
   poetry run pytest && \
   cd ..
 
+
+@backend-test-ci: ci-db && docker-stop
+  cd backend && \
+  poetry run pytest && \
+  cd ..
+
 @black:
   -cd backend && \
   poetry run black app tests && \
@@ -57,6 +63,11 @@
 
 @frontend-test:
   -cd frontend && \
+  npm run test && \
+  cd ..
+
+@frontend-test-ci:
+  cd frontend && \
   npm run test && \
   cd ..
 

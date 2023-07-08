@@ -53,8 +53,8 @@ async def test_create_goal_duplicate(test_client, user_data):
     assert response.status_code == 400
 
 
-async def test_delete_goal_by_id(test_client, user):
-    response = await test_client.delete(f"goal/{user.id}")
+async def test_delete_goal_by_id(test_client, user_with_goals):
+    response = await test_client.delete(f"goal/{user_with_goals.id}")
     assert response.status_code == 204
 
 
@@ -68,8 +68,8 @@ async def test_delete_goal_by_id_invalid_oid(test_client):
     assert response.status_code == 400
 
 
-async def test_delete_goal_by_name(test_client, user):
-    response = await test_client.delete(f"goal/name/{user.goals[0].name}")
+async def test_delete_goal_by_name(test_client, user_with_goals):
+    response = await test_client.delete(f"goal/name/{user_with_goals.goals[0].name}")
     assert response.status_code == 204
 
 
