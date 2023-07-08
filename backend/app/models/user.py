@@ -4,6 +4,7 @@ from beanie import Document, Indexed
 from bson import ObjectId
 from camel_converter import to_camel
 from camel_converter.pydantic_base import CamelBase
+from pydantic import validator
 
 from app.models.object_id import ObjectIdStr
 
@@ -25,7 +26,7 @@ class DaysOfWeek(CamelBase):
 
 
 class _GoalBase(CamelBase):
-    name: Indexed(str, unique=True)  # type: ignore[valid-type]
+    name: str
     duration: int
     days_of_week: DaysOfWeek
     repeats_every: RepeatsEvery
@@ -33,7 +34,7 @@ class _GoalBase(CamelBase):
 
 
 class Goal(_GoalBase):
-    id: Indexed(str, unique=True)  # type: ignore
+    id: str
 
 
 class GoalCreate(_GoalBase):
@@ -81,3 +82,27 @@ class User(Document):
 
     class Settings:
         name = "users"
+
+    @validator("goals")
+    @classmethod
+    def validate_goals(cls, v: list[Goal] | None) -> list[Goal] | None:
+        """Validate that the goal names and ids are unique.
+
+        I want this to happen in the database, but so far I haven't been able to get Beanie to do it.
+        """
+        if not v:
+            return None
+
+        goal_ids = {x.id for x in v}
+        if len(v) != len(goal_ids):
+            raise ValueError(
+                "Goal IDs must be unique",
+            )
+
+        goal_names = {x.name for x in v}
+        if len(v) != len(goal_names):
+            raise ValueError(
+                "Goal names must be unique",
+            )
+
+        return v

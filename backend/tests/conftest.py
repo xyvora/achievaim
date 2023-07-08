@@ -1,26 +1,29 @@
 import asyncio
+from copy import deepcopy
+from uuid import uuid4
 
 import pytest
 from httpx import AsyncClient
 
 from app.core.config import config
 from app.core.security import get_password_hash
+from app.db import init_db
 from app.main import app
 from app.models.user import User
+
+
+@pytest.fixture(scope="session", autouse=True)
+async def initialize_db():
+    await init_db()
 
 
 @pytest.fixture(autouse=True)
 async def clear_db():
     yield
-    students = await User.find_all().to_list()
+    users = await User.find_all().to_list()
 
-    for student in students:
-        await student.delete()
-
-    goals = await User.find_all().to_list()
-
-    for goal in goals:
-        await goal.delete()
+    for user in users:
+        await user.delete()
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -47,6 +50,7 @@ def user_data():
         "hashed_password": get_password_hash("test_password"),
         "goals": [
             {
+                "id": str(uuid4()),
                 "name": "Goal 1",
                 "duration": 5,
                 "daysOfWeek": {
@@ -66,5 +70,12 @@ def user_data():
 
 
 @pytest.fixture
-async def user(user_data):
+async def user_with_goals(user_data):
     return await User(**user_data).insert()
+
+
+@pytest.fixture
+async def user_no_goals(user_data):
+    user_data_copy = deepcopy(user_data)
+    user_data_copy["goals"] = None
+    return await User(**user_data_copy).insert()

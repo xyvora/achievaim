@@ -88,6 +88,8 @@ async def create_goal(goal: GoalCreate) -> list[Goal]:
             status_code=HTTP_404_NOT_FOUND, detail="User with ID {goal.user_id} not found"
         )
 
+    _validate_unique_goal(user, goal.name)
+
     logger.info("Saving goal")
     goal_dict = goal.dict()
     goal_dict.pop("user_id")
@@ -112,10 +114,24 @@ async def create_goal(goal: GoalCreate) -> list[Goal]:
                 status_code=HTTP_400_BAD_REQUEST,
                 detail="An error occurred while adding the goal",
             )
-    except Exception as e:
-        logger.error(f"An error occurred while adding the goal: {e}")
+    except ValueError as e:
+        if "Goal IDs must be unique" in str(e):
+            logger.info("Goal IDs must be unique: %s", e)
+            raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Goal IDs must be unique")
+        if "Goal names must be unique" in str(e):
+            logger.info("Goal names must be unique: %s", e)
+            raise HTTPException(
+                status_code=HTTP_400_BAD_REQUEST, detail="Goal names must be unique"
+            )
+        logger.info("An error occurred %s", e)
         raise HTTPException(
-            status_code=HTTP_400_BAD_REQUEST,
+            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An error occurred while adding the goal",
+        )
+    except Exception as e:
+        logger.error("An error occurred while adding the goal: %s", e)
+        raise HTTPException(
+            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An error occurred while adding the goal",
         )
 
@@ -196,6 +212,8 @@ async def update_goal(goal: GoalWithUserId) -> Goal:
     logger.info("Retrieving user %s", goal.user_id)
     user = await User.find_one(User.id == goal.user_id)
 
+    _validate_unique_goal(user, goal.name, goal.id)
+
     if not user:
         logger.info("User with ID %s not found", goal.user_id)
         raise HTTPException(
@@ -246,3 +264,18 @@ async def update_goal(goal: GoalWithUserId) -> Goal:
     raise HTTPException(
         status_code=HTTP_404_NOT_FOUND, detail=f"Goal {goal.id} not found for user {goal.user_id}"
     )
+
+
+def _validate_unique_goal(user: User, goal_name: str, goal_id: str | None = None) -> None:
+    if not user.goals:
+        return None
+
+    if goal_name in [x.name for x in user.goals]:
+        logger.info("Goal names must be unique")
+        raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Goal names must be unique")
+
+    if goal_id and goal_id in [x.id for x in user.goals]:
+        logger.info("Goal IDs must be unique")
+        raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Goal IDs must be unique")
+
+    return None

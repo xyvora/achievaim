@@ -1,19 +1,55 @@
+from copy import deepcopy
+from uuid import uuid4
+
 import pytest
 from bson import ObjectId
 
 
-async def test_create_goal(test_client, user_data):
-    response = await test_client.post("goal/", json=user_data)
+@pytest.mark.usefixtures("user_no_goals")
+async def test_create_goal_no_goals(test_client, user_data):
+    goal_data = deepcopy(user_data["goals"][0])
+    goal_data["user_id"] = user_data["_id"]
+    response = await test_client.post("goal/", json=goal_data)
     response_json = response.json()
-    response_json.pop("_id")
-    user_data.pop("_id")
 
-    assert response_json == user_data
+    assert len(response_json) == 1
+    assert "id" in response_json[0]
+
+    got = response_json[0]
+    got.pop("id")
+    user_data["goals"][0].pop("id")
+    assert sorted(got.items()) == sorted(user_data["goals"][0].items())
 
 
-@pytest.mark.usefixtures("goal")
+@pytest.mark.usefixtures("user_with_goals")
+async def test_create_goal_with_goals(test_client, user_data):
+    goal_data = deepcopy(user_data["goals"][0])
+    goal_data["name"] = str(uuid4())
+    goal_data["user_id"] = user_data["_id"]
+    response = await test_client.post("goal/", json=goal_data)
+
+    got = []
+    for goal in response.json():
+        goal.pop("id")
+        got.append(goal)
+
+    expected = []
+    for goal in user_data["goals"]:
+        goal.pop("id")
+        expected.append(goal)
+
+    goal_data.pop("user_id")
+    goal_data.pop("id")
+    expected.append(goal_data)
+
+    assert [sorted(x.items()) for x in got] == [sorted(x.items()) for x in expected]
+
+
+@pytest.mark.usefixtures("user_with_goals")
 async def test_create_goal_duplicate(test_client, user_data):
-    response = await test_client.post("goal/", json=user_data)
+    goal_data = deepcopy(user_data["goals"][0])
+    goal_data["user_id"] = user_data["_id"]
+    response = await test_client.post("goal/", json=goal_data)
     assert response.status_code == 400
 
 
