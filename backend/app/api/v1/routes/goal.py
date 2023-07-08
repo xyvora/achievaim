@@ -242,13 +242,13 @@ async def update_goal(goal: GoalWithUserId) -> Goal:
     logger.info("Retrieving user %s", goal.user_id)
     user = await User.find_one(User.id == goal.user_id)
 
-    _validate_unique_goal(user, goal.name)
-
     if not user:
         logger.info("User with ID %s not found", goal.user_id)
         raise HTTPException(
             status_code=HTTP_404_NOT_FOUND, detail="User with ID {goal.user_id} not found"
         )
+
+    _validate_unique_goal(user, goal.name)
 
     if not user.goals:
         logger.info("No goals found for user %s", goal.user_id)
