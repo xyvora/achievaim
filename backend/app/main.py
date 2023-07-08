@@ -18,6 +18,6 @@ app.add_middleware(
 
 
 @app.on_event("startup")
-async def startup() -> None:
+async def startup() -> None:  # pragma: no cover
     logger.info("Initializing the database")
     await init_db()

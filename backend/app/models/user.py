@@ -2,7 +2,6 @@ from enum import Enum
 
 from beanie import Document, Indexed
 from bson import ObjectId
-from camel_converter import to_camel
 from camel_converter.pydantic_base import CamelBase
 from pydantic import validator
 
@@ -75,10 +74,6 @@ class User(Document):
     user_name: Indexed(str, unique=True)  # type: ignore
     hashed_password: str
     goals: list[Goal] | None = None
-
-    class Config:
-        alias_generator = to_camel
-        allow_population_by_field_name = True
 
     class Settings:
         name = "users"

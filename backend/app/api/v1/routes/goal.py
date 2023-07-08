@@ -12,8 +12,8 @@ from starlette.status import (
 
 from app.api.deps import logger
 from app.core.config import config
+from app.core.utils import APIRouter, str_to_oid
 from app.models.user import Goal, GoalCreate, GoalWithUserId, User
-from app.utils import APIRouter, str_to_oid
 
 router = APIRouter(tags=["Goal"], prefix=f"{config.V1_API_PREFIX}/goal")
 
@@ -131,10 +131,12 @@ async def create_goal(goal: GoalCreate) -> list[Goal]:
         user.goals.append(db_goal)
     try:
         await user.set({User.goals: user.goals})
-    except DuplicateKeyError:
+    # The DuplicateKeyError and OperationFailure are fail safes just incase something goes wrong
+    # in the model validation and lets these slip through.
+    except DuplicateKeyError:  # pragma: no cover
         logger.error("Goal already exists")
         raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Goal already exists")
-    except OperationFailure as e:
+    except OperationFailure as e:  # pragma: no cover
         if e.code == 11000:  # Unique key violation
             logger.error("Goal already exists")
             raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Goal already exists")
@@ -144,7 +146,7 @@ async def create_goal(goal: GoalCreate) -> list[Goal]:
                 status_code=HTTP_400_BAD_REQUEST,
                 detail="An error occurred while adding the goal",
             )
-    except ValueError as e:
+    except ValueError as e:  # pragma: no cover
         if "Goal IDs must be unique" in str(e):
             logger.info("Goal IDs must be unique: %s", e)
             raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Goal IDs must be unique")
@@ -158,7 +160,7 @@ async def create_goal(goal: GoalCreate) -> list[Goal]:
             status_code=HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An error occurred while adding the goal",
         )
-    except Exception as e:
+    except Exception as e:  # pragma: no cover
         logger.error("An error occurred while adding the goal: %s", e)
         raise HTTPException(
             status_code=HTTP_500_INTERNAL_SERVER_ERROR,
@@ -167,7 +169,7 @@ async def create_goal(goal: GoalCreate) -> list[Goal]:
 
     updated_user = await User.find_one(User.id == user.id)
 
-    if not updated_user or not updated_user.goals:
+    if not updated_user or not updated_user.goals:  # pragma: no cover
         logger.info("No goal inserted")
         raise HTTPException(
             status_code=HTTP_500_INTERNAL_SERVER_ERROR, detail="Error inserting goal"
@@ -266,10 +268,10 @@ async def update_goal(goal: GoalWithUserId) -> Goal:
             user.goals[i] = db_goal
             try:
                 await user.set({User.goals: user.goals})
-            except DuplicateKeyError:
+            except DuplicateKeyError:  # pragma: no cover
                 logger.error("Goal already exists")
                 raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Goal already exists")
-            except OperationFailure as e:
+            except OperationFailure as e:  # pragma: no cover
                 if e.code == 11000:  # Unique key violation
                     logger.error("Goal already exists")
                     raise HTTPException(
@@ -281,7 +283,7 @@ async def update_goal(goal: GoalWithUserId) -> Goal:
                         status_code=HTTP_400_BAD_REQUEST,
                         detail="An error occurred while adding the goal",
                     )
-            except Exception as e:
+            except Exception as e:  # pragma: no cover
                 logger.error(f"An error occurred while adding the goal: {e}")
                 raise HTTPException(
                     status_code=HTTP_400_BAD_REQUEST,

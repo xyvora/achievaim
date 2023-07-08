@@ -1,5 +1,5 @@
 from app.api.v1.routes import goal, health, user
-from app.utils import APIRouter
+from app.core.utils import APIRouter
 
 api_router = APIRouter()
 api_router.include_router(goal.router)

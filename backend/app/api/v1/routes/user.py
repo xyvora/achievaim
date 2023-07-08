@@ -1,3 +1,4 @@
+from beanie.exceptions import RevisionIdWasChanged
 from bson import ObjectId
 from bson.errors import InvalidId
 from fastapi import HTTPException
@@ -12,8 +13,8 @@ from starlette.status import (
 from app.api.deps import logger
 from app.core.config import config
 from app.core.security import get_password_hash
+from app.core.utils import APIRouter, str_to_oid
 from app.models.user import User, UserCreate, UserNoPassword, UserUpdate
-from app.utils import APIRouter, str_to_oid
 
 router = APIRouter(tags=["User"], prefix=f"{config.V1_API_PREFIX}/user")
 
@@ -24,7 +25,7 @@ async def create_user(user: UserCreate) -> UserNoPassword:
     logger.info("Creating user")
     try:
         user.password = get_password_hash(user.password)
-    except Exception as e:
+    except Exception as e:  # pragma: no cover
         logger.info("An error occurred while hashing the password: %s", e)
         raise HTTPException(
             status_code=HTTP_500_INTERNAL_SERVER_ERROR,
@@ -36,13 +37,13 @@ async def create_user(user: UserCreate) -> UserNoPassword:
         user_dict["hashed_password"] = user_dict.pop("password")
         db_user = User(**user_dict)
         saved_user = await db_user.insert()
-    except DuplicateKeyError:
-        logger.info("User name %s already exists", user.user_name)
+    except DuplicateKeyError as e:
+        logger.info("User name %s already exists: %s", user.user_name, e)
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST,
             detail=f"A user with the user name {user.user_name} already exists",
         )
-    except Exception as e:
+    except Exception as e:  # pragma: no cover
         logger.info("An error occurred while inserting user: %s", e)
         raise HTTPException(
             status_code=HTTP_500_INTERNAL_SERVER_ERROR,
@@ -57,6 +58,10 @@ async def get_users() -> list[UserNoPassword]:
     """Get all users."""
     logger.info("Getting all users")
     users = await User.find_all().to_list()
+
+    if not users:
+        logger.info("No users found")
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="No users found")
 
     return [UserNoPassword(**x.dict()) for x in users]
 
@@ -144,10 +149,23 @@ async def update_user(user: UserUpdate) -> UserNoPassword:
     update_user = user.dict()
     update_user["hashed_password"] = update_user.pop("password")
     db_user = User(**update_user)
-    await user_in_db.update({"$set": db_user.dict()})
+    try:
+        await user_in_db.update({"$set": db_user.dict()})
+    except RevisionIdWasChanged as e:
+        logger.info("User name %s already exists: %s", user.user_name, e)
+        raise HTTPException(
+            status_code=HTTP_400_BAD_REQUEST, detail="User name {user.user_name} already exists"
+        )
+    except Exception as e:  # pragma: no cover
+        logger.info("An error occurred while updating user %s: %s", user.id, e)
+        raise HTTPException(
+            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An error occurred while updatingg user",
+        )
+
     updated_user = await User.find_one(User.id == user.id)
 
-    if not updated_user:
+    if not updated_user:  # pragma: no cover
         logger.info("An error occurred while updating the user")
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail="An error occurred while updating the user"
