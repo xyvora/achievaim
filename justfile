@@ -6,6 +6,11 @@
   poetry run pytest && \
   cd ..
 
+@backend-test-ci: ci-db && docker-stop
+  cd backend && \
+  poetry run pytest && \
+  cd ..
+
 @black:
   -cd backend && \
   poetry run black app tests && \
@@ -45,8 +50,18 @@
   npm run check && \
   cd ..
 
+@frontend-check-ci:
+  cd frontend && \
+  npm run check && \
+  cd ..
+
 @frontend-format:
   -cd frontend && \
+  npm run format && \
+  cd ..
+
+@frontend-format-ci:
+  cd frontend && \
   npm run format && \
   cd ..
 
@@ -55,8 +70,18 @@
   npm run lint && \
   cd ..
 
+@frontend-lint-ci:
+  cd frontend && \
+  npm run lint && \
+  cd ..
+
 @frontend-test:
   -cd frontend && \
+  npm run test && \
+  cd ..
+
+@frontend-test-ci:
+  cd frontend && \
   npm run test && \
   cd ..
 
@@ -95,6 +120,11 @@
 
 @mypy:
   -cd backend && \
+  poetry run mypy . && \
+  cd ..
+
+@mypy-ci:
+  cd backend && \
   poetry run mypy . && \
   cd ..
 
