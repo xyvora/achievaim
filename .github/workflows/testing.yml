@@ -46,7 +46,7 @@ jobs:
       - name: Lint with ruff
         run: just ruff-ci
       - name: mypy check
-        run: just mypy
+        run: just mypy-ci
 
   backend-testing:
     strategy:
@@ -102,9 +102,9 @@ jobs:
       - name: Install Dependencies
         run: just install-frontend
       - name: Lint
-        run: just frontend-lint
+        run: just frontend-lint-ci
       - name: Check
-        run: just frontend-check
+        run: just frontend-check-ci
 
   frontend-testing:
     strategy:
