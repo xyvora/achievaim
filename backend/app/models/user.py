@@ -24,7 +24,7 @@ class DaysOfWeek(CamelBase):
     sunday: bool = False
 
 
-class Goal(CamelBase):
+class _GoalBase(CamelBase):
     name: Indexed(str, unique=True)  # type: ignore[valid-type]
     duration: int
     days_of_week: DaysOfWeek
@@ -32,14 +32,24 @@ class Goal(CamelBase):
     progress: float
 
 
+class Goal(_GoalBase):
+    id: Indexed(str, unique=True)  # type: ignore
+
+
+class GoalCreate(_GoalBase):
+    user_id: ObjectIdStr
+
+
 class GoalWithUserId(Goal):
-    user_id: str
+    user_id: ObjectIdStr
+
+    class Config:
+        json_encoders = {ObjectId: lambda x: str(x)}
 
 
-class UserWithPassword(CamelBase):
+class UserCreate(CamelBase):
     user_name: str
     password: str
-    goals: list[Goal] | None = None
 
 
 class UserNoPassword(CamelBase):
@@ -55,7 +65,6 @@ class UserUpdate(CamelBase):
     id: ObjectIdStr
     password: str
     user_name: str
-    goals: list[Goal] | None = None
 
     class Config:
         json_encoders = {ObjectId: lambda x: str(x)}
