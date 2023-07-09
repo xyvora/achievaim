@@ -1,5 +1,5 @@
 <script lang="ts">
-  // import { page } from '$app/stores';
+  import { page } from '$app/stores';
   import ThemeSelector from './ThemeSelector.svelte';
   import { link } from 'svelte-routing';
 </script>
