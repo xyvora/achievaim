@@ -4,6 +4,7 @@ from datetime import UTC, datetime, timedelta
 from typing import Any
 
 import jwt
+from beanie import PydanticObjectId
 from passlib.context import CryptContext
 
 from app.core.config import config
@@ -14,7 +15,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def create_access_token(
-    subject: str | dict[str, Any], expires_delta: timedelta | None = None
+    subject: PydanticObjectId | str | dict[str, Any], expires_delta: timedelta | None = None
 ) -> str:
     if expires_delta:
         expire = datetime.utcnow() + expires_delta

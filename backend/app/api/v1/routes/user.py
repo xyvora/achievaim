@@ -109,7 +109,7 @@ async def delete_user_by_id(user_id: str) -> None:
     try:
         oid = ObjectId(user_id)
     except InvalidId:
-        logger.info(f"{user_id} is not a valid ObjectId")
+        logger.info("%s is not a valid ObjectId", user_id)
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail=f"{user_id} is not a valid ID format"
         )
@@ -119,7 +119,7 @@ async def delete_user_by_id(user_id: str) -> None:
         logger.info("User with ID %s not found", user_id)
         raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="User not found")
 
-    logger.info(f"Deleting user with ID {user_id}")
+    logger.info("Deleting user with ID %s", user_id)
     await user_in_db.delete()
 
 
