@@ -1,5 +1,5 @@
 <script lang="ts">
-  import axios from 'axios';
+  // import axios from 'axios';
   import { onMount, createEventDispatcher } from 'svelte';
 
   let daysOfWeek = [
@@ -55,6 +55,7 @@
     // goalTime = data.goalTime;
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function regenerate(event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) {
     throw new Error('Function not implemented.');
   }
@@ -92,8 +93,8 @@
             id="password-input"
             class="input input-bordered"
           />
-          <a href="#" class="label-text-alt link link-hover mt-4 mb-4">Forgot password?</a>
-          <a href="#" class="label-text-alt link link-hover"
+          <a href={'#'} class="label-text-alt link link-hover mt-4 mb-4">Forgot password?</a>
+          <a href={'#'} class="label-text-alt link link-hover"
             >Are your Goals Smart yet? Sign up here!</a
           >
         </div>
@@ -101,10 +102,10 @@
           <button class="btn btn-primary">Login</button>
         </div>
         <div class="form-control mt-6 text-center text-lg font-bold" />
-        </div>
-        </div>
-        </div>
-        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="flex">
   <div class="divider" />
@@ -292,7 +293,7 @@
     <p>Copyright © 2023 - All right reserved</p>
   </div>
   <div class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
-    <a
+    <a href={'#'}
       ><svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -304,7 +305,7 @@
         /></svg
       >
     </a>
-    <a
+    <a href={'#'}
       ><svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
