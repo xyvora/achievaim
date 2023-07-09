@@ -120,5 +120,7 @@ jobs:
           node-version: "18"
       - name: Install Dependencies
         run: just install-frontend
+      - name: Playwright install
+        run: npx playwright install
       - name: Frontend Tests
         run: just frontend-test-ci

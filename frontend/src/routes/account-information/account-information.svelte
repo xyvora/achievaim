@@ -17,8 +17,10 @@
         id="password-input"
         class="input input-bordered"
       />
-      <a href="#" class="label-text-alt link link-hover mt-4 mb-4">Forgot password?</a>
-      <a href="#" class="label-text-alt link link-hover">Are your Goals Smart yet? Sign up here!</a>
+      <a href={'#'} class="label-text-alt link link-hover mt-4 mb-4">Forgot password?</a>
+      <a href={'#'} class="label-text-alt link link-hover"
+        >Are your Goals Smart yet? Sign up here!</a
+      >
     </div>
     <div class="form-control mt-6">
       <button class="btn btn-primary">Login</button>
