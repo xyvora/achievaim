@@ -1,8 +1,8 @@
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from app.config import config
-from app.models.goals import Goal
+from app.core.config import config
+from app.models.user import User
 
 db_client = AsyncIOMotorClient(
     host=config.mongo_host,
@@ -13,4 +13,4 @@ db_client = AsyncIOMotorClient(
 
 
 async def init_db() -> None:
-    await init_beanie(database=db_client.db_name, document_models=[Goal])  # type: ignore[arg-type]
+    await init_beanie(database=db_client.db_name, document_models=[User])  # type: ignore[arg-type]

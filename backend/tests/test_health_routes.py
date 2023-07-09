@@ -6,7 +6,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 @pytest.fixture
 async def test_client_bad_db():
     from app.api.deps import get_db_client
-    from app.config import V1_API_PREFIX, config
+    from app.core.config import config
     from app.main import app
 
     def get_db_client_override():
@@ -20,7 +20,7 @@ async def test_client_bad_db():
 
     app.dependency_overrides[get_db_client] = get_db_client_override
 
-    async with AsyncClient(app=app, base_url=f"http://127.0.0.1{V1_API_PREFIX}") as client:
+    async with AsyncClient(app=app, base_url=f"http://127.0.0.1{config.V1_API_PREFIX}") as client:
         yield client
 
     app.dependency_overrides = {}

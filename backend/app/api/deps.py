@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from app.config import config
+from app.core.config import config
 from app.db import db_client
 
 logging.basicConfig(format="%(asctime)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s")

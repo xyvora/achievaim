@@ -12,6 +12,8 @@ beanie = "1.20.0"
 fastapi = {version = "0.99.1", extras = ["all"]}
 camel-converter = {version = "3.0.2", extras = ["pydantic"]}
 pydantic = "1.10.10"
+passlib = {extras = ["bcrypt"], version = "1.7.4"}
+pyjwt = "2.7.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "23.3.0"
@@ -57,7 +59,7 @@ module = ["tests.*"]
 disallow_untyped_defs = false
 
 [[tool.mypy.overrides]]
-module = ["motor.*"]
+module = ["motor.*", "passlib.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

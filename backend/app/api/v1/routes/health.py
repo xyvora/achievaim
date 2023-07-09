@@ -1,8 +1,8 @@
 from app.api.deps import MongoClient, logger
-from app.config import V1_API_PREFIX
-from app.utils import APIRouter
+from app.core.config import config
+from app.core.utils import APIRouter
 
-router = APIRouter(tags=["Health"], prefix=V1_API_PREFIX)
+router = APIRouter(tags=["Health"], prefix=config.V1_API_PREFIX)
 
 
 @router.get("/health")
