@@ -21,8 +21,7 @@ logging.basicConfig(format="%(asctime)s - %(levelname)s - [%(filename)s:%(lineno
 logging.root.setLevel(level=config.log_level)
 logger = logging
 
-_reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=f"{config.V1_API_PREFIX}/login/access-token")
-Reusable_OAuth2 = Annotated[str, Depends(_reusable_oauth2)]
+_oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{config.V1_API_PREFIX}/login/access-token")
 
 
 def get_config() -> Settings:
@@ -33,13 +32,13 @@ def get_db_client() -> AsyncIOMotorClient:
     return db_client
 
 
-async def get_current_user(token: Reusable_OAuth2) -> User:
+async def get_current_user(token: Annotated[str, Depends(_oauth2_scheme)]) -> User:
     try:
         payload = jwt.decode(token, config.SECRET_KEY, algorithms=[ALGORITHM])
         token_data = TokenPayload(**payload)
-    except (PyJWTError, ValidationError):
-        logger.info("Could not validate credentials")
-        raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="Could not valide credentials")
+    except (PyJWTError, ValidationError) as e:
+        logger.info("Could not validate credentials: %s", e)
+        raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="Could not validate credentials")
 
     try:
         oid = ObjectId(token_data.sub)

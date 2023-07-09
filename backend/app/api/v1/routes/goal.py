@@ -10,7 +10,7 @@ from starlette.status import (
     HTTP_500_INTERNAL_SERVER_ERROR,
 )
 
-from app.api.deps import logger
+from app.api.deps import CurrentUser, logger
 from app.core.config import config
 from app.core.utils import APIRouter, str_to_oid
 from app.models.user import Goal, GoalCreate, GoalWithUserId, User
@@ -18,32 +18,18 @@ from app.models.user import Goal, GoalCreate, GoalWithUserId, User
 router = APIRouter(tags=["Goal"], prefix=f"{config.V1_API_PREFIX}/goal")
 
 
-@router.get("/{user_id}")
-async def get_user_goals(user_id: str) -> list[Goal]:
+@router.get("/")
+async def get_user_goals(current_user: CurrentUser) -> list[Goal]:
     """Get goals for a user."""
-    logger.info("Getting goals")
-    try:
-        oid = str_to_oid(user_id)
-    except InvalidId:
+    logger.info("Getting goals for user %s", current_user.id)
+
+    if not current_user.goals:
+        logger.info("No goals found for user %s", current_user.id)
         raise HTTPException(
-            status_code=HTTP_400_BAD_REQUEST, detail=f"{user_id} is not a valid ID format"
+            status_code=HTTP_404_NOT_FOUND, detail=f"No goals found for user {current_user.id}"
         )
 
-    user = await User.find_one(User.id == oid)
-
-    if not user:
-        logger.info("User with id %s not found", user_id)
-        raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND, detail=f"User with id {user_id} not found"
-        )
-
-    if not user.goals:
-        logger.info("No goals found for user %s", user_id)
-        raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND, detail=f"No goals found for user {user_id}"
-        )
-
-    return user.goals
+    return current_user.goals
 
 
 @router.get("/{user_id}/{goal_id}")
