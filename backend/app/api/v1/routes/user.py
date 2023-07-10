@@ -62,7 +62,7 @@ async def get_users(_: CurrentAdminUser) -> list[UserNoPassword]:
     return [UserNoPassword(**x.dict()) for x in users]
 
 
-@router.get("/")
+@router.get("/me")
 async def get_me(create_user: CurrentUser) -> UserNoPassword:
     """Retriever the logged in user's information."""
     return UserNoPassword(**create_user.dict())
@@ -150,7 +150,7 @@ async def update_me(user: UserUpdate, current_user: CurrentUser) -> UserNoPasswo
     logger.info("Updating user")
 
     if user.id != current_user.id:
-        logger.info("Cannot uupdate another user's information")
+        logger.info("Cannot update another user's information")
         raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Invalid user ID")
 
     update_user = user.dict()

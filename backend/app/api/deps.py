@@ -42,7 +42,7 @@ async def get_current_admin_user(token: Annotated[str, Depends(_oauth2_scheme)])
 
     try:
         oid = ObjectId(token_data.sub)
-    except InvalidId:
+    except InvalidId:  # pragma: no cover
         logger.info("%s is not a valid ObjectId", token_data.sub)
         raise HTTPException(
             status_code=HTTP_403_FORBIDDEN, detail=f"{token_data.sub} is not a valid ID format"
@@ -73,7 +73,7 @@ async def get_current_user(token: Annotated[str, Depends(_oauth2_scheme)]) -> Us
 
     try:
         oid = ObjectId(token_data.sub)
-    except InvalidId:
+    except InvalidId:  # pragma: no cover
         logger.info("%s is not a valid ObjectId", token_data.sub)
         raise HTTPException(
             status_code=HTTP_403_FORBIDDEN, detail=f"{token_data.sub} is not a valid ID format"

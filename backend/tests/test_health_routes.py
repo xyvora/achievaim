@@ -1,6 +1,9 @@
 import pytest
+from bson import ObjectId
 from httpx import AsyncClient
 from motor.motor_asyncio import AsyncIOMotorClient
+
+from app.core.security import create_access_token
 
 
 @pytest.fixture
@@ -46,3 +49,19 @@ async def test_health_not_authenticated(test_client):
     result = await test_client.get("health")
 
     assert result.status_code == 401
+
+
+async def test_health_invalid_token(test_client):
+    """This is here to test an invalid admin token."""
+    bad_header = {"Authorization": "Bearer bad"}
+    response = await test_client.get("health", headers=bad_header)
+    assert response.status_code == 403
+    assert response.json()["detail"] == "Could not validate credentials"
+
+
+async def test_health_token_user_not_found(test_client):
+    """This is here to test an admin token where the user isn't found."""
+    bad_header = {"Authorization": f"Bearer {create_access_token(str(ObjectId()))}"}
+    response = await test_client.get("health", headers=bad_header)
+    assert response.status_code == 404
+    assert response.json()["detail"] == "User not found"
