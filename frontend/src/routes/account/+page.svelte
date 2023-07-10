@@ -1,5 +1,6 @@
-<script>
-  let user = {
+<script lang="ts">
+  import type { User } from '$lib/types';
+  let user: User = {
     username: '',
     avatar: '',
     firstName: '',
