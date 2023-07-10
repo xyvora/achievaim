@@ -1,7 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import ThemeSelector from './ThemeSelector.svelte';
-  import { link } from 'svelte-routing';
 </script>
 
 <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content max-h-16" id="navbar">
