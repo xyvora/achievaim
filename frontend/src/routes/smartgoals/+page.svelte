@@ -14,18 +14,32 @@
   }
 
   let showModal = false;
+  /**
+     * @type {{ name: any; }}
+     */
   let selectedGoal;
 
+  /**
+     * @param {{ name?: any; editing?: any; }} goal
+     */
   function toggleEditing(goal) {
       goal.editing = !goal.editing;
       showModal = false;
   }
 
+  /**
+     * @param {{ details: any; editing: boolean; }} goal
+     * @param {any} newDetails
+     */
   function saveChanges(goal, newDetails) {
       goal.details = newDetails;
       goal.editing = false;
   }
 
+  /**
+     * @param {string | number} category
+     * @param {{ name: any; }} goal
+     */
   function deleteGoal(category, goal) {
       let index = goals[category].indexOf(goal);
       goals[category].splice(index, 1);
