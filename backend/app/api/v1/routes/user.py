@@ -10,7 +10,7 @@ from starlette.status import (
     HTTP_500_INTERNAL_SERVER_ERROR,
 )
 
-from app.api.deps import logger
+from app.api.deps import CurrentAdminUser, CurrentUser, logger
 from app.core.config import config
 from app.core.security import get_password_hash
 from app.core.utils import APIRouter, str_to_oid
@@ -54,20 +54,22 @@ async def create_user(user: UserCreate) -> UserNoPassword:
 
 
 @router.get("/")
-async def get_users() -> list[UserNoPassword]:
+async def get_users(_: CurrentAdminUser) -> list[UserNoPassword]:
     """Get all users."""
     logger.info("Getting all users")
     users = await User.find_all().to_list()
 
-    if not users:
-        logger.info("No users found")
-        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="No users found")
-
     return [UserNoPassword(**x.dict()) for x in users]
 
 
+@router.get("/")
+async def get_me(create_user: CurrentUser) -> UserNoPassword:
+    """Retriever the logged in user's information."""
+    return UserNoPassword(**create_user.dict())
+
+
 @router.get("/{user_id}")
-async def get_user_by_id(user_id: str) -> UserNoPassword:
+async def get_user_by_id(user_id: str, _: CurrentAdminUser) -> UserNoPassword:
     """Get a user by ID."""
     logger.info("Getting user %s", user_id)
     try:
@@ -89,7 +91,7 @@ async def get_user_by_id(user_id: str) -> UserNoPassword:
 
 
 @router.get("/user-name/{user_name}")
-async def get_user_by_user_name(user_name: str) -> UserNoPassword:
+async def get_user_by_user_name(user_name: str, _: CurrentAdminUser) -> UserNoPassword:
     """Get a user by user name."""
     logger.info("Getting user %s", user_name)
     user = await User.find_one(User.user_name == user_name)
@@ -103,8 +105,14 @@ async def get_user_by_user_name(user_name: str) -> UserNoPassword:
     return UserNoPassword(**user.dict())
 
 
+@router.delete("/", response_model=None, status_code=HTTP_204_NO_CONTENT)
+async def delete_me(current_user: CurrentUser) -> None:
+    """Delete the current logged in user."""
+    await current_user.delete()
+
+
 @router.delete("/{user_id}", response_model=None, status_code=HTTP_204_NO_CONTENT)
-async def delete_user_by_id(user_id: str) -> None:
+async def delete_user_by_id(user_id: str, _: CurrentAdminUser) -> None:
     """Delete a user by ID."""
     try:
         oid = ObjectId(user_id)
@@ -124,7 +132,7 @@ async def delete_user_by_id(user_id: str) -> None:
 
 
 @router.delete("/user-name/{user_name}", response_model=None, status_code=HTTP_204_NO_CONTENT)
-async def delete_user_by_user_name(user_name: str) -> None:
+async def delete_user_by_user_name(user_name: str, _: CurrentAdminUser) -> None:
     """Delete a user by user name."""
     user_in_db = await User.find_one(User.user_name == user_name)
 
@@ -137,20 +145,19 @@ async def delete_user_by_user_name(user_name: str) -> None:
 
 
 @router.put("/")
-async def update_user(user: UserUpdate) -> UserNoPassword:
-    """Update a user's information."""
+async def update_me(user: UserUpdate, current_user: CurrentUser) -> UserNoPassword:
+    """Update the logged in user's information."""
     logger.info("Updating user")
-    user_in_db = await User.find_one(User.id == user.id)
 
-    if not user_in_db:
-        logger.info("User not found")
-        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="User not found")
+    if user.id != current_user.id:
+        logger.info("Cannot uupdate another user's information")
+        raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Invalid user ID")
 
     update_user = user.dict()
     update_user["hashed_password"] = update_user.pop("password")
     db_user = User(**update_user)
     try:
-        await user_in_db.update({"$set": db_user.dict()})
+        await current_user.update({"$set": db_user.dict()})
     except RevisionIdWasChanged as e:
         logger.info("User name %s already exists: %s", user.user_name, e)
         raise HTTPException(
@@ -163,12 +170,4 @@ async def update_user(user: UserUpdate) -> UserNoPassword:
             detail="An error occurred while updatingg user",
         )
 
-    updated_user = await User.find_one(User.id == user.id)
-
-    if not updated_user:  # pragma: no cover
-        logger.info("An error occurred while updating the user")
-        raise HTTPException(
-            status_code=HTTP_400_BAD_REQUEST, detail="An error occurred while updating the user"
-        )
-
-    return UserNoPassword(**updated_user.dict())
+    return UserNoPassword(**current_user.dict())

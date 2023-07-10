@@ -26,7 +26,9 @@ async def login_access_token(
 
     if not user:
         logger.info("Incorrect user name or password")
-        raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Incorrect email or password")
+        raise HTTPException(
+            status_code=HTTP_400_BAD_REQUEST, detail="Incorrect user name or password"
+        )
 
     if not user.is_active:
         logger.info("Inactive user")
@@ -39,17 +41,21 @@ async def login_access_token(
 
     if not verify_password(form_data.password, user.hashed_password):
         logger.info("Incorrect user name or password")
-        raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Incorrect email or password")
+        raise HTTPException(
+            status_code=HTTP_400_BAD_REQUEST, detail="Incorrect user name or password"
+        )
 
     access_token_expires = timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES)
 
-    return Token(
+    token = Token(
         access_token=create_access_token(user.id, expires_delta=access_token_expires),
-        token_type="bearer",
+        token_type="Bearer",
     )
+
+    return token
 
 
 @router.post("/test-token")
 def test_token(current_user: CurrentUser) -> UserNoPassword:
     """Test access token."""
-    return current_user
+    return UserNoPassword(**current_user.dict())
