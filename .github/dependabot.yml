@@ -3,6 +3,7 @@ updates:
   - package-ecosystem: "pip"
     directory: "/backend"
     schedule:
+      interval: "weekly"
       day: "monday"
     labels:
       - skip-changelog
@@ -11,6 +12,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
+      interval: "weekly"
       day: "monday"
     labels:
       - skip-changelog
@@ -19,6 +21,7 @@ updates:
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
+      interval: "weekly"
       day: "monday"
     labels:
       - skip-changelog
