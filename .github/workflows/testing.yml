@@ -121,6 +121,6 @@ jobs:
       - name: Install Dependencies
         run: just install-frontend
       - name: Playwright install
-        run: npx playwright install
+        run: just playwright-install
       - name: Frontend Tests
         run: just frontend-test-ci

@@ -128,6 +128,11 @@
   poetry run mypy . && \
   cd ..
 
+@playwright-install:
+  -cd frontend && \
+  npx playwright install && \
+  cd ..
+
 @ruff:
   -cd backend && \
   poetry run ruff check . && \
