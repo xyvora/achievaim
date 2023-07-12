@@ -16,7 +16,7 @@ passlib = {extras = ["bcrypt"], version = "1.7.4"}
 pyjwt = "2.7.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "23.3.0"
+black = "23.7.0"
 mypy = "1.4.1"
 pytest = "7.4.0"
 pytest-cov = "4.1.0"
