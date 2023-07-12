@@ -20,10 +20,7 @@ async def initialize_db():
 @pytest.fixture(autouse=True)
 async def clear_db():
     yield
-    users = await User.find_all().to_list()
-
-    for user in users:
-        await user.delete()
+    await User.delete_all()
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -79,3 +76,36 @@ async def user_no_goals(user_data):
     user_data_copy = deepcopy(user_data)
     user_data_copy["goals"] = None
     return await User(**user_data_copy).insert()
+
+
+@pytest.fixture
+async def admin_user():
+    return await User(
+        user_name="admin", hashed_password=get_password_hash("test_password"), is_admin=True
+    ).insert()
+
+
+@pytest.fixture
+async def superuser_token_headers(test_client, admin_user):
+    login_data = {
+        "username": admin_user.user_name,
+        "password": "test_password",
+    }
+    response = await test_client.post("/login/access-token", data=login_data)
+    tokens = response.json()
+    a_token = tokens["access_token"]
+    headers = {"Authorization": f"Bearer {a_token}"}
+    return headers
+
+
+@pytest.fixture
+async def user_token_headers(test_client):
+    login_data = {
+        "username": "immauser",
+        "password": "test_password",
+    }
+    response = await test_client.post("/login/access-token", data=login_data)
+    tokens = response.json()
+    a_token = tokens["access_token"]
+    headers = {"Authorization": f"Bearer {a_token}"}
+    return headers
