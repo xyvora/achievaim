@@ -8,7 +8,7 @@
 | [Achiev𝘼𝙄m Discord Conversation](https://discord.gg/n3CDBbWw) | Achiev𝘼𝙄m discussions on development, help and ideas. 
 
 ---
-Achiev𝘼𝙄m is a user-friendly and scalable SaaS web application. It seamlessly integrates with calendar and other software applications, leveraging the power of Generative AI to assist users in creating and tracking their SMART goals effectively."
+Achiev𝘼𝙄m is a user-friendly and scalable SaaS web application. It seamlessly integrates with calendar and other software applications, leveraging the power of Generative AI to assist users in creating and tracking their SMART goals effectively.
 
 ---
 ## Features
