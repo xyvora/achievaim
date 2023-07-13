@@ -1,9 +1,11 @@
+from datetime import datetime
 from enum import Enum
 
-from beanie import Document, Indexed
+from beanie import Document
 from bson import ObjectId
 from camel_converter.pydantic_base import CamelBase
-from pydantic import validator
+from pydantic import Field, validator
+from pymongo import ASCENDING, IndexModel
 
 from app.models.object_id import ObjectIdStr
 
@@ -60,6 +62,13 @@ class UserNoPassword(CamelBase):
     class Config:
         json_encoders = {ObjectId: lambda x: str(x)}
 
+    class Settings:
+        projection = {
+            "id": "$_id",
+            "user_name": "$user_name",
+            "goals": "$goals",
+        }
+
 
 class UserUpdate(CamelBase):
     id: ObjectIdStr
@@ -71,14 +80,24 @@ class UserUpdate(CamelBase):
 
 
 class User(Document):
-    user_name: Indexed(str, unique=True)  # type: ignore
+    user_name: str
     hashed_password: str
     goals: list[Goal] | None = None
     is_active: bool = True
     is_admin: bool = False
+    date_created: datetime = Field(default_factory=datetime.now)
+    last_update: datetime = Field(default_factory=datetime.now)
+    last_login: datetime = Field(default_factory=datetime.now)
 
     class Settings:
         name = "users"
+        indexes = [
+            IndexModel(keys=[("user_name", ASCENDING)], name="user_name", unique=True),
+            IndexModel(keys=[("is_active", ASCENDING)], name="is_active"),
+            IndexModel(keys=[("is_admin", ASCENDING)], name="is_admin"),
+            IndexModel(keys=[("goals.id", ASCENDING)], name="goal_id", unique=True),
+            IndexModel(keys=[("goals.name", ASCENDING)], name="goal_name", unique=True),
+        ]
 
     @validator("goals")
     @classmethod
