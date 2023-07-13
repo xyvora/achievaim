@@ -12,6 +12,7 @@ from app.db import init_db
 app = FastAPI()
 templates = Jinja2Templates("app/templates")
 app.include_router(api_router)
+templates = Jinja2Templates(directory="app/templates")
 
 app.add_middleware(
     CORSMiddleware,

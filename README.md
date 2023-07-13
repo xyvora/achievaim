@@ -1,16 +1,18 @@
 # Achiev𝘼𝙄m
 
-| Link | Description |
-|:-----|:------------|
-| [achievaim repo](https://github.com/xyvora/achievaim) | Codebase |
-| [Achiev𝘼𝙄m Project](https://github.com/orgs/xyvora/projects/1) | Project progression, tracking and management. |
-| [Achiev𝘼𝙄m Wiki](https://github.com/xyvora/achievaim/wiki) | Past meeting notes, research, and documentation. |
-| [Achiev𝘼𝙄m Discord Conversation](https://discord.gg/n3CDBbWw) | Achiev𝘼𝙄m discussions on development, help and ideas. 
+| Link                                                           | Description                                           |
+| :------------------------------------------------------------- | :---------------------------------------------------- |
+| [achievaim repo](https://github.com/xyvora/achievaim)          | Codebase                                              |
+| [Achiev𝘼𝙄m Project](https://github.com/orgs/xyvora/projects/1) | Project progression, tracking and management.         |
+| [Achiev𝘼𝙄m Wiki](https://github.com/xyvora/achievaim/wiki)     | Past meeting notes, research, and documentation.      |
+| [Achiev𝘼𝙄m Discord Conversation](https://discord.gg/n3CDBbWw)  | Achiev𝘼𝙄m discussions on development, help and ideas. |
 
 ---
+
 Achiev𝘼𝙄m is a user-friendly and scalable SaaS web application. It seamlessly integrates with calendar and other software applications, leveraging the power of Generative AI to assist users in creating and tracking their SMART goals effectively.
 
 ---
+
 ## Features
 
 - Identify and create SMART goals using a click of a button.
@@ -20,6 +22,7 @@ Achiev𝘼𝙄m is a user-friendly and scalable SaaS web application. It seamles
 - Easily integrate SMART goals with automatic SMART goal events in Google or Outlook.
 
 ---
+
 ## Tech Stack
 
 - Svelte: Front-end framework for building user interfaces
@@ -30,13 +33,14 @@ Achiev𝘼𝙄m is a user-friendly and scalable SaaS web application. It seamles
 - MongoDB/PostgreSQL: Databases for storing goal data
 
 ---
+
 ## Solution
 
 Professionals and students struggle with setting, tracking, and achieving their goals. They often use multiple platforms to manage their tasks, appointments, and goals, leading to disorganization and inefficiency. Existing solutions may not offer seamless integration with commonly used calendar applications like Google and Outlook, making it difficult for users to synchronize their goals and tasks with their schedules. Furthermore, these solutions may not use advanced AI Large Language Models (LLMs) to provide personalized goal recommendations and progress tracking.
 
 ---
-## Installation
 
+## Installation
 
 Clone the repository:
 
@@ -53,7 +57,7 @@ cd achievaim
 Install the dependencies:
 
 ```sh
-npm install
+just install
 ```
 
 Create a .env file in the root directory and provide the necessary environment variables:
@@ -64,20 +68,22 @@ DB_URI=<your-database-connection-uri>
 ```
 
 Usage
-Start the development server:
+Start the development server backend API:
 
 ```sh
-npm run dev
+just api
 ```
 
-Open your browser and visit http://localhost:5000 to access the app or relevant localhost address generated after running. 
+Start the frontend
 
 ```sh
-npm run dev
+just frontend dev
 ```
+
+Open your browser and visit http://localhost:5000 to access the app or relevant localhost address generated after running.
 
 Contributing
-Contributions are welcome! If you find any issues or want to contribute to the project, please create a pull request or open an issue.
+Contributions are welcome! If you are interesting in contributing please see our [contributing guide](CONTRIBUTING.md)
 
 License
 This project is licensed under the MIT License.
