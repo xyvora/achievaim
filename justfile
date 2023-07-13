@@ -17,7 +17,7 @@
   cd ..
 
 @black-ci:
-  -cd backend && \
+  cd backend && \
   poetry run black app tests --check && \
   cd ..
 
@@ -128,12 +128,17 @@
   poetry run mypy . && \
   cd ..
 
+@playwright-install:
+  -cd frontend && \
+  npx playwright install && \
+  cd ..
+
 @ruff:
   -cd backend && \
   poetry run ruff check . && \
   cd ..
 
 @ruff-ci:
-  -cd backend && \
+  cd backend && \
   poetry run ruff check --exit-non-zero-on-fix . && \
   cd ..

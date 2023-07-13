@@ -37,7 +37,7 @@ class Goal(_GoalBase):
 
 
 class GoalCreate(_GoalBase):
-    user_id: ObjectIdStr
+    pass
 
 
 class GoalWithUserId(Goal):
@@ -74,6 +74,8 @@ class User(Document):
     user_name: Indexed(str, unique=True)  # type: ignore
     hashed_password: str
     goals: list[Goal] | None = None
+    is_active: bool = True
+    is_admin: bool = False
 
     class Settings:
         name = "users"

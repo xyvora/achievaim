@@ -2,17 +2,15 @@ from copy import deepcopy
 from uuid import uuid4
 
 import pytest
-from bson import ObjectId
 from fastapi import HTTPException
 
 from app.api.v1.routes.goal import _validate_unique_goal
 
 
 @pytest.mark.usefixtures("user_no_goals")
-async def test_create_goal_no_goals(test_client, user_data):
+async def test_create_goal_no_goals(test_client, user_data, user_token_headers):
     goal_data = deepcopy(user_data["goals"][0])
-    goal_data["user_id"] = user_data["_id"]
-    response = await test_client.post("goal/", json=goal_data)
+    response = await test_client.post("goal/", headers=user_token_headers, json=goal_data)
     response_json = response.json()
 
     assert len(response_json) == 1
@@ -25,11 +23,10 @@ async def test_create_goal_no_goals(test_client, user_data):
 
 
 @pytest.mark.usefixtures("user_with_goals")
-async def test_create_goal_with_goals(test_client, user_data):
+async def test_create_goal_with_goals(test_client, user_data, user_token_headers):
     goal_data = deepcopy(user_data["goals"][0])
     goal_data["name"] = str(uuid4())
-    goal_data["user_id"] = user_data["_id"]
-    response = await test_client.post("goal/", json=goal_data)
+    response = await test_client.post("goal/", headers=user_token_headers, json=goal_data)
 
     got = []
     for goal in response.json():
@@ -41,7 +38,6 @@ async def test_create_goal_with_goals(test_client, user_data):
         goal.pop("id")
         expected.append(goal)
 
-    goal_data.pop("user_id")
     goal_data.pop("id")
     expected.append(goal_data)
 
@@ -49,198 +45,165 @@ async def test_create_goal_with_goals(test_client, user_data):
 
 
 @pytest.mark.usefixtures("user_with_goals")
-async def test_create_goal_duplicate(test_client, user_data):
+async def test_create_goal_duplicate(test_client, user_data, user_token_headers):
     goal_data = deepcopy(user_data["goals"][0])
-    goal_data["user_id"] = user_data["_id"]
-    response = await test_client.post("goal/", json=goal_data)
+    response = await test_client.post("goal/", headers=user_token_headers, json=goal_data)
     assert response.status_code == 400
 
 
-async def test_create_goal_user_not_found(test_client, user_data):
+async def tests_create_goal_not_authenticated(test_client, user_data):
     goal_data = deepcopy(user_data["goals"][0])
-    goal_data["user_id"] = user_data["_id"]
     response = await test_client.post("goal/", json=goal_data)
-    assert response.status_code == 404
-    assert "User with ID" in response.json()["detail"]
+    assert response.status_code == 401
 
 
-async def test_delete_goal_by_id(test_client, user_with_goals):
-    response = await test_client.delete(f"goal/{user_with_goals.id}/{user_with_goals.goals[0].id}")
+async def test_delete_goal_by_id(test_client, user_with_goals, user_token_headers):
+    response = await test_client.delete(
+        f"goal/{user_with_goals.goals[0].id}", headers=user_token_headers
+    )
     assert response.status_code == 204
 
 
-async def test_delete_goal_by_id_user_not_found(test_client):
-    response = await test_client.delete(f"goal/{ObjectId()}/some_goal")
-    assert response.status_code == 404
-    assert "User not found" == response.json()["detail"]
+async def test_delete_goal_by_id_not_authenticated(test_client):
+    response = await test_client.delete("goal/some_goal")
+    assert response.status_code == 401
 
 
-async def test_delete_goal_by_id_no_goals(test_client, user_no_goals):
-    response = await test_client.delete(f"goal/{user_no_goals.id}/some_goal")
+@pytest.mark.usefixtures("user_no_goals")
+async def test_delete_goal_by_id_no_goals(test_client, user_token_headers):
+    response = await test_client.delete("goal/some_goal", headers=user_token_headers)
     assert response.status_code == 404
     assert "No goals found for user" == response.json()["detail"]
 
 
-async def test_delete_goal_by_id_not_found(test_client, user_with_goals):
+@pytest.mark.usefixtures("user_with_goals")
+async def test_delete_goal_by_id_not_found(test_client, user_token_headers):
     goal_id = str(uuid4())
-    response = await test_client.delete(f"goal/{user_with_goals.id}/{goal_id}")
+    response = await test_client.delete(f"goal/{goal_id}", headers=user_token_headers)
     assert response.status_code == 404
     assert f"Goal {goal_id} not found" == response.json()["detail"]
 
 
-async def test_delete_goal_by_id_invalid_oid(test_client):
-    response = await test_client.delete("goal/bad/bad")
-    assert response.status_code == 400
-
-
-async def test_delete_goal_by_name(test_client, user_with_goals):
+async def test_delete_goal_by_name(test_client, user_with_goals, user_token_headers):
     response = await test_client.delete(
-        f"goal/{user_with_goals.id}/goal-name/{user_with_goals.goals[0].name}"
+        f"goal/goal-name/{user_with_goals.goals[0].name}", headers=user_token_headers
     )
     assert response.status_code == 204
 
 
-async def test_delete_goal_by_name_user_not_found(test_client):
-    response = await test_client.delete(f"goal/{ObjectId()}/goal-name/some_goal")
-    assert response.status_code == 404
-    assert "User not found" == response.json()["detail"]
+async def test_delete_goal_by_name_user_not_authenticated(test_client):
+    response = await test_client.delete("goal/goal-name/some_goal")
+    assert response.status_code == 401
 
 
-async def test_delete_goal_by_name_no_goals(test_client, user_no_goals):
-    response = await test_client.delete(f"goal/{user_no_goals.id}/goal-name/some_goal")
+@pytest.mark.usefixtures("user_no_goals")
+async def test_delete_goal_by_name_no_goals(test_client, user_token_headers):
+    response = await test_client.delete("goal/goal-name/some_goal", headers=user_token_headers)
     assert response.status_code == 404
     assert "No goals found for user" == response.json()["detail"]
 
 
-async def test_delete_goal_by_name_not_found(test_client, user_with_goals):
+@pytest.mark.usefixtures("user_with_goals")
+async def test_delete_goal_by_name_not_found(test_client, user_token_headers):
     goal_name = str(uuid4())
-    response = await test_client.delete(f"goal/{user_with_goals.id}/goal-name/{goal_name}")
+    response = await test_client.delete(f"goal/goal-name/{goal_name}", headers=user_token_headers)
     assert response.status_code == 404
     assert f"Goal {goal_name} not found" == response.json()["detail"]
 
 
-async def test_delete_goal_by_name_invalid_oid(test_client):
-    response = await test_client.delete("goal/bad/goal-name/some_goal")
-    assert response.status_code == 400
-
-
-async def test_get_all_goals(test_client, user_with_goals):
-    response = await test_client.get(f"goal/{user_with_goals.id}")
+async def test_get_all_goals(test_client, user_with_goals, user_token_headers):
+    response = await test_client.get("goal", headers=user_token_headers)
     assert response.json()[0]["name"] == user_with_goals.goals[0].name
 
 
-async def test_get_all_goals_no_goals(test_client, user_no_goals):
-    response = await test_client.get(f"goal/{user_no_goals.id}")
+@pytest.mark.usefixtures("user_no_goals")
+async def test_get_all_goals_no_goals(test_client, user_token_headers):
+    response = await test_client.get("goal/", headers=user_token_headers)
     assert response.status_code == 404
 
 
-async def test_get_all_goals_user_not_found(test_client):
-    response = await test_client.get(f"goal/{ObjectId()}")
-    assert response.status_code == 404
+async def test_get_all_goals_user_not_authenticated(test_client):
+    response = await test_client.get("goal/")
+    assert response.status_code == 401
 
 
-async def test_get_all_goals_bad_oid(test_client):
-    response = await test_client.get("goal/bad")
-    assert response.status_code == 400
-
-
-async def test_get_by_id_user_not_found(test_client):
-    response = await test_client.get(f"goal/{ObjectId()}/someid")
-    assert response.status_code == 404
-    assert "User not found" == response.json()["detail"]
-
-
-async def test_get_goal_by_id_not_found(test_client, user_with_goals):
-    response = await test_client.get(f"goal/{user_with_goals.id}/some_id")
+@pytest.mark.usefixtures("user_with_goals")
+async def test_get_goal_by_id_not_found(test_client, user_token_headers):
+    response = await test_client.get("goal/some_id", headers=user_token_headers)
     assert response.status_code == 404
     assert "No goal ID" in response.json()["detail"]
 
 
-async def test_get_goal_by_id_no_goals(test_client, user_no_goals):
-    response = await test_client.get(f"goal/{user_no_goals.id}/some_id")
+@pytest.mark.usefixtures("user_no_goals")
+async def test_get_goal_by_id_no_goals(test_client, user_token_headers):
+    response = await test_client.get("goal/some_id", headers=user_token_headers)
     assert response.status_code == 404
     assert "No goals found for user" == response.json()["detail"]
 
 
-async def test_get_goal_by_id_bad_oid(test_client):
-    response = await test_client.get("goal/bad/bad")
-    assert response.status_code == 400
-
-
-async def test_get_goal_by_id(test_client, user_with_goals):
-    response = await test_client.get(f"goal/{user_with_goals.id}/{user_with_goals.goals[0].id}")
-    assert response.json()["name"] == user_with_goals.goals[0].name
-
-
-async def test_get_goal_by_name(test_client, user_with_goals):
+async def test_get_goal_by_id(test_client, user_with_goals, user_token_headers):
     response = await test_client.get(
-        f"goal/{user_with_goals.id}/goal-name/{user_with_goals.goals[0].name}"
+        f"goal/{user_with_goals.goals[0].id}", headers=user_token_headers
     )
     assert response.json()["name"] == user_with_goals.goals[0].name
 
 
-async def test_get_goal_by_name_not_found(test_client, user_with_goals):
-    response = await test_client.get(f"goal/{user_with_goals.id}/goal-name/bad")
+async def test_get_goal_by_name(test_client, user_with_goals, user_token_headers):
+    response = await test_client.get(
+        f"goal/goal-name/{user_with_goals.goals[0].name}", headers=user_token_headers
+    )
+    assert response.json()["name"] == user_with_goals.goals[0].name
+
+
+@pytest.mark.usefixtures("user_with_goals")
+async def test_get_goal_by_name_not_found(test_client, user_token_headers):
+    response = await test_client.get("goal/goal-name/bad", headers=user_token_headers)
     assert response.status_code == 404
     assert "No goal named" in response.json()["detail"]
 
 
-async def test_get_goal_by_name_no_goals(test_client, user_no_goals):
-    response = await test_client.get(f"goal/{user_no_goals.id}/goal-name/bad")
+@pytest.mark.usefixtures("user_no_goals")
+async def test_get_goal_by_name_no_goals(test_client, user_token_headers):
+    response = await test_client.get("goal/goal-name/bad", headers=user_token_headers)
     assert response.status_code == 404
     assert "No goals found for user" == response.json()["detail"]
 
 
-async def test_get_goal_by_name_user_not_found(test_client):
-    response = await test_client.get(f"goal/{ObjectId()}/goal-name/bad")
-    assert response.status_code == 404
-    assert "User not found" == response.json()["detail"]
+async def test_get_goal_by_name_not_authenticated(test_client):
+    response = await test_client.get("goal/goal-name/some_goal")
+    assert response.status_code == 401
 
 
-async def test_get_goal_by_name_bad_oid(test_client):
-    response = await test_client.get("goal/bad/goal-name/some_goal")
-    assert response.status_code == 400
-
-
-async def test_update_goal(test_client, user_with_goals, user_data):
+@pytest.mark.usefixtures("user_with_goals")
+async def test_update_goal(test_client, user_data, user_token_headers):
     goal_data = deepcopy(user_data["goals"][0])
-    goal_data["user_id"] = str(user_with_goals.id)
     goal_data["name"] = "Test"
-    response = await test_client.put("goal/", json=goal_data)
+    response = await test_client.put("goal/", json=goal_data, headers=user_token_headers)
     assert response.json()["name"] == "Test"
 
 
-async def test_update_goal_user_not_found(test_client, user_data):
+async def test_update_goal_user_not_authenticated(test_client, user_data):
     goal_data = deepcopy(user_data["goals"][0])
-    goal_data["user_id"] = str(ObjectId())
     response = await test_client.put("goal/", json=goal_data)
-    assert response.status_code == 404
-    assert "User with ID" in response.json()["detail"]
+    assert response.status_code == 401
 
 
-async def test_update_goal_no_goals(test_client, user_no_goals, user_data):
+@pytest.mark.usefixtures("user_no_goals")
+async def test_update_goal_no_goals(test_client, user_data, user_token_headers):
     goal_data = deepcopy(user_data["goals"][0])
-    goal_data["user_id"] = str(user_no_goals.id)
-    response = await test_client.put("goal/", json=goal_data)
+    response = await test_client.put("goal/", headers=user_token_headers, json=goal_data)
     assert response.status_code == 404
     assert "No goals found for user" in response.json()["detail"]
 
 
-async def test_update_goal_goal_not_found(test_client, user_with_goals, user_data):
+@pytest.mark.usefixtures("user_with_goals")
+async def test_update_goal_goal_not_found(test_client, user_data, user_token_headers):
     goal_data = deepcopy(user_data["goals"][0])
-    goal_data["user_id"] = str(user_with_goals.id)
     goal_data["id"] = str(uuid4())
     goal_data["name"] = str(uuid4())
-    response = await test_client.put("goal/", json=goal_data)
+    response = await test_client.put("goal/", headers=user_token_headers, json=goal_data)
     assert response.status_code == 404
-    assert "not found for user" in response.json()["detail"]
-
-
-async def test_update_goal_bad_oid(test_client, user_data):
-    goal_data = deepcopy(user_data["goals"][0])
-    goal_data["user_id"] = "bad"
-    response = await test_client.put("goal/", json=goal_data)
-    assert response.status_code == 422
+    assert "not found" in response.json()["detail"]
 
 
 def test_validate_unique_goal_id(user_with_goals):

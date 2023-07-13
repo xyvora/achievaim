@@ -10,7 +10,7 @@ class Settings(BaseSettings):
 
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: Final[int] = 60 * 24 * 8
-    SECRET_KEY: Final[str] = secrets.token_urlsafe(32)
+    SECRET_KEY: Final[str] = Field(secrets.token_urlsafe(32), env="SECRET_KEY")
 
     mongo_initdb_database: str = Field("mongo_test", env="MONGO_INITDB_DATABASE")
     mongo_initdb_root_username: str = Field("mongo", env="MONGO_INITDB_ROOT_USERNAME")
