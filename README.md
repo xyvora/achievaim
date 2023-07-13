@@ -57,7 +57,7 @@ cd achievaim
 Install the dependencies:
 
 ```sh
-npm install
+just install
 ```
 
 Create a .env file in the root directory and provide the necessary environment variables:
@@ -68,20 +68,22 @@ DB_URI=<your-database-connection-uri>
 ```
 
 Usage
-Start the development server:
+Start the development server backend API:
 
 ```sh
-npm run dev
+just api
+```
+
+Start the frontend
+
+```sh
+just frontend dev
 ```
 
 Open your browser and visit http://localhost:5000 to access the app or relevant localhost address generated after running.
 
-```sh
-npm run dev
-```
-
 Contributing
-Contributions are welcome! If you find any issues or want to contribute to the project, please create a pull request or open an issue.
+Contributions are welcome! If you are interesting in contributing please see our [contributing guide](CONTRIBUTING.md)
 
 License
 This project is licensed under the MIT License.
