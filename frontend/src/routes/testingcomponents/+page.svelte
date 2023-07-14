@@ -1,12 +1,24 @@
 <section class="bg-white dark:bg-gray-900">
-    <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
-        <div class="mx-auto max-w-screen-sm text-center">
-            <h1 class="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-primary-600 dark:text-primary-500">404</h1>
-            <p class="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">Something's missing.</p>
-            <p class="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">We can't find that page. You'll find lots to explore on the home page. </p>
-            <a href="#" class="inline-flex text-white bg-primary-600 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900 my-4">Back to Homepage</a>
-        </div>   
+  <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+    <div class="mx-auto max-w-screen-sm text-center">
+      <h1
+        class="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-primary-600 dark:text-primary-500"
+      >
+        404
+      </h1>
+      <p class="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">
+        Something's missing.
+      </p>
+      <p class="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
+        We can't find that page. You'll find lots to explore on the home page.
+      </p>
+      <a
+        href="#"
+        class="inline-flex text-white bg-primary-600 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900 my-4"
+        >Back to Homepage</a
+      >
     </div>
+  </div>
 </section>
 
 <body class="antialiased bg-slate-200">
@@ -75,20 +87,23 @@
 </body>
 
 <div class="bg-gray-100 h-screen">
-    <div class="bg-white p-6  md:mx-auto">
-      <svg viewBox="0 0 24 24" class="text-green-600 w-16 h-16 mx-auto my-6">
-          <path fill="currentColor"
-              d="M12,0A12,12,0,1,0,24,12,12.014,12.014,0,0,0,12,0Zm6.927,8.2-6.845,9.289a1.011,1.011,0,0,1-1.43.188L5.764,13.769a1,1,0,1,1,1.25-1.562l4.076,3.261,6.227-8.451A1,1,0,1,1,18.927,8.2Z">
-          </path>
-      </svg>
-      <div class="text-center">
-          <h3 class="md:text-2xl text-base text-gray-900 font-semibold text-center">Smart Goals ahead</h3>
-          <p class="text-gray-600 my-2">Thank you for being SMART when it comes to  your goals. </p>
-          <div class="py-10 text-center">
-              <a href="#" class="px-12 bg-indigo-600 hover:primary text-white font-semibold py-3">
-                  GO BACK 
-             </a>
-          </div>
+  <div class="bg-white p-6  md:mx-auto">
+    <svg viewBox="0 0 24 24" class="text-green-600 w-16 h-16 mx-auto my-6">
+      <path
+        fill="currentColor"
+        d="M12,0A12,12,0,1,0,24,12,12.014,12.014,0,0,0,12,0Zm6.927,8.2-6.845,9.289a1.011,1.011,0,0,1-1.43.188L5.764,13.769a1,1,0,1,1,1.25-1.562l4.076,3.261,6.227-8.451A1,1,0,1,1,18.927,8.2Z"
+      />
+    </svg>
+    <div class="text-center">
+      <h3 class="md:text-2xl text-base text-gray-900 font-semibold text-center">
+        Smart Goals ahead
+      </h3>
+      <p class="text-gray-600 my-2">Thank you for being SMART when it comes to your goals.</p>
+      <div class="py-10 text-center">
+        <a href="#" class="px-12 bg-indigo-600 hover:primary text-white font-semibold py-3">
+          GO BACK
+        </a>
       </div>
+    </div>
   </div>
 </div>
