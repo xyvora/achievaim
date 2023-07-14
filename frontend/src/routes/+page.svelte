@@ -35,8 +35,11 @@
             class="input input-bordered"
           />
           <a href={'#'} class="label-text-alt link link-hover mt-4 mb-4">Forgot password?</a>
-          <a href="signup" class="label-text-alt link link-hover" class:active={$page.url.pathname === '/signup'}
-          >Are your Goals Smart yet? Sign up here!</a
+          <a
+            href="signup"
+            class="label-text-alt link link-hover"
+            class:active={$page.url.pathname === '/signup'}
+            >Are your Goals Smart yet? Sign up here!</a
           >
         </div>
         <div class="form-control mt-6">
