@@ -3,8 +3,7 @@ from enum import Enum
 
 from beanie import Document
 from bson import ObjectId
-from camel_converter.pydantic_base import CamelBase
-from pydantic import Field, validator
+from pydantic import BaseModel, Field, validator
 from pymongo import ASCENDING, IndexModel
 
 from app.models.object_id import ObjectIdStr
@@ -16,7 +15,7 @@ class RepeatsEvery(str, Enum):
     month = "month"
 
 
-class DaysOfWeek(CamelBase):
+class DaysOfWeek(BaseModel):
     monday: bool = False
     tuesday: bool = False
     wednesday: bool = False
@@ -26,7 +25,7 @@ class DaysOfWeek(CamelBase):
     sunday: bool = False
 
 
-class _GoalBase(CamelBase):
+class _GoalBase(BaseModel):
     name: str
     duration: int
     days_of_week: DaysOfWeek
@@ -49,12 +48,12 @@ class GoalWithUserId(Goal):
         json_encoders = {ObjectId: lambda x: str(x)}
 
 
-class UserCreate(CamelBase):
+class UserCreate(BaseModel):
     user_name: str
     password: str
 
 
-class UserNoPassword(CamelBase):
+class UserNoWithGoals(BaseModel):
     id: ObjectIdStr
     user_name: str
     goals: list[Goal] | None = None
@@ -70,13 +69,32 @@ class UserNoPassword(CamelBase):
         }
 
 
-class UserUpdate(CamelBase):
+class UserNoPassword(BaseModel):
+    id: ObjectIdStr
+    user_name: str
+
+    class Config:
+        json_encoders = {ObjectId: lambda x: str(x)}
+
+    class Settings:
+        projection = {
+            "id": "$_id",
+            "user_name": "$user_name",
+        }
+
+
+class UserUpdateMe(BaseModel):
     id: ObjectIdStr
     password: str
     user_name: str
 
     class Config:
         json_encoders = {ObjectId: lambda x: str(x)}
+
+
+class UserUpdate(UserUpdateMe):
+    is_active: bool
+    is_admin: bool
 
 
 class User(Document):
