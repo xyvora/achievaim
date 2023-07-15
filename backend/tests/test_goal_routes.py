@@ -138,7 +138,7 @@ async def test_get_goal_by_id_not_found(test_client, user_token_headers):
 async def test_get_goal_by_id_no_goals(test_client, user_token_headers):
     response = await test_client.get("goal/some_id", headers=user_token_headers)
     assert response.status_code == 404
-    assert "No goals found for user" == response.json()["detail"]
+    assert "No goal ID" in response.json()["detail"]
 
 
 async def test_get_goal_by_id(test_client, user_with_goals, user_token_headers):
@@ -166,7 +166,7 @@ async def test_get_goal_by_name_not_found(test_client, user_token_headers):
 async def test_get_goal_by_name_no_goals(test_client, user_token_headers):
     response = await test_client.get("goal/goal-name/bad", headers=user_token_headers)
     assert response.status_code == 404
-    assert "No goals found for user" == response.json()["detail"]
+    assert "No goal named" in response.json()["detail"]
 
 
 async def test_get_goal_by_name_not_authenticated(test_client):

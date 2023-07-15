@@ -63,9 +63,25 @@ def user_data():
                     "saturday": False,
                     "sunday": False,
                 },
-                "repeats_every": "day",
+                "repeats_every": "week",
                 "progress": 41.0,
-            }
+            },
+            {
+                "id": str(uuid4()),
+                "name": "Goal 2",
+                "duration": 2,
+                "days_of_week": {
+                    "monday": True,
+                    "tuesday": True,
+                    "wednesday": False,
+                    "thursday": True,
+                    "friday": True,
+                    "saturday": True,
+                    "sunday": True,
+                },
+                "repeats_every": "day",
+                "progress": 42.0,
+            },
         ],
     }
 

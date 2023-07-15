@@ -14,6 +14,9 @@ from app.api.deps import CurrentUser, logger
 from app.core.config import config
 from app.core.utils import APIRouter
 from app.models.user import Goal, GoalCreate, User
+from app.services.goal_service import get_goal_by_id as get_goal_by_id_service
+from app.services.goal_service import get_goal_by_name as get_goal_by_name_service
+from app.services.goal_service import get_goals_by_user_id
 from app.services.user_service import get_full_user
 
 router = APIRouter(tags=["Goal"], prefix=f"{config.V1_API_PREFIX}/goal")
@@ -23,67 +26,41 @@ router = APIRouter(tags=["Goal"], prefix=f"{config.V1_API_PREFIX}/goal")
 async def get_user_goals(current_user: CurrentUser) -> list[Goal]:
     """Get goals for a user."""
     logger.info("Getting goals for user %s", current_user.id)
-    user = await get_full_user(ObjectId(current_user.id))
+    goals = await get_goals_by_user_id(ObjectId(current_user.id))
 
-    if not user:  # pragma: no cover
-        logger.info("No user found with id %s", current_user.id)
-        raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND, detail=f"No user found with id {current_user.id}"
-        )
-
-    if not user.goals:
+    if not goals:
         logger.info("No goals found for user %s", current_user.id)
         raise HTTPException(
             status_code=HTTP_404_NOT_FOUND, detail=f"No goals found for user {current_user.id}"
         )
 
-    return user.goals
+    return goals
 
 
 @router.get("/{goal_id}")
 async def get_goal_by_id(goal_id: str, current_user: CurrentUser) -> Goal:
     """Get a specifiic goal by goal ID."""
-    user = await get_full_user(ObjectId(current_user.id))
+    goal = await get_goal_by_id_service(ObjectId(current_user.id), goal_id)
 
-    if not user:  # pragma: no cover
-        logger.info("No user found with id %s", current_user.id)
-        raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND, detail=f"No user found with id {current_user.id}"
-        )
+    if not goal:
+        logger.info("No goal named %s found for ID %s", goal_id, current_user.id)
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f"No goal ID {goal_id} found")
 
-    if not user.goals:
-        logger.info("No goals found for user %s", current_user.id)
-        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="No goals found for user")
-
-    for goal in user.goals:
-        if goal.id == goal_id:
-            return goal
-
-    logger.info("No goal named %s found for ID %s", goal_id, current_user.id)
-    raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f"No goal ID {goal_id} found")
+    return goal
 
 
 @router.get("/goal-name/{goal_name}")
 async def get_goal_by_name(goal_name: str, current_user: CurrentUser) -> Goal:
     """Get a specifiic goal."""
-    user = await get_full_user(ObjectId(current_user.id))
+    goal = await get_goal_by_name_service(ObjectId(current_user.id), goal_name)
 
-    if not user:  # pragma: no cover
-        logger.info("No user found with id %s", current_user.id)
+    if not goal:
+        logger.info("No goal named %s found for user %s", goal_name, current_user.id)
         raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND, detail=f"No user found with id {current_user.id}"
+            status_code=HTTP_404_NOT_FOUND, detail=f"No goal named {goal_name} found"
         )
 
-    if not user.goals:
-        logger.info("No goals found for user %s", current_user.id)
-        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="No goals found for user")
-
-    for goal in user.goals:
-        if goal.name == goal_name:
-            return goal
-
-    logger.info("No goal named %s found for user %s", goal_name, current_user.id)
-    raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f"No goal named {goal_name} found")
+    return goal
 
 
 @router.post("/")
