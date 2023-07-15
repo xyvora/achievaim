@@ -12,7 +12,6 @@ from starlette.status import (
 
 from app.api.deps import CurrentAdminUser, CurrentUser, logger
 from app.core.config import config
-from app.core.security import get_password_hash
 from app.core.utils import APIRouter, str_to_oid
 from app.exceptions import DuplicateUserNameError, NoRecordsDeletedError, NoRecordsUpdatedError
 from app.models.user import UserCreate, UserNoPassword, UserUpdateMe

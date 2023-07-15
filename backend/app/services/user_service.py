@@ -20,8 +20,6 @@ async def create_user(user: UserCreate) -> UserNoPassword:
     if await get_user_by_user_name(user_name):
         raise DuplicateUserNameError(f"A user with the user name {user.user_name} already exists")
 
-    print("ME!!!")
-    print(user.password)
     hashed_password = get_password_hash(user.password)
     user = User(user_name=user_name, hashed_password=hashed_password)
     await user.save()
