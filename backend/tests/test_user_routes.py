@@ -9,7 +9,7 @@ async def test_create_user(test_client):
     response = await test_client.post("user/", json=user_data)
     response_json = response.json()
 
-    assert response_json["userName"] == user_data["user_name"]
+    assert response_json["user_name"] == user_data["user_name"]
 
 
 async def test_create_user_duplicate(user_with_goals, test_client):
@@ -24,7 +24,7 @@ async def test_get_users(user_with_goals, test_client, superuser_token_headers):
     response_json = response.json()
 
     assert len(response_json) == 2
-    assert response_json[0]["userName"] == user_with_goals.user_name
+    assert response_json[0]["user_name"] == user_with_goals.user_name
 
 
 @pytest.mark.usefixtures("user_with_goals")
@@ -46,7 +46,7 @@ async def test_get_user_by_id(user_with_goals, test_client, superuser_token_head
     response = await test_client.get(f"user/{user_with_goals.id}", headers=superuser_token_headers)
     response_json = response.json()
 
-    assert response_json["userName"] == user_with_goals.user_name
+    assert response_json["user_name"] == user_with_goals.user_name
 
 
 async def test_get_user_by_id_bad_id(test_client, superuser_token_headers):
@@ -75,7 +75,7 @@ async def test_get_user_by_name(user_with_goals, test_client, superuser_token_he
     )
     response_json = response.json()
 
-    assert response_json["userName"] == user_with_goals.user_name
+    assert response_json["user_name"] == user_with_goals.user_name
 
 
 async def test_get_user_by_name_not_found(test_client, superuser_token_headers):
@@ -197,12 +197,11 @@ async def test_update_me(user_with_goals, user_data, test_client, user_token_hea
     user_data["id"] = str(user_with_goals.id)
     response = await test_client.put("user/", headers=user_token_headers, json=user_data)
 
-    assert response.json()["userName"] == user_data["user_name"]
+    assert response.json()["user_name"] == user_data["user_name"]
 
 
-async def test_update_me_different_user(
-    user_with_goals, user_data, test_client, user_token_headers
-):
+@pytest.mark.usefixtures("user_with_goals")
+async def test_update_me_different_user(user_data, test_client, user_token_headers):
     response = await test_client.post("user", json={"user_name": str(uuid4()), "password": "abc"})
     assert response.status_code == 200
     user_data.pop("goals")

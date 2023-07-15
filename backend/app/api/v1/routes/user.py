@@ -12,9 +12,16 @@ from starlette.status import (
 
 from app.api.deps import CurrentAdminUser, CurrentUser, logger
 from app.core.config import config
-from app.core.security import get_password_hash
 from app.core.utils import APIRouter, str_to_oid
-from app.models.user import User, UserCreate, UserNoPassword, UserUpdate
+from app.exceptions import DuplicateUserNameError, NoRecordsDeletedError, NoRecordsUpdatedError
+from app.models.user import UserCreate, UserNoPassword, UserUpdateMe
+from app.services.user_service import create_user as create_user_service
+from app.services.user_service import delete_user_by_id as delete_user_by_id_service
+from app.services.user_service import delete_user_by_user_name as delete_user_by_user_name_service
+from app.services.user_service import get_user_by_id as get_user_by_id_service
+from app.services.user_service import get_user_by_user_name as get_user_by_user_name_service
+from app.services.user_service import get_users as get_user_service
+from app.services.user_service import update_me as update_me_service
 
 router = APIRouter(tags=["User"], prefix=f"{config.V1_API_PREFIX}/user")
 
@@ -24,21 +31,9 @@ async def create_user(user: UserCreate) -> UserNoPassword:
     """Create a new user."""
     logger.info("Creating user")
     try:
-        user.password = get_password_hash(user.password)
-    except Exception as e:  # pragma: no cover
-        logger.info("An error occurred while hashing the password: %s", e)
-        raise HTTPException(
-            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An error occurred while hasing the password",
-        )
-
-    try:
-        user_dict = user.dict()
-        user_dict["hashed_password"] = user_dict.pop("password")
-        db_user = User(**user_dict)
-        saved_user = await db_user.insert()
-    except DuplicateKeyError as e:
-        logger.info("User name %s already exists: %s", user.user_name, e)
+        created_user = await create_user_service(user)
+    except DuplicateUserNameError:
+        logger.info("A user with the user name %s already exists", user.user_name)
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST,
             detail=f"A user with the user name {user.user_name} already exists",
@@ -50,16 +45,14 @@ async def create_user(user: UserCreate) -> UserNoPassword:
             detail="An error occurred while creating the user",
         )
 
-    return UserNoPassword(**saved_user.dict())
+    return created_user
 
 
 @router.get("/")
 async def get_users(_: CurrentAdminUser) -> list[UserNoPassword]:
     """Get all users."""
     logger.info("Getting all users")
-    users = await User.find_all().to_list()
-
-    return [UserNoPassword(**x.dict()) for x in users]
+    return await get_user_service()
 
 
 @router.get("/me")
@@ -79,7 +72,7 @@ async def get_user_by_id(user_id: str, _: CurrentAdminUser) -> UserNoPassword:
             status_code=HTTP_400_BAD_REQUEST, detail=f"{user_id} is not a valid ID format"
         )
 
-    user = await User.find_one(User.id == oid)
+    user = await get_user_by_id_service(oid)
 
     if not user:
         logger.info("User with id %s not found", user_id)
@@ -87,14 +80,14 @@ async def get_user_by_id(user_id: str, _: CurrentAdminUser) -> UserNoPassword:
             status_code=HTTP_404_NOT_FOUND, detail=f"User with id {user_id} not found"
         )
 
-    return UserNoPassword(**user.dict())
+    return user
 
 
 @router.get("/user-name/{user_name}")
 async def get_user_by_user_name(user_name: str, _: CurrentAdminUser) -> UserNoPassword:
     """Get a user by user name."""
     logger.info("Getting user %s", user_name)
-    user = await User.find_one(User.user_name == user_name)
+    user = await get_user_by_user_name_service(user_name)
 
     if not user:
         logger.info("User with user name %s not found", user_name)
@@ -102,13 +95,28 @@ async def get_user_by_user_name(user_name: str, _: CurrentAdminUser) -> UserNoPa
             status_code=HTTP_404_NOT_FOUND, detail=f"User with user name {user_name} not found"
         )
 
-    return UserNoPassword(**user.dict())
+    return user
 
 
 @router.delete("/", response_model=None, status_code=HTTP_204_NO_CONTENT)
 async def delete_me(current_user: CurrentUser) -> None:
     """Delete the current logged in user."""
-    await current_user.delete()
+    # fail-safe, shouldn't be possible to hit
+    if not current_user.id:  # pragma: no cover
+        logger.info("User has no id, unable to delete")
+        raise HTTPException(
+            status_code=HTTP_400_BAD_REQUEST, detail="User has no ID, unable to delete"
+        )
+
+    try:
+        await delete_user_by_id_service(ObjectId(current_user.id))
+    except NoRecordsDeletedError:  # pragma: no cover
+        # fail-safe, shouldn't be possible to hit
+        logger.info("User with id %s not found. No delete performed", current_user.id)
+        raise HTTPException(
+            status_code=HTTP_400_BAD_REQUEST,
+            detail=f"User with id {current_user.id} not found. No user deleted",
+        )
 
 
 @router.delete("/{user_id}", response_model=None, status_code=HTTP_204_NO_CONTENT)
@@ -121,31 +129,32 @@ async def delete_user_by_id(user_id: str, _: CurrentAdminUser) -> None:
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail=f"{user_id} is not a valid ID format"
         )
-    user_in_db = await User.find_one(User.id == oid)
 
-    if not user_in_db:
-        logger.info("User with ID %s not found", user_id)
-        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="User not found")
-
-    logger.info("Deleting user with ID %s", user_id)
-    await user_in_db.delete()
+    try:
+        await delete_user_by_id_service(oid)
+    except NoRecordsDeletedError:
+        logger.info("User with id %s not found. No delete performed", user_id)
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND,
+            detail=f"User with id {user_id} not found. No user deleted",
+        )
 
 
 @router.delete("/user-name/{user_name}", response_model=None, status_code=HTTP_204_NO_CONTENT)
 async def delete_user_by_user_name(user_name: str, _: CurrentAdminUser) -> None:
     """Delete a user by user name."""
-    user_in_db = await User.find_one(User.user_name == user_name)
-
-    if not user_in_db:
-        logger.info("User with user name %s not found", user_name)
-        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="User not found")
-
-    logger.info("Deleting user with user name %s", user_name)
-    await user_in_db.delete()
+    try:
+        await delete_user_by_user_name_service(user_name)
+    except NoRecordsDeletedError:
+        logger.info("User with user name %s not found. No delete performed", user_name)
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND,
+            detail=f"User with user name {user_name} not found. No user deleted",
+        )
 
 
 @router.put("/")
-async def update_me(user: UserUpdate, current_user: CurrentUser) -> UserNoPassword:
+async def update_me(user: UserUpdateMe, current_user: CurrentUser) -> UserNoPassword:
     """Update the logged in user's information."""
     logger.info("Updating user")
 
@@ -153,12 +162,22 @@ async def update_me(user: UserUpdate, current_user: CurrentUser) -> UserNoPasswo
         logger.info("Cannot update another user's information")
         raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Invalid user ID")
 
-    update_user = user.dict()
-    update_user["hashed_password"] = update_user.pop("password")
-    db_user = User(**update_user)
     try:
-        await current_user.update({"$set": db_user.dict()})
-    except RevisionIdWasChanged as e:
+        update_result = await update_me_service(user)
+    except NoRecordsUpdatedError:  # pragma: no cover
+        # Shouldn't be able to get here because we have already checked that the user exists
+        logger.info("Error updating user %s", user.id)
+        raise HTTPException(
+            status_code=HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error updating user {user.id}"
+        )
+    except DuplicateKeyError as e:
+        logger.info("User name %s already exists: %s", user.user_name, e)
+        raise HTTPException(
+            status_code=HTTP_400_BAD_REQUEST, detail="User name {user.user_name} already exists"
+        )
+    except RevisionIdWasChanged as e:  # pragma: no cover
+        # Same as DuplicateKeyError. I'm not sure why sometimes it is one and sometimes it is the
+        # other
         logger.info("User name %s already exists: %s", user.user_name, e)
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail="User name {user.user_name} already exists"
@@ -170,4 +189,4 @@ async def update_me(user: UserUpdate, current_user: CurrentUser) -> UserNoPasswo
             detail="An error occurred while updatingg user",
         )
 
-    return UserNoPassword(**current_user.dict())
+    return update_result

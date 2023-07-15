@@ -2,9 +2,6 @@ from copy import deepcopy
 from uuid import uuid4
 
 import pytest
-from fastapi import HTTPException
-
-from app.api.v1.routes.goal import _validate_unique_goal
 
 
 @pytest.mark.usefixtures("user_no_goals")
@@ -81,7 +78,7 @@ async def test_delete_goal_by_id_not_found(test_client, user_token_headers):
     goal_id = str(uuid4())
     response = await test_client.delete(f"goal/{goal_id}", headers=user_token_headers)
     assert response.status_code == 404
-    assert f"Goal {goal_id} not found" == response.json()["detail"]
+    assert f"No goal with the id {goal_id} found" == response.json()["detail"]
 
 
 async def test_delete_goal_by_name(test_client, user_with_goals, user_token_headers):
@@ -108,7 +105,7 @@ async def test_delete_goal_by_name_not_found(test_client, user_token_headers):
     goal_name = str(uuid4())
     response = await test_client.delete(f"goal/goal-name/{goal_name}", headers=user_token_headers)
     assert response.status_code == 404
-    assert f"Goal {goal_name} not found" == response.json()["detail"]
+    assert f"No goal with the name {goal_name} found" == response.json()["detail"]
 
 
 async def test_get_all_goals(test_client, user_with_goals, user_token_headers):
@@ -138,7 +135,7 @@ async def test_get_goal_by_id_not_found(test_client, user_token_headers):
 async def test_get_goal_by_id_no_goals(test_client, user_token_headers):
     response = await test_client.get("goal/some_id", headers=user_token_headers)
     assert response.status_code == 404
-    assert "No goals found for user" == response.json()["detail"]
+    assert "No goal ID" in response.json()["detail"]
 
 
 async def test_get_goal_by_id(test_client, user_with_goals, user_token_headers):
@@ -166,7 +163,7 @@ async def test_get_goal_by_name_not_found(test_client, user_token_headers):
 async def test_get_goal_by_name_no_goals(test_client, user_token_headers):
     response = await test_client.get("goal/goal-name/bad", headers=user_token_headers)
     assert response.status_code == 404
-    assert "No goals found for user" == response.json()["detail"]
+    assert "No goal named" in response.json()["detail"]
 
 
 async def test_get_goal_by_name_not_authenticated(test_client):
@@ -179,7 +176,8 @@ async def test_update_goal(test_client, user_data, user_token_headers):
     goal_data = deepcopy(user_data["goals"][0])
     goal_data["name"] = "Test"
     response = await test_client.put("goal/", json=goal_data, headers=user_token_headers)
-    assert response.json()["name"] == "Test"
+    goals = [x["name"] for x in response.json()]
+    assert "Test" in goals
 
 
 async def test_update_goal_user_not_authenticated(test_client, user_data):
@@ -193,7 +191,7 @@ async def test_update_goal_no_goals(test_client, user_data, user_token_headers):
     goal_data = deepcopy(user_data["goals"][0])
     response = await test_client.put("goal/", headers=user_token_headers, json=goal_data)
     assert response.status_code == 404
-    assert "No goals found for user" in response.json()["detail"]
+    assert "No goals found for user" == response.json()["detail"]
 
 
 @pytest.mark.usefixtures("user_with_goals")
@@ -203,18 +201,12 @@ async def test_update_goal_goal_not_found(test_client, user_data, user_token_hea
     goal_data["name"] = str(uuid4())
     response = await test_client.put("goal/", headers=user_token_headers, json=goal_data)
     assert response.status_code == 404
-    assert "not found" in response.json()["detail"]
+    assert "No goals found for user" == response.json()["detail"]
 
 
-def test_validate_unique_goal_id(user_with_goals):
-    with pytest.raises(HTTPException) as exc:
-        _validate_unique_goal(user_with_goals, str(uuid4()), user_with_goals.goals[0].id)
-
-    assert "Goal IDs must be unique" == exc.value.detail
-
-
-def test_validate_unique_goal_name(user_with_goals):
-    with pytest.raises(HTTPException) as exc:
-        _validate_unique_goal(user_with_goals, user_with_goals.goals[0].name)
-
-    assert "Goal names must be unique" == exc.value.detail
+@pytest.mark.usefixtures("user_with_goals")
+async def test_update_goal_duplicate_goal(test_client, user_data, user_token_headers):
+    goal_data = deepcopy(user_data["goals"][0])
+    goal_data["name"] = user_data["goals"][1]
+    response = await test_client.put("goal/", json=goal_data, headers=user_token_headers)
+    assert response.status_code == 422

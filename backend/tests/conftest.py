@@ -4,6 +4,7 @@ from uuid import uuid4
 
 import pytest
 from httpx import AsyncClient
+from pymongo.errors import OperationFailure
 
 from app.core.config import config
 from app.core.security import get_password_hash
@@ -14,7 +15,10 @@ from app.models.user import User
 
 @pytest.fixture(scope="session", autouse=True)
 async def initialize_db():
-    await init_db()
+    try:
+        await init_db()
+    except OperationFailure:  # init_db already ran
+        pass
 
 
 @pytest.fixture(autouse=True)
@@ -44,13 +48,13 @@ def user_data():
     return {
         "_id": "649a39c599ef045345c94afc",
         "user_name": "immauser",
-        "hashed_password": get_password_hash("test_password"),
+        "hashed_password": get_password_hash("test_password", _rounds=1),
         "goals": [
             {
                 "id": str(uuid4()),
                 "name": "Goal 1",
                 "duration": 5,
-                "daysOfWeek": {
+                "days_of_week": {
                     "monday": False,
                     "tuesday": False,
                     "wednesday": True,
@@ -59,9 +63,25 @@ def user_data():
                     "saturday": False,
                     "sunday": False,
                 },
-                "repeatsEvery": "day",
+                "repeats_every": "week",
                 "progress": 41.0,
-            }
+            },
+            {
+                "id": str(uuid4()),
+                "name": "Goal 2",
+                "duration": 2,
+                "days_of_week": {
+                    "monday": True,
+                    "tuesday": True,
+                    "wednesday": False,
+                    "thursday": True,
+                    "friday": True,
+                    "saturday": True,
+                    "sunday": True,
+                },
+                "repeats_every": "day",
+                "progress": 42.0,
+            },
         ],
     }
 
@@ -74,6 +94,7 @@ async def user_with_goals(user_data):
 @pytest.fixture
 async def user_no_goals(user_data):
     user_data_copy = deepcopy(user_data)
+    user_data_copy["user_name"] = "immauser"
     user_data_copy["goals"] = None
     return await User(**user_data_copy).insert()
 
@@ -81,7 +102,9 @@ async def user_no_goals(user_data):
 @pytest.fixture
 async def admin_user():
     return await User(
-        user_name="admin", hashed_password=get_password_hash("test_password"), is_admin=True
+        user_name="admin",
+        hashed_password=get_password_hash("test_password", _rounds=1),
+        is_admin=True,
     ).insert()
 
 

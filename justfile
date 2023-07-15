@@ -1,5 +1,5 @@
 @api: && docker-stop
-  -docker compose up --build
+  -docker compose up backend db --build
 
 @backend-test: ci-db && docker-stop
   -cd backend && \
@@ -21,18 +21,35 @@
   poetry run black app tests --check && \
   cd ..
 
-@build-dev:
+@build-backend-dev:
   -cd backend && \
   docker build -t backend:dev . && \
   cd ..
 
-@build-prod:
+@build-dev: build-backend-dev build-frontend-dev
+
+@build-frontend-dev:
+  -cd frontend && \
+  docker build -t frontend:dev . && \
+  cd ..
+
+@build-backend-prod:
   -cd backend && \
   docker build -t backend:latest --target prod . && \
   cd ..
 
+@build-frontend-prod:
+  -cd frontend && \
+  docker build -t frontend:latest . && \
+  cd ..
+
+@build-prod: build-backend-prod build-frontend-prod
+
 @ci-db:
-  docker compose up -d db
+  docker compose -f docker-compose-testing.yml up -d db
+
+@compose-up:
+  docker compose up --build
 
 @db:
   docker compose up db

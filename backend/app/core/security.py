@@ -5,13 +5,12 @@ from typing import Any
 
 import jwt
 from beanie import PydanticObjectId
-from passlib.context import CryptContext
+from passlib.hash import argon2
 
 from app.core.config import config
 
 ALGORITHM = "HS256"
-
-pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
+DEFAULT_ROUNDS = 25
 
 
 def create_access_token(
@@ -27,8 +26,8 @@ def create_access_token(
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    return argon2.verify(plain_password, hashed_password)
 
 
-def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+def get_password_hash(password: str, *, _rounds: int = DEFAULT_ROUNDS) -> str:
+    return argon2.using(rounds=_rounds).hash(password)
