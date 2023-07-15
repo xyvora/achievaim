@@ -18,18 +18,23 @@ router = APIRouter(tags=["Login"], prefix=f"{config.V1_API_PREFIX}/login")
 
 @router.post("/access-token")
 async def login_access_token(
-    config: Config, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()], config: Config
 ) -> Token:
     """OAuth2 compatible token login, get an access token for future requests."""
-
     logger.info("Logging user in.")
+    print(form_data.__dict__)
     user = await get_full_user_by_username(form_data.username)
+    print(user)
 
     if not user:
         logger.info("Incorrect user name")
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail="Incorrect user name or password"
         )
+    from app.core.security import get_password_hash
+
+    print(verify_password("some", get_password_hash("some")))
+    print(verify_password(form_data.password, user.hashed_password))
 
     if not user.is_active:
         logger.info("Inactive user")

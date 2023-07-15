@@ -32,15 +32,6 @@ async def create_user(user: UserCreate) -> UserNoPassword:
     """Create a new user."""
     logger.info("Creating user")
     try:
-        user.password = get_password_hash(user.password)
-    except Exception as e:  # pragma: no cover
-        logger.info("An error occurred while hashing the password: %s", e)
-        raise HTTPException(
-            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An error occurred while hasing the password",
-        )
-
-    try:
         created_user = await create_user_service(user)
     except DuplicateUserNameError:
         logger.info("A user with the user name %s already exists", user.user_name)
