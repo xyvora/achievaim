@@ -27,14 +27,23 @@ class DaysOfWeek(BaseModel):
 
 class _GoalBase(BaseModel):
     name: str
-    duration: int
-    days_of_week: DaysOfWeek
-    repeats_every: RepeatsEvery
-    progress: float
+    duration: int | None
+    days_of_week: DaysOfWeek | None
+    repeats_every: RepeatsEvery | None
+    progress: float | None
 
 
 class Goal(_GoalBase):
     id: str
+
+    class Settings:
+        projection = {
+            "id": "$_id",
+            "name": "$name",
+            "days_of_week": "$days_of_week",
+            "repeats_every": "$repeats_every",
+            "progress": "$progress",
+        }
 
 
 class GoalCreate(_GoalBase):
@@ -127,6 +136,7 @@ class User(Document):
             IndexModel(keys=[("user_name", ASCENDING)], name="user_name", unique=True),
             IndexModel(keys=[("is_active", ASCENDING)], name="is_active"),
             IndexModel(keys=[("is_admin", ASCENDING)], name="is_admin"),
+            IndexModel(keys=[("goals", ASCENDING)], name="goals"),
             IndexModel(
                 keys=[("_id", ASCENDING), ("goals.id", ASCENDING)], name="goal_id", unique=True
             ),
