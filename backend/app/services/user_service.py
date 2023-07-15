@@ -11,7 +11,7 @@ from app.exceptions import (
     NoRecordsUpdatedError,
     UserNotFoundError,
 )
-from app.models.user import User, UserCreate, UserNoPassword, UserUpdate, UserUpdateMe
+from app.models.user import User, UserCreate, UserNoGoals, UserNoPassword, UserUpdate, UserUpdateMe
 
 
 async def create_user(user: UserCreate) -> UserNoPassword:
@@ -24,7 +24,7 @@ async def create_user(user: UserCreate) -> UserNoPassword:
     user = User(user_name=user_name, hashed_password=hashed_password)
     await user.save()
 
-    updated_user = await User.find_one(User.id == user.id).project(UserNoPassword)
+    updated_user = await User.find_one(User.id == user.id, projection_model=UserNoPassword)
 
     if not updated_user:  # pragma: no cover
         raise UserNotFoundError("User not found after update")
@@ -46,6 +46,14 @@ async def delete_user_by_user_name(user_name: str) -> None:
         raise NoRecordsDeletedError(f"User with user name {user_name} not found")
 
 
+async def get_full_user(user_id: ObjectId | PydanticObjectId) -> User | None:
+    return await User.find_one(User.id == user_id)
+
+
+async def get_full_user_by_username(user_name: str) -> User | None:
+    return await User.find_one(User.user_name == user_name)
+
+
 async def get_user_by_id(user_id: ObjectId | PydanticObjectId) -> UserNoPassword | None:
     return await User.find_one(User.id == user_id, projection_model=UserNoPassword)
 
@@ -54,6 +62,10 @@ async def get_user_by_user_name(user_name: str) -> UserNoPassword | None:
     return await User.find_one(
         User.user_name == user_name.lower().strip(), projection_model=UserNoPassword
     )
+
+
+async def get_user_no_goal(user_id: ObjectId | PydanticObjectId) -> UserNoGoals | None:
+    return await User.find_one(User.id == user_id, projection_model=UserNoGoals)
 
 
 async def get_users() -> list[UserNoPassword]:

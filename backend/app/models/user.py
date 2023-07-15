@@ -53,22 +53,6 @@ class UserCreate(BaseModel):
     password: str
 
 
-class UserNoWithGoals(BaseModel):
-    id: ObjectIdStr
-    user_name: str
-    goals: list[Goal] | None = None
-
-    class Config:
-        json_encoders = {ObjectId: lambda x: str(x)}
-
-    class Settings:
-        projection = {
-            "id": "$_id",
-            "user_name": "$user_name",
-            "goals": "$goals",
-        }
-
-
 class UserNoPassword(BaseModel):
     id: ObjectIdStr
     user_name: str
@@ -80,6 +64,36 @@ class UserNoPassword(BaseModel):
         projection = {
             "id": "$_id",
             "user_name": "$user_name",
+        }
+
+
+class UserWithGoals(UserNoPassword):
+    goals: list[Goal] | None = None
+
+    class Settings:
+        projection = {
+            "id": "$_id",
+            "user_name": "$user_name",
+            "goals": "$goals",
+        }
+
+
+class UserNoGoals(UserNoPassword):
+    is_active: bool
+    is_admin: bool
+    date_created: datetime
+    last_update: datetime
+    last_login: datetime
+
+    class Settings:
+        projection = {
+            "id": "$_id",
+            "user_name": "$user_name",
+            "is_active": "$is_active",
+            "is_admin": "$is_admin",
+            "date_created": "$date_created",
+            "last_update": "$last_update",
+            "last_login": "$last_login",
         }
 
 
@@ -113,8 +127,12 @@ class User(Document):
             IndexModel(keys=[("user_name", ASCENDING)], name="user_name", unique=True),
             IndexModel(keys=[("is_active", ASCENDING)], name="is_active"),
             IndexModel(keys=[("is_admin", ASCENDING)], name="is_admin"),
-            IndexModel(keys=[("goals.id", ASCENDING)], name="goal_id", unique=True),
-            IndexModel(keys=[("goals.name", ASCENDING)], name="goal_name", unique=True),
+            IndexModel(
+                keys=[("_id", ASCENDING), ("goals.id", ASCENDING)], name="goal_id", unique=True
+            ),
+            IndexModel(
+                keys=[("_id", ASCENDING), ("goals.name", ASCENDING)], name="goal_name", unique=True
+            ),
         ]
 
     @validator("goals")

@@ -119,7 +119,7 @@ async def delete_me(current_user: CurrentUser) -> None:
         )
 
     try:
-        await delete_user_by_id_service(current_user.id)
+        await delete_user_by_id_service(ObjectId(current_user.id))
     except NoRecordsDeletedError:  # pragma: no cover
         # fail-safe, shouldn't be possible to hit
         logger.info("User with id %s not found. No delete performed", current_user.id)

@@ -32,7 +32,7 @@ async def test_get_access_token_user_not_found(test_client):
 
 
 async def test_get_access_token_inactivate_user(test_client, user_with_goals):
-    response = await update_user(
+    await update_user(
         UserUpdate(
             id=user_with_goals.id,
             user_name=user_with_goals.user_name,
