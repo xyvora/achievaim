@@ -38,7 +38,8 @@
         </button>
         <p class="text-center">
           Not registered yet? <a
-          href={'#'}            class="text-indigo-600 font-medium inline-flex space-x-1 items-center"
+            href={'#'}
+            class="text-indigo-600 font-medium inline-flex space-x-1 items-center"
             ><span>Register now </span><span
               ><svg
                 xmlns="http://www.w3.org/2000/svg"
