@@ -48,7 +48,7 @@ def user_data():
     return {
         "_id": "649a39c599ef045345c94afc",
         "user_name": "immauser",
-        "hashed_password": get_password_hash("test_password"),
+        "hashed_password": get_password_hash("test_password", _rounds=1),
         "goals": [
             {
                 "id": str(uuid4()),
@@ -102,7 +102,9 @@ async def user_no_goals(user_data):
 @pytest.fixture
 async def admin_user():
     return await User(
-        user_name="admin", hashed_password=get_password_hash("test_password"), is_admin=True
+        user_name="admin",
+        hashed_password=get_password_hash("test_password", _rounds=1),
+        is_admin=True,
     ).insert()
 
 
