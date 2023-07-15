@@ -1,5 +1,6 @@
 from uuid import uuid4
 
+from bson import ObjectId
 from fastapi import HTTPException
 from pymongo.errors import DuplicateKeyError, OperationFailure
 from starlette.status import (
@@ -13,6 +14,7 @@ from app.api.deps import CurrentUser, logger
 from app.core.config import config
 from app.core.utils import APIRouter
 from app.models.user import Goal, GoalCreate, User
+from app.services.user_service import get_full_user
 
 router = APIRouter(tags=["Goal"], prefix=f"{config.V1_API_PREFIX}/goal")
 
@@ -21,24 +23,39 @@ router = APIRouter(tags=["Goal"], prefix=f"{config.V1_API_PREFIX}/goal")
 async def get_user_goals(current_user: CurrentUser) -> list[Goal]:
     """Get goals for a user."""
     logger.info("Getting goals for user %s", current_user.id)
+    user = await get_full_user(ObjectId(current_user.id))
 
-    if not current_user.goals:
+    if not user:  # pragma: no cover
+        logger.info("No user found with id %s", current_user.id)
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND, detail=f"No user found with id {current_user.id}"
+        )
+
+    if not user.goals:
         logger.info("No goals found for user %s", current_user.id)
         raise HTTPException(
             status_code=HTTP_404_NOT_FOUND, detail=f"No goals found for user {current_user.id}"
         )
 
-    return current_user.goals
+    return user.goals
 
 
 @router.get("/{goal_id}")
 async def get_goal_by_id(goal_id: str, current_user: CurrentUser) -> Goal:
     """Get a specifiic goal by goal ID."""
-    if not current_user.goals:
+    user = await get_full_user(ObjectId(current_user.id))
+
+    if not user:  # pragma: no cover
+        logger.info("No user found with id %s", current_user.id)
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND, detail=f"No user found with id {current_user.id}"
+        )
+
+    if not user.goals:
         logger.info("No goals found for user %s", current_user.id)
         raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="No goals found for user")
 
-    for goal in current_user.goals:
+    for goal in user.goals:
         if goal.id == goal_id:
             return goal
 
@@ -49,11 +66,19 @@ async def get_goal_by_id(goal_id: str, current_user: CurrentUser) -> Goal:
 @router.get("/goal-name/{goal_name}")
 async def get_goal_by_name(goal_name: str, current_user: CurrentUser) -> Goal:
     """Get a specifiic goal."""
-    if not current_user.goals:
+    user = await get_full_user(ObjectId(current_user.id))
+
+    if not user:  # pragma: no cover
+        logger.info("No user found with id %s", current_user.id)
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND, detail=f"No user found with id {current_user.id}"
+        )
+
+    if not user.goals:
         logger.info("No goals found for user %s", current_user.id)
         raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="No goals found for user")
 
-    for goal in current_user.goals:
+    for goal in user.goals:
         if goal.name == goal_name:
             return goal
 
@@ -65,19 +90,26 @@ async def get_goal_by_name(goal_name: str, current_user: CurrentUser) -> Goal:
 async def create_goal(goal: GoalCreate, current_user: CurrentUser) -> list[Goal]:
     """Add a new goal."""
     logger.info("Creating goal for user %s", current_user.id)
+    user = await get_full_user(ObjectId(current_user.id))
 
-    _validate_unique_goal(current_user, goal.name)
+    if not user:  # pragma: no cover
+        logger.info("No user found with id %s", current_user.id)
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND, detail=f"No user found with id {current_user.id}"
+        )
+
+    _validate_unique_goal(user, goal.name)
 
     logger.info("Saving goal")
     goal_dict = goal.dict()
     goal_dict["id"] = str(uuid4())
     db_goal = Goal(**goal_dict)
-    if not current_user.goals:
-        current_user.goals = [db_goal]
+    if not user.goals:
+        user.goals = [db_goal]
     else:
-        current_user.goals.append(db_goal)
+        user.goals.append(db_goal)
     try:
-        await current_user.set({User.goals: current_user.goals})
+        await user.set({User.goals: user.goals})
     # The DuplicateKeyError and OperationFailure are fail safes just incase something goes wrong
     # in the model validation and lets these slip through.
     except DuplicateKeyError:  # pragma: no cover
@@ -114,59 +146,83 @@ async def create_goal(goal: GoalCreate, current_user: CurrentUser) -> list[Goal]
             detail="An error occurred while adding the goal",
         )
 
-    return current_user.goals
+    return user.goals
 
 
 @router.delete("/{goal_id}", response_model=None, status_code=HTTP_204_NO_CONTENT)
 async def delete_goal(goal_id: str, current_user: CurrentUser) -> None:
     """Delete a user's goal by ID."""
-    if not current_user.goals:
+    user = await get_full_user(ObjectId(current_user.id))
+
+    if not user:  # pragma: no cover
+        logger.info("No user found with id %s", current_user.id)
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND, detail=f"No user found with id {current_user.id}"
+        )
+
+    if not user.goals:
         logger.info("No goals found for user %s", current_user.id)
         raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="No goals found for user")
 
-    updated_goals = [x for x in current_user.goals if x.id != goal_id]
-    if len(current_user.goals) == len(updated_goals):
+    updated_goals = [x for x in user.goals if x.id != goal_id]
+    if len(user.goals) == len(updated_goals):
         logger.info("Goal %s not found", goal_id)
         raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f"Goal {goal_id} not found")
 
     logger.info("Deleting goal %s for user %s", goal_id, current_user.id)
-    await current_user.set({User.goals: updated_goals})
+    await user.set({User.goals: updated_goals})
 
 
 @router.delete("/goal-name/{goal_name}", response_model=None, status_code=HTTP_204_NO_CONTENT)
 async def delete_goal_by_name(goal_name: str, current_user: CurrentUser) -> None:
     """Delete a user's goal by name."""
-    if not current_user.goals:
+    user = await get_full_user(ObjectId(current_user.id))
+
+    if not user:  # pragma: no cover
+        logger.info("No user found with id %s", current_user.id)
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND, detail=f"No user found with id {current_user.id}"
+        )
+
+    if not user.goals:
         logger.info("No goals found for user %s", current_user.id)
         raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="No goals found for user")
 
-    updated_goals = [x for x in current_user.goals if x.name != goal_name]
-    if len(current_user.goals) == len(updated_goals):
+    updated_goals = [x for x in user.goals if x.name != goal_name]
+    if len(user.goals) == len(updated_goals):
         logger.info("Goal %s not found", goal_name)
         raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f"Goal {goal_name} not found")
 
     logger.info("Deleting goal %s for user %s", goal_name, current_user.id)
-    await current_user.set({User.goals: updated_goals})
+    await user.set({User.goals: updated_goals})
 
 
 @router.put("/")
 async def update_goal(goal: Goal, current_user: CurrentUser) -> Goal:
     """Update a goal's information."""
-    _validate_unique_goal(current_user, goal.name)
+    user = await get_full_user(ObjectId(current_user.id))
 
-    if not current_user.goals:
+    if not user:  # pragma: no cover
+        logger.info("No user found with id %s", current_user.id)
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND, detail=f"No user found with id {current_user.id}"
+        )
+
+    _validate_unique_goal(user, goal.name)
+
+    if not user.goals:
         logger.info("No goals found for user %s", current_user.id)
         raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="No goals found for user")
 
     logger.info("Updating goal")
     goal_dict = goal.dict()
 
-    for i, user_goal in enumerate(current_user.goals):
+    for i, user_goal in enumerate(user.goals):
         if user_goal.id == goal.id:
             db_goal = Goal(**goal_dict)
-            current_user.goals[i] = db_goal
+            user.goals[i] = db_goal
             try:
-                await current_user.set({User.goals: current_user.goals})
+                await user.set({User.goals: user.goals})
             except DuplicateKeyError:  # pragma: no cover
                 logger.error("Goal already exists")
                 raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Goal already exists")

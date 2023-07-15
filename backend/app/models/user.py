@@ -1,9 +1,10 @@
+from datetime import datetime
 from enum import Enum
 
-from beanie import Document, Indexed
+from beanie import Document
 from bson import ObjectId
-from camel_converter.pydantic_base import CamelBase
-from pydantic import validator
+from pydantic import BaseModel, Field, validator
+from pymongo import ASCENDING, IndexModel
 
 from app.models.object_id import ObjectIdStr
 
@@ -14,7 +15,7 @@ class RepeatsEvery(str, Enum):
     month = "month"
 
 
-class DaysOfWeek(CamelBase):
+class DaysOfWeek(BaseModel):
     monday: bool = False
     tuesday: bool = False
     wednesday: bool = False
@@ -24,7 +25,7 @@ class DaysOfWeek(CamelBase):
     sunday: bool = False
 
 
-class _GoalBase(CamelBase):
+class _GoalBase(BaseModel):
     name: str
     duration: int
     days_of_week: DaysOfWeek
@@ -47,38 +48,92 @@ class GoalWithUserId(Goal):
         json_encoders = {ObjectId: lambda x: str(x)}
 
 
-class UserCreate(CamelBase):
+class UserCreate(BaseModel):
     user_name: str
     password: str
 
 
-class UserNoPassword(CamelBase):
+class UserNoPassword(BaseModel):
     id: ObjectIdStr
     user_name: str
+
+    class Config:
+        json_encoders = {ObjectId: lambda x: str(x)}
+
+    class Settings:
+        projection = {
+            "id": "$_id",
+            "user_name": "$user_name",
+        }
+
+
+class UserWithGoals(UserNoPassword):
     goals: list[Goal] | None = None
 
-    class Config:
-        json_encoders = {ObjectId: lambda x: str(x)}
+    class Settings:
+        projection = {
+            "id": "$_id",
+            "user_name": "$user_name",
+            "goals": "$goals",
+        }
 
 
-class UserUpdate(CamelBase):
+class UserNoGoals(UserNoPassword):
+    is_active: bool
+    is_admin: bool
+    date_created: datetime
+    last_update: datetime
+    last_login: datetime
+
+    class Settings:
+        projection = {
+            "id": "$_id",
+            "user_name": "$user_name",
+            "is_active": "$is_active",
+            "is_admin": "$is_admin",
+            "date_created": "$date_created",
+            "last_update": "$last_update",
+            "last_login": "$last_login",
+        }
+
+
+class UserUpdateMe(BaseModel):
     id: ObjectIdStr
     password: str
     user_name: str
 
     class Config:
         json_encoders = {ObjectId: lambda x: str(x)}
+
+
+class UserUpdate(UserUpdateMe):
+    is_active: bool
+    is_admin: bool
 
 
 class User(Document):
-    user_name: Indexed(str, unique=True)  # type: ignore
+    user_name: str
     hashed_password: str
     goals: list[Goal] | None = None
     is_active: bool = True
     is_admin: bool = False
+    date_created: datetime = Field(default_factory=datetime.now)
+    last_update: datetime = Field(default_factory=datetime.now)
+    last_login: datetime = Field(default_factory=datetime.now)
 
     class Settings:
         name = "users"
+        indexes = [
+            IndexModel(keys=[("user_name", ASCENDING)], name="user_name", unique=True),
+            IndexModel(keys=[("is_active", ASCENDING)], name="is_active"),
+            IndexModel(keys=[("is_admin", ASCENDING)], name="is_admin"),
+            IndexModel(
+                keys=[("_id", ASCENDING), ("goals.id", ASCENDING)], name="goal_id", unique=True
+            ),
+            IndexModel(
+                keys=[("_id", ASCENDING), ("goals.name", ASCENDING)], name="goal_name", unique=True
+            ),
+        ]
 
     @validator("goals")
     @classmethod

@@ -4,6 +4,8 @@ import pytest
 from bson import ObjectId
 
 from app.core.security import create_access_token
+from app.models.user import UserUpdate
+from app.services.user_service import update_user
 
 
 @pytest.mark.usefixtures("user_with_goals")
@@ -30,8 +32,15 @@ async def test_get_access_token_user_not_found(test_client):
 
 
 async def test_get_access_token_inactivate_user(test_client, user_with_goals):
-    update_user = user_with_goals.dict()
-    update_user["is_active"] = False
+    await update_user(
+        UserUpdate(
+            id=user_with_goals.id,
+            user_name=user_with_goals.user_name,
+            password="test_password",
+            is_active=False,
+            is_admin=user_with_goals.is_admin,
+        ),
+    )
     response = await user_with_goals.update({"$set": update_user})
     login_data = {
         "username": user_with_goals.user_name,

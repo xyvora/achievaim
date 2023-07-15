@@ -32,7 +32,7 @@
   cd ..
 
 @ci-db:
-  docker compose up -d db
+  docker compose -f docker-compose-testing.yml up -d db
 
 @db:
   docker compose up db

@@ -15,7 +15,8 @@ from app.core.config import Settings, config
 from app.core.security import ALGORITHM
 from app.db import db_client
 from app.models.token import TokenPayload
-from app.models.user import User
+from app.models.user import UserNoGoals
+from app.services.user_service import get_user_no_goal
 
 logging.basicConfig(format="%(asctime)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s")
 logging.root.setLevel(level=config.log_level)
@@ -32,7 +33,7 @@ def get_db_client() -> AsyncIOMotorClient:
     return db_client
 
 
-async def get_current_admin_user(token: Annotated[str, Depends(_oauth2_scheme)]) -> User:
+async def get_current_admin_user(token: Annotated[str, Depends(_oauth2_scheme)]) -> UserNoGoals:
     try:
         payload = jwt.decode(token, config.SECRET_KEY, algorithms=[ALGORITHM])
         token_data = TokenPayload(**payload)
@@ -48,7 +49,7 @@ async def get_current_admin_user(token: Annotated[str, Depends(_oauth2_scheme)])
             status_code=HTTP_403_FORBIDDEN, detail=f"{token_data.sub} is not a valid ID format"
         )
 
-    user = await User.find_one(User.id == oid)
+    user = await get_user_no_goal(oid)
 
     if not user:
         logger.info("User not found")
@@ -63,7 +64,7 @@ async def get_current_admin_user(token: Annotated[str, Depends(_oauth2_scheme)])
     return user
 
 
-async def get_current_user(token: Annotated[str, Depends(_oauth2_scheme)]) -> User:
+async def get_current_user(token: Annotated[str, Depends(_oauth2_scheme)]) -> UserNoGoals:
     try:
         payload = jwt.decode(token, config.SECRET_KEY, algorithms=[ALGORITHM])
         token_data = TokenPayload(**payload)
@@ -79,7 +80,7 @@ async def get_current_user(token: Annotated[str, Depends(_oauth2_scheme)]) -> Us
             status_code=HTTP_403_FORBIDDEN, detail=f"{token_data.sub} is not a valid ID format"
         )
 
-    user = await User.find_one(User.id == oid)
+    user = await get_user_no_goal(oid)
 
     if not user:
         logger.info("User not found")
@@ -89,6 +90,6 @@ async def get_current_user(token: Annotated[str, Depends(_oauth2_scheme)]) -> Us
 
 
 Config = Annotated[Settings, Depends(get_config)]
-CurrentUser = Annotated[User, Depends(get_current_user)]
-CurrentAdminUser = Annotated[User, Depends(get_current_admin_user)]
+CurrentUser = Annotated[UserNoGoals, Depends(get_current_user)]
+CurrentAdminUser = Annotated[UserNoGoals, Depends(get_current_admin_user)]
 MongoClient = Annotated[AsyncIOMotorClient, Depends(get_db_client)]
