@@ -6,13 +6,18 @@
   poetry run pytest && \
   cd ..
 
+@backend-test-ci: ci-db && docker-stop
+  cd backend && \
+  poetry run pytest && \
+  cd ..
+
 @black:
   -cd backend && \
   poetry run black app tests && \
   cd ..
 
 @black-ci:
-  -cd backend && \
+  cd backend && \
   poetry run black app tests --check && \
   cd ..
 
@@ -27,7 +32,7 @@
   cd ..
 
 @ci-db:
-  docker compose up -d db
+  docker compose -f docker-compose-testing.yml up -d db
 
 @db:
   docker compose up db
@@ -45,8 +50,18 @@
   npm run check && \
   cd ..
 
+@frontend-check-ci:
+  cd frontend && \
+  npm run check && \
+  cd ..
+
 @frontend-format:
   -cd frontend && \
+  npm run format && \
+  cd ..
+
+@frontend-format-ci:
+  cd frontend && \
   npm run format && \
   cd ..
 
@@ -55,8 +70,18 @@
   npm run lint && \
   cd ..
 
+@frontend-lint-ci:
+  cd frontend && \
+  npm run lint && \
+  cd ..
+
 @frontend-test:
   -cd frontend && \
+  npm run test && \
+  cd ..
+
+@frontend-test-ci:
+  cd frontend && \
   npm run test && \
   cd ..
 
@@ -98,12 +123,22 @@
   poetry run mypy . && \
   cd ..
 
+@mypy-ci:
+  cd backend && \
+  poetry run mypy . && \
+  cd ..
+
+@playwright-install:
+  -cd frontend && \
+  npx playwright install && \
+  cd ..
+
 @ruff:
   -cd backend && \
   poetry run ruff check . && \
   cd ..
 
 @ruff-ci:
-  -cd backend && \
+  cd backend && \
   poetry run ruff check --exit-non-zero-on-fix . && \
   cd ..

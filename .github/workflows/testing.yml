@@ -41,12 +41,8 @@ jobs:
         run: timeout 10s poetry run pip --version || rm -rf .venv
       - name: Install Dependencies
         run: just install-backend
-      - name: Black check
-        run: just black-ci
-      - name: Lint with ruff
-        run: just ruff-ci
       - name: mypy check
-        run: just mypy
+        run: just mypy-ci
 
   backend-testing:
     strategy:
@@ -85,7 +81,7 @@ jobs:
       - name: Install Dependencies
         run: just install-backend
       - name: Test with pytest
-        run: just backend-test
+        run: just backend-test-ci
 
   frontend-linting:
     strategy:
@@ -102,9 +98,9 @@ jobs:
       - name: Install Dependencies
         run: just install-frontend
       - name: Lint
-        run: just frontend-lint
+        run: just frontend-lint-ci
       - name: Check
-        run: just frontend-check
+        run: just frontend-check-ci
 
   frontend-testing:
     strategy:
@@ -120,5 +116,7 @@ jobs:
           node-version: "18"
       - name: Install Dependencies
         run: just install-frontend
+      - name: Playwright install
+        run: just playwright-install
       - name: Frontend Tests
-        run: just frontend-test
+        run: just frontend-test-ci
