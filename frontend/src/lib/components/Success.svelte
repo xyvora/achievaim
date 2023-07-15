@@ -12,7 +12,7 @@
       </h3>
       <p class="text-gray-600 my-2">Thank you for being SMART when it comes to your goals.</p>
       <div class="py-10 text-center">
-        <a href="#" class="px-12 bg-indigo-600 hover:primary text-white font-semibold py-3">
+        <a href={'#'} class="px-12 bg-indigo-600 hover:primary text-white font-semibold py-3">
           GO BACK
         </a>
       </div>

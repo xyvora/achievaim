@@ -13,8 +13,7 @@
         We can't find that page. You'll find lots to explore on the home page.
       </p>
       <a
-        href="#"
-        class="inline-flex text-white bg-primary-600 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900 my-4"
+      href={'#'}        class="inline-flex text-white bg-primary-600 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900 my-4"
         >Back to Homepage</a
       >
     </div>
@@ -61,7 +60,7 @@
         </button>
         <p class="text-center">
           Not registered yet? <a
-            href="#"
+          href={'#'}
             class="text-indigo-600 font-medium inline-flex space-x-1 items-center"
             ><span>Register now </span><span
               ><svg
@@ -100,7 +99,7 @@
       </h3>
       <p class="text-gray-600 my-2">Thank you for being SMART when it comes to your goals.</p>
       <div class="py-10 text-center">
-        <a href="#" class="px-12 bg-indigo-600 hover:primary text-white font-semibold py-3">
+        <a href={'#'} class="px-12 bg-indigo-600 hover:primary text-white font-semibold py-3">
           GO BACK
         </a>
       </div>
