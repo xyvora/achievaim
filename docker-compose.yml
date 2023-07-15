@@ -22,6 +22,14 @@ services:
         source: ./backend
         target: /app
         read_only: false
+  frontend:
+    image: frontend:dev
+    build:
+      context: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
   db:
     image: mongo:6.0
     volumes:
