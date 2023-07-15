@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 from bson import ObjectId
 from fastapi import HTTPException
 from pymongo.errors import DuplicateKeyError, OperationFailure
@@ -13,7 +11,9 @@ from starlette.status import (
 from app.api.deps import CurrentUser, logger
 from app.core.config import config
 from app.core.utils import APIRouter
+from app.exceptions import DuplicateGoalError
 from app.models.user import Goal, GoalCreate, User
+from app.services.goal_service import create_goal as create_goal_service
 from app.services.goal_service import get_goal_by_id as get_goal_by_id_service
 from app.services.goal_service import get_goal_by_name as get_goal_by_name_service
 from app.services.goal_service import get_goals_by_user_id
@@ -22,86 +22,18 @@ from app.services.user_service import get_full_user
 router = APIRouter(tags=["Goal"], prefix=f"{config.V1_API_PREFIX}/goal")
 
 
-@router.get("/")
-async def get_user_goals(current_user: CurrentUser) -> list[Goal]:
-    """Get goals for a user."""
-    logger.info("Getting goals for user %s", current_user.id)
-    goals = await get_goals_by_user_id(ObjectId(current_user.id))
-
-    if not goals:
-        logger.info("No goals found for user %s", current_user.id)
-        raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND, detail=f"No goals found for user {current_user.id}"
-        )
-
-    return goals
-
-
-@router.get("/{goal_id}")
-async def get_goal_by_id(goal_id: str, current_user: CurrentUser) -> Goal:
-    """Get a specifiic goal by goal ID."""
-    goal = await get_goal_by_id_service(ObjectId(current_user.id), goal_id)
-
-    if not goal:
-        logger.info("No goal named %s found for ID %s", goal_id, current_user.id)
-        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f"No goal ID {goal_id} found")
-
-    return goal
-
-
-@router.get("/goal-name/{goal_name}")
-async def get_goal_by_name(goal_name: str, current_user: CurrentUser) -> Goal:
-    """Get a specifiic goal."""
-    goal = await get_goal_by_name_service(ObjectId(current_user.id), goal_name)
-
-    if not goal:
-        logger.info("No goal named %s found for user %s", goal_name, current_user.id)
-        raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND, detail=f"No goal named {goal_name} found"
-        )
-
-    return goal
-
-
 @router.post("/")
 async def create_goal(goal: GoalCreate, current_user: CurrentUser) -> list[Goal]:
     """Add a new goal."""
     logger.info("Creating goal for user %s", current_user.id)
-    user = await get_full_user(ObjectId(current_user.id))
-
-    if not user:  # pragma: no cover
-        logger.info("No user found with id %s", current_user.id)
-        raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND, detail=f"No user found with id {current_user.id}"
-        )
-
-    _validate_unique_goal(user, goal.name)
-
-    logger.info("Saving goal")
-    goal_dict = goal.dict()
-    goal_dict["id"] = str(uuid4())
-    db_goal = Goal(**goal_dict)
-    if not user.goals:
-        user.goals = [db_goal]
-    else:
-        user.goals.append(db_goal)
     try:
-        await user.set({User.goals: user.goals})
-    # The DuplicateKeyError and OperationFailure are fail safes just incase something goes wrong
-    # in the model validation and lets these slip through.
-    except DuplicateKeyError:  # pragma: no cover
-        logger.error("Goal already exists")
-        raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Goal already exists")
-    except OperationFailure as e:  # pragma: no cover
-        if e.code == 11000:  # Unique key violation
-            logger.error("Goal already exists")
-            raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Goal already exists")
-        else:
-            logger.error(f"An error occurred while adding the goal: {e}")
-            raise HTTPException(
-                status_code=HTTP_400_BAD_REQUEST,
-                detail="An error occurred while adding the goal",
-            )
+        goals = await create_goal_service(ObjectId(current_user.id), goal)
+    except DuplicateGoalError:
+        logger.error("Goal with the name %s already exists for user %s", goal.name, current_user.id)
+        raise HTTPException(
+            status_code=HTTP_400_BAD_REQUEST,
+            detail=f"Goal with the name {goal.name} already exists",
+        )
     except ValueError as e:  # pragma: no cover
         if "Goal IDs must be unique" in str(e):
             logger.info("Goal IDs must be unique: %s", e)
@@ -123,7 +55,7 @@ async def create_goal(goal: GoalCreate, current_user: CurrentUser) -> list[Goal]
             detail="An error occurred while adding the goal",
         )
 
-    return user.goals
+    return goals
 
 
 @router.delete("/{goal_id}", response_model=None, status_code=HTTP_204_NO_CONTENT)
@@ -172,6 +104,47 @@ async def delete_goal_by_name(goal_name: str, current_user: CurrentUser) -> None
 
     logger.info("Deleting goal %s for user %s", goal_name, current_user.id)
     await user.set({User.goals: updated_goals})
+
+
+@router.get("/")
+async def get_user_goals(current_user: CurrentUser) -> list[Goal]:
+    """Get goals for a user."""
+    logger.info("Getting goals for user %s", current_user.id)
+    goals = await get_goals_by_user_id(ObjectId(current_user.id))
+
+    if not goals:
+        logger.info("No goals found for user %s", current_user.id)
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND, detail=f"No goals found for user {current_user.id}"
+        )
+
+    return goals
+
+
+@router.get("/{goal_id}")
+async def get_goal_by_id(goal_id: str, current_user: CurrentUser) -> Goal:
+    """Get a specifiic goal by goal ID."""
+    goal = await get_goal_by_id_service(ObjectId(current_user.id), goal_id)
+
+    if not goal:
+        logger.info("No goal named %s found for ID %s", goal_id, current_user.id)
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f"No goal ID {goal_id} found")
+
+    return goal
+
+
+@router.get("/goal-name/{goal_name}")
+async def get_goal_by_name(goal_name: str, current_user: CurrentUser) -> Goal:
+    """Get a specifiic goal."""
+    goal = await get_goal_by_name_service(ObjectId(current_user.id), goal_name)
+
+    if not goal:
+        logger.info("No goal named %s found for user %s", goal_name, current_user.id)
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND, detail=f"No goal named {goal_name} found"
+        )
+
+    return goal
 
 
 @router.put("/")

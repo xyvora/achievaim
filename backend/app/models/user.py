@@ -136,6 +136,7 @@ class User(Document):
             IndexModel(keys=[("user_name", ASCENDING)], name="user_name", unique=True),
             IndexModel(keys=[("is_active", ASCENDING)], name="is_active"),
             IndexModel(keys=[("is_admin", ASCENDING)], name="is_admin"),
+            IndexModel(keys=[("goals", ASCENDING)], name="goals"),
             IndexModel(
                 keys=[("_id", ASCENDING), ("goals.id", ASCENDING)], name="goal_id", unique=True
             ),

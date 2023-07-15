@@ -1,4 +1,12 @@
+class DuplicateGoalError(Exception):
+    pass
+
+
 class DuplicateUserNameError(Exception):
+    pass
+
+
+class NoGoalsFoundError(Exception):
     pass
 
 
