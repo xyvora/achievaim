@@ -29,5 +29,5 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return argon2.verify(plain_password, hashed_password)
 
 
-def get_password_hash(password: str) -> str:
-    return argon2.using(rounds=DEFAULT_ROUNDS).hash(password)
+def get_password_hash(password: str, *, _rounds: int = DEFAULT_ROUNDS) -> str:
+    return argon2.using(rounds=_rounds).hash(password)
