@@ -1,5 +1,8 @@
 # Achiev𝘼𝙄m
 
+[![Tests Status](https://github.com/xyvora/achievaim/workflows/Testing/badge.svg?branch=main&event=push)](https://github.com/xyvora/achievaim/actions?query=workflow%3ATesting+branch%3Amain+event%3Apush)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/xyvora/achievaim/main.svg)](https://results.pre-commit.ci/latest/github/xyvora/achievaim/main)
+
 ![AchieveAim Profile Picture - 1280 x 640](https://github.com/xyvora/achievaim/assets/78818969/3e53c59f-0ecd-4d14-8ff0-7320e3c5f8f4)
 
 | Link                                                           | Description                                           |
