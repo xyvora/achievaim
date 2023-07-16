@@ -13,7 +13,7 @@
             class="h-5 w-5"
             fill="none"
             viewBox="0 0 24 24"
-            stroke="currentColor"
+            stroke="grey"
             ><path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -34,7 +34,7 @@
             class="h-5 w-5"
             fill="none"
             viewBox="0 0 24 24"
-            stroke="currentColor"
+            stroke="grey"
             ><path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -61,7 +61,7 @@
         fill="none"
         viewBox="0 0 24 24"
         stroke-width="1.5"
-        stroke="currentColor"
+        stroke="grey"
         class="w-6 h-6"
       >
         <path
