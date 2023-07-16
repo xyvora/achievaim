@@ -7,15 +7,13 @@
   <div class="flex-none sm:px-2 sm:mx-2">
     <ul class="menu menu-horizontal bg-base-200 rounded-box">
       <li>
-        <a href="/" class:active={$page.url.pathname === '/'}>
+        <a href="/" aria-label="home" class:active={$page.url.pathname === '/'}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            role="img"
-            aria-label="Home"
             ><path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -26,15 +24,17 @@
         </a>
       </li>
       <li>
-        <a href="smartgoals" class:active={$page.url.pathname === '/smartgoals'}>
+        <a
+          href="smartgoals"
+          aria-label="smart goals"
+          class:active={$page.url.pathname === '/smartgoals'}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            role="img"
-            aria-label="Smart Goals"
             ><path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -51,7 +51,11 @@
   <div class="flex-none">
     <ul class="menu menu-horizontal px-1" />
     <ThemeSelector />
-    <a href="/creategoals" class:active={$page.url.pathname === '/creategoals'}>
+    <a
+      href="/creategoals"
+      aria-label="create goals"
+      class:active={$page.url.pathname === '/creategoals'}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -59,8 +63,6 @@
         stroke-width="1.5"
         stroke="currentColor"
         class="w-6 h-6"
-        role="img"
-        aria-label="Add Goals"
       >
         <path
           stroke-linecap="round"
