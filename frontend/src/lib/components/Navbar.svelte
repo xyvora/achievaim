@@ -7,7 +7,7 @@
   <div class="flex-none sm:px-2 sm:mx-2">
     <ul class="menu menu-horizontal bg-base-200 rounded-box">
       <li>
-        <a href="/">
+        <a href="/" class:active={$page.url.pathname === '/'}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5"
