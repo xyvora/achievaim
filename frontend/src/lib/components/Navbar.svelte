@@ -14,6 +14,8 @@
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
+            role="img"
+            aria-label="Home"
             ><path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -31,6 +33,8 @@
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
+            role="img"
+            aria-label="Smart Goals"
             ><path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -55,6 +59,8 @@
         stroke-width="1.5"
         stroke="currentColor"
         class="w-6 h-6"
+        role="img"
+        aria-label="Add Goals"
       >
         <path
           stroke-linecap="round"
