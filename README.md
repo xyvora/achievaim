@@ -1,5 +1,7 @@
 # Achiev𝘼𝙄m
 
+![AchieveAim Profile Picture - 1280 x 640](https://github.com/xyvora/achievaim/assets/78818969/3e53c59f-0ecd-4d14-8ff0-7320e3c5f8f4)
+
 | Link                                                           | Description                                           |
 | :------------------------------------------------------------- | :---------------------------------------------------- |
 | [achievaim repo](https://github.com/xyvora/achievaim)          | Codebase                                              |
