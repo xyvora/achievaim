@@ -14,7 +14,9 @@
 
 ---
 
-Achiev𝘼𝙄m is a user-friendly and scalable SaaS web application. It seamlessly integrates with calendar and other software applications, leveraging the power of Generative AI to assist users in creating and tracking their SMART goals effectively.
+Achiev𝘼𝙄m is a user-friendly and scalable SaaS web application. It seamlessly integrates with
+calendar and other software applications, leveraging the power of Generative AI to assist users in
+creating and tracking their SMART goals effectively.
 
 ---
 
@@ -35,13 +37,18 @@ Achiev𝘼𝙄m is a user-friendly and scalable SaaS web application. It seamles
 - DaisyUI: Plugin for Tailwind CSS that provides UI components
 - FastAPI: A modern, fast, web-based, Python framework for building APIs
 - OpenAI GPT API: Generative AI API for generating goal suggestions
-- MongoDB/PostgreSQL: Databases for storing goal data
+- MongoDB: Database for storing goal data
 
 ---
 
 ## Solution
 
-Professionals and students struggle with setting, tracking, and achieving their goals. They often use multiple platforms to manage their tasks, appointments, and goals, leading to disorganization and inefficiency. Existing solutions may not offer seamless integration with commonly used calendar applications like Google and Outlook, making it difficult for users to synchronize their goals and tasks with their schedules. Furthermore, these solutions may not use advanced AI Large Language Models (LLMs) to provide personalized goal recommendations and progress tracking.
+Professionals and students struggle with setting, tracking, and achieving their goals. They often
+use multiple platforms to manage their tasks, appointments, and goals, leading to disorganization
+and inefficiency. Existing solutions may not offer seamless integration with commonly used calendar
+applications like Google and Outlook, making it difficult for users to synchronize their goals and
+tasks with their schedules. Furthermore, these solutions may not use advanced AI Large Language
+Models (LLMs) to provide personalized goal recommendations and progress tracking.
 
 ---
 
@@ -82,15 +89,19 @@ just api
 Start the frontend
 
 ```sh
-just frontend dev
+just frontend-dev
 ```
 
-Open your browser and visit http://localhost:5000 to access the app or relevant localhost address generated after running.
+Open your browser and visit http://localhost:3000 to access the app or relevant localhost address
+generated after running.
 
-Contributing
-Contributions are welcome! If you are interesting in contributing please see our [contributing guide](CONTRIBUTING.md)
+## Contributing
 
-License
+Contributions are welcome! If you are interesting in contributing please see our
+[contributing guide](CONTRIBUTING.md)
+
+## License
+
 This project is licensed under the MIT License.
 
 Feel free to modify and customize the README file according to your project's specifics.
