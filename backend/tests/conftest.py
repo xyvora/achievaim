@@ -48,6 +48,9 @@ def user_data():
     return {
         "_id": "649a39c599ef045345c94afc",
         "user_name": "immauser",
+        "first_name": "Imma",
+        "last_name": "User",
+        "country": "USA",
         "hashed_password": get_password_hash("test_password", _rounds=1),
         "goals": [
             {
@@ -103,6 +106,9 @@ async def user_no_goals(user_data):
 async def admin_user():
     return await User(
         user_name="admin",
+        first_name="Admin",
+        last_name="User",
+        country="USA",
         hashed_password=get_password_hash("test_password", _rounds=1),
         is_admin=True,
     ).insert()
@@ -112,6 +118,9 @@ async def admin_user():
 async def superuser_token_headers(test_client, admin_user):
     login_data = {
         "username": admin_user.user_name,
+        "first_name": "Super",
+        "last_name": "User",
+        "country": "Italy",
         "password": "test_password",
     }
     response = await test_client.post("/login/access-token", data=login_data)

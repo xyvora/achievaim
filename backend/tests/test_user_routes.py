@@ -5,7 +5,13 @@ from bson import ObjectId
 
 
 async def test_create_user(test_client):
-    user_data = {"user_name": "arthurdent", "password": "immapassword"}
+    user_data = {
+        "user_name": "arthurdent",
+        "first_name": "Imma",
+        "last_name": "User",
+        "country": "USA",
+        "password": "immapassword",
+    }
     response = await test_client.post("user/", json=user_data)
     response_json = response.json()
 
@@ -13,7 +19,13 @@ async def test_create_user(test_client):
 
 
 async def test_create_user_duplicate(user_with_goals, test_client):
-    user_data = {"user_name": user_with_goals.user_name, "password": "immapassword"}
+    user_data = {
+        "user_name": user_with_goals.user_name,
+        "first_name": "Imma",
+        "last_name": "User",
+        "country": "USA",
+        "password": "immapassword",
+    }
     response = await test_client.post("user/", json=user_data)
 
     assert response.status_code == 400
@@ -202,7 +214,16 @@ async def test_update_me(user_with_goals, user_data, test_client, user_token_hea
 
 @pytest.mark.usefixtures("user_with_goals")
 async def test_update_me_different_user(user_data, test_client, user_token_headers):
-    response = await test_client.post("user", json={"user_name": str(uuid4()), "password": "abc"})
+    response = await test_client.post(
+        "user",
+        json={
+            "user_name": str(uuid4()),
+            "first_name": "Imma",
+            "last_name": "User",
+            "country": "USA",
+            "password": "abc",
+        },
+    )
     assert response.status_code == 200
     user_data.pop("goals")
     user_data.pop("_id")
@@ -216,7 +237,13 @@ async def test_update_me_different_user(user_data, test_client, user_token_heade
 
 
 async def test_update_me_duplicate_user_name(test_client, user_with_goals, user_token_headers):
-    user_data = {"user_name": str(uuid4()), "password": "some_password"}
+    user_data = {
+        "user_name": str(uuid4()),
+        "first_name": "Imma",
+        "last_name": "User",
+        "country": "USA",
+        "password": "some_password",
+    }
     response = await test_client.post("user/", json=user_data)
     assert response.status_code == 200
     user_data["id"] = str(user_with_goals.id)
