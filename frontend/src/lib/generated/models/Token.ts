@@ -3,8 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { ValidationError } from './ValidationError';
-
-export type HTTPValidationError = {
-  detail?: Array<ValidationError>;
+export type Token = {
+  access_token: string;
+  token_type: string;
 };

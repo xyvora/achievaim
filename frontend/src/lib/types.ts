@@ -20,3 +20,8 @@ export interface User {
   country: string;
   gmail: string;
 }
+
+export interface UserLogin {
+  userName?: string;
+  password?: string;
+}
