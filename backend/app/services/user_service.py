@@ -20,8 +20,18 @@ async def create_user(user: UserCreate) -> UserNoPassword:
     if await get_user_by_user_name(user_name):
         raise DuplicateUserNameError(f"A user with the user name {user.user_name} already exists")
 
+    first_name = user.first_name.strip()
+    last_name = user.last_name.strip()
+    country = user.country.strip()
     hashed_password = get_password_hash(user.password)
-    user = User(user_name=user_name, hashed_password=hashed_password)
+    user = User(
+        user_name=user_name,
+        first_name=first_name,
+        last_name=last_name,
+        country=country,
+        avatar_url=user.avatar_url,
+        hashed_password=hashed_password,
+    )
     await user.save()
 
     updated_user = await User.find_one(User.id == user.id, projection_model=UserNoPassword)
@@ -75,12 +85,19 @@ async def get_users() -> list[UserNoPassword]:
 
 async def update_me(update_info: UserUpdateMe) -> UserNoPassword:
     user_name = update_info.user_name.lower().strip()
+    first_name = update_info.first_name.strip()
+    last_name = update_info.last_name.strip()
+    country = update_info.country.strip()
     password = update_info.password.strip()
     hashed_password = get_password_hash(password)
     update_result = await User.find_one(User.id == update_info.id).update(
         Set(
             {
                 User.user_name: user_name,
+                User.first_name: first_name,
+                User.last_name: last_name,
+                User.country: country,
+                User.avatar_url: update_info.avatar_url,
                 User.hashed_password: hashed_password,
                 User.last_update: datetime.now(),
             }
@@ -100,12 +117,19 @@ async def update_me(update_info: UserUpdateMe) -> UserNoPassword:
 
 async def update_user(update_info: UserUpdate) -> UserNoPassword:
     user_name = update_info.user_name.lower().strip()
+    first_name = update_info.first_name.strip()
+    last_name = update_info.last_name.strip()
+    country = update_info.country.strip()
     password = update_info.password.strip()
     hashed_password = get_password_hash(password)
     update_result = await User.find_one(User.id == update_info.id).update(
         Set(
             {
                 User.user_name: user_name,
+                User.first_name: first_name,
+                User.last_name: last_name,
+                User.country: country,
+                User.avatar_url: update_info.avatar_url,
                 User.hashed_password: hashed_password,
                 User.last_update: datetime.now(),
                 User.is_active: update_info.is_active,

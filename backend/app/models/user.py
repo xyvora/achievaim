@@ -3,7 +3,7 @@ from enum import Enum
 
 from beanie import Document
 from bson import ObjectId
-from pydantic import BaseModel, Field, validator
+from pydantic import AnyHttpUrl, BaseModel, Field, validator
 from pymongo import ASCENDING, IndexModel
 
 from app.models.object_id import ObjectIdStr
@@ -59,12 +59,20 @@ class GoalWithUserId(Goal):
 
 class UserCreate(BaseModel):
     user_name: str
+    first_name: str
+    last_name: str
+    country: str
+    avatar_url: AnyHttpUrl | None = None
     password: str
 
 
 class UserNoPassword(BaseModel):
     id: ObjectIdStr
     user_name: str
+    first_name: str
+    last_name: str
+    country: str
+    avatar_url: AnyHttpUrl | None = None
 
     class Config:
         json_encoders = {ObjectId: lambda x: str(x)}
@@ -73,6 +81,10 @@ class UserNoPassword(BaseModel):
         projection = {
             "id": "$_id",
             "user_name": "$user_name",
+            "first_name": "$first_name",
+            "last_name": "$last_name",
+            "country": "$country",
+            "avatar_url": "$avatar_url",
         }
 
 
@@ -83,6 +95,10 @@ class UserWithGoals(UserNoPassword):
         projection = {
             "id": "$_id",
             "user_name": "$user_name",
+            "first_name": "$first_name",
+            "last_name": "$last_name",
+            "country": "$country",
+            "avatar_url": "$avatar_url",
             "goals": "$goals",
         }
 
@@ -98,6 +114,10 @@ class UserNoGoals(UserNoPassword):
         projection = {
             "id": "$_id",
             "user_name": "$user_name",
+            "first_name": "$first_name",
+            "last_name": "$last_name",
+            "country": "$country",
+            "avatar_url": "$avatar_url",
             "is_active": "$is_active",
             "is_admin": "$is_admin",
             "date_created": "$date_created",
@@ -110,6 +130,10 @@ class UserUpdateMe(BaseModel):
     id: ObjectIdStr
     password: str
     user_name: str
+    first_name: str
+    last_name: str
+    country: str
+    avatar_url: AnyHttpUrl | None = None
 
     class Config:
         json_encoders = {ObjectId: lambda x: str(x)}
@@ -122,7 +146,11 @@ class UserUpdate(UserUpdateMe):
 
 class User(Document):
     user_name: str
+    first_name: str
+    last_name: str
+    country: str
     hashed_password: str
+    avatar_url: AnyHttpUrl | None = None
     goals: list[Goal] | None = None
     is_active: bool = True
     is_admin: bool = False

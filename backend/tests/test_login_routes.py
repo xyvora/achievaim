@@ -36,6 +36,9 @@ async def test_get_access_token_inactivate_user(test_client, user_with_goals):
         UserUpdate(
             id=user_with_goals.id,
             user_name=user_with_goals.user_name,
+            first_name=user_with_goals.first_name,
+            last_name=user_with_goals.last_name,
+            country=user_with_goals.country,
             password="test_password",
             is_active=False,
             is_admin=user_with_goals.is_admin,
