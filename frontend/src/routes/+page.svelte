@@ -1,5 +1,37 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import Input from '$lib/components/Input.svelte';
+  import type { UserLogin } from '$lib/types';
+  import { login } from '$lib/api';
+
+  let userLogin: UserLogin = {
+    userName: '',
+    password: ''
+  };
+
+  let userNameError = false;
+  let passwordError = false;
+
+  async function handleSubmit() {
+    if (userLogin.userName == null || userLogin.userName.trim() === '') {
+      userNameError = true;
+    } else {
+      userNameError = false;
+    }
+
+    if (userLogin.password == null || userLogin.password.trim() === '') {
+      passwordError = true;
+    } else {
+      passwordError = false;
+    }
+
+    if (userNameError === true || passwordError === true) {
+      return;
+    }
+
+    const token = await login(userLogin);
+    console.log(token);
+  }
 </script>
 
 <div class="hero min-h-screen bg-base-200 mb-10">
@@ -17,23 +49,26 @@
     </div>
     <div class="card flex-shrink-0 w-full lg:w-1/3 max-w-sm shadow-2xl bg-base-100">
       <div class="card-body">
-        <div class="form-control">
-          <label class="label" for="email-input">
-            <span class="label-text">Email</span>
-          </label>
-          <input type="text" placeholder="email" id="email-input" class="input input-bordered" />
-        </div>
+        <Input
+          inputId="user-name"
+          labelText="User Name"
+          placeholder="user name"
+          errorMessage="User Name is required."
+          isError={userNameError}
+          bind:value={userLogin.userName}
+        />
+
+        <Input
+          inputId="password"
+          labelText="Password"
+          placeholder="password"
+          errorMessage="Password is required."
+          isError={passwordError}
+          bind:value={userLogin.password}
+          isPassword={true}
+        />
 
         <div class="form-control">
-          <label class="label" for="password-input">
-            <span class="label-text">Password</span>
-          </label>
-          <input
-            type="password"
-            placeholder="password"
-            id="password-input"
-            class="input input-bordered"
-          />
           <a href={'#'} class="label-text-alt link link-hover mt-4 mb-4">Forgot password?</a>
           <a
             href="signup"
@@ -43,7 +78,9 @@
           >
         </div>
         <div class="form-control mt-6">
-          <button class="btn btn-primary">Login</button>
+          <button class="btn btn-primary" on:click={() => handleSubmit()} id="login-button"
+            >Login</button
+          >
         </div>
         <div class="form-control mt-6 text-center text-lg font-bold" />
       </div>

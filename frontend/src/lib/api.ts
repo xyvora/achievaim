@@ -1,7 +1,7 @@
 import { axiosInstance } from '$lib/axios-config';
-import type { GoalBase } from '$lib/generated';
+import type { UserLogin } from '$lib/types';
 
-export const createGoal = async (goal: GoalBase) => {
+/* export const createGoal = async (goal: GoalBase) => {
   try {
     const response = await axiosInstance.post('/goal', goal);
     if (response.status == 200) {
@@ -18,6 +18,30 @@ export const createGoal = async (goal: GoalBase) => {
 export const getGoals = async () => {
   try {
     const response = await axiosInstance.get('/goal');
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      throw new Error(response.statusText);
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}; */
+
+export const login = async (loginInfo: UserLogin) => {
+  if (loginInfo.userName == null || loginInfo.password == null) {
+    throw new Error('A user name and password are required');
+  }
+  const formData = new FormData();
+  formData.append('username', loginInfo.userName);
+  formData.append('password', loginInfo.password);
+  try {
+    const response = await axiosInstance.post('/login/access-token', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
     if (response.status == 200) {
       return response.data;
     } else {
