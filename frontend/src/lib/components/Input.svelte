@@ -1,8 +1,10 @@
 <script lang="ts">
+  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+
   export let inputId: string;
   export let labelText: string;
   export let placeholder: string;
-  export let errorMessage: string;
+  export let errorMessage: string | null = null;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export let value: any;
@@ -35,7 +37,7 @@
   {:else}
     <input type="text" {placeholder} id={inputId} class="input input-bordered" bind:value />
   {/if}
-  {#if isError}
-    <span id="{inputId}-error" class="text-error mt-2">{errorMessage}</span>
+  {#if isError && errorMessage !== null}
+    <ErrorMessage errorMessageId="{inputId}-error" {errorMessage} showError={true} />
   {/if}
 </div>

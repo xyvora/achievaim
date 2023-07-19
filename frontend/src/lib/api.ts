@@ -1,5 +1,7 @@
 import { axiosInstance } from '$lib/axios-config';
 import type { AccessToken, UserLogin } from '$lib/types';
+import { LoginError } from '$lib/errors';
+import { AxiosError } from 'axios';
 
 /* export const createGoal = async (goal: GoalBase) => {
   try {
@@ -45,10 +47,18 @@ export const login = async (loginInfo: UserLogin): Promise<AccessToken> => {
     if (response.status == 200) {
       return response.data;
     } else {
-      throw new Error(response.statusText);
+      throw new LoginError(response.statusText);
     }
   } catch (error) {
-    console.error(error);
+    if (error instanceof AxiosError) {
+      if (
+        error.response !== undefined &&
+        error.response.data !== undefined &&
+        error.response.data.detail !== undefined
+      ) {
+        throw new LoginError(error.response.data.detail);
+      }
+    }
     throw error;
   }
 };

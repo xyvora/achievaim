@@ -1,6 +1,8 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
   import Input from '$lib/components/Input.svelte';
+  import { LoginError } from '$lib/errors';
   import { accessToken, isLoading, isLoggedIn } from '$lib/stores/stores';
   import type { UserLogin } from '$lib/types';
   import { login } from '$lib/api';
@@ -12,27 +14,49 @@
 
   let userNameError = false;
   let passwordError = false;
+  let genericError = false;
+  let genericErrorMessage = '';
 
   async function handleSubmit() {
     isLoading.set(true);
+    genericError = false;
+    userNameError = false;
+    passwordError = false;
+
     if (userLogin.userName == null || userLogin.userName.trim() === '') {
       userNameError = true;
-    } else {
-      userNameError = false;
     }
 
     if (userLogin.password == null || userLogin.password.trim() === '') {
       passwordError = true;
-    } else {
-      passwordError = false;
     }
 
     if (userNameError === true || passwordError === true) {
+      isLoading.set(false);
       return;
     }
 
-    const token = await login(userLogin);
-    accessToken.set(token);
+    try {
+      const token = await login(userLogin);
+      accessToken.set(token);
+    } catch (error) {
+      if (
+        error instanceof LoginError &&
+        error.message !== undefined &&
+        error.message === 'Incorrect user name or password'
+      ) {
+        genericError = true;
+        genericErrorMessage = 'Incorrect user name or password';
+      } else {
+        genericError = true;
+        genericErrorMessage =
+          'An error occurred trying to connect to the sever. Please try again later.';
+      }
+      isLoading.set(false);
+      return;
+    }
+    userLogin.userName = '';
+    userLogin.password = '';
     isLoading.set(false);
   }
 </script>
@@ -70,6 +94,12 @@
             isError={passwordError}
             bind:value={userLogin.password}
             isPassword={true}
+          />
+
+          <ErrorMessage
+            errorMessageId="generic-error"
+            errorMessage={genericErrorMessage}
+            showError={genericError}
           />
 
           <div class="form-control">
