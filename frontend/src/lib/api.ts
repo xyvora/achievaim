@@ -1,5 +1,5 @@
 import { axiosInstance } from '$lib/axios-config';
-import type { UserLogin } from '$lib/types';
+import type { AccessToken, UserLogin } from '$lib/types';
 
 /* export const createGoal = async (goal: GoalBase) => {
   try {
@@ -29,7 +29,7 @@ export const getGoals = async () => {
   }
 }; */
 
-export const login = async (loginInfo: UserLogin) => {
+export const login = async (loginInfo: UserLogin): Promise<AccessToken> => {
   if (loginInfo.userName == null || loginInfo.password == null) {
     throw new Error('A user name and password are required');
   }

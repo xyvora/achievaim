@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import Input from '$lib/components/Input.svelte';
+  import { accessToken } from '$lib/stores/stores';
   import type { UserLogin } from '$lib/types';
   import { login } from '$lib/api';
 
@@ -31,6 +32,7 @@
 
     const token = await login(userLogin);
     console.log(token);
+    accessToken.set(token);
   }
 </script>
 
