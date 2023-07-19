@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import Input from '$lib/components/Input.svelte';
-  import { accessToken } from '$lib/stores/stores';
+  import { accessToken, isLoggedIn } from '$lib/stores/stores';
   import type { UserLogin } from '$lib/types';
   import { login } from '$lib/api';
 
@@ -31,7 +31,6 @@
     }
 
     const token = await login(userLogin);
-    console.log(token);
     accessToken.set(token);
   }
 </script>
@@ -49,43 +48,45 @@
         effective and efficient platform for personal and professional growth.
       </p>
     </div>
-    <div class="card flex-shrink-0 w-full lg:w-1/3 max-w-sm shadow-2xl bg-base-100">
-      <div class="card-body">
-        <Input
-          inputId="user-name"
-          labelText="User Name"
-          placeholder="user name"
-          errorMessage="User Name is required."
-          isError={userNameError}
-          bind:value={userLogin.userName}
-        />
+    {#if !$isLoggedIn}
+      <div class="card flex-shrink-0 w-full lg:w-1/3 max-w-sm shadow-2xl bg-base-100">
+        <div class="card-body">
+          <Input
+            inputId="user-name"
+            labelText="User Name"
+            placeholder="user name"
+            errorMessage="User Name is required."
+            isError={userNameError}
+            bind:value={userLogin.userName}
+          />
 
-        <Input
-          inputId="password"
-          labelText="Password"
-          placeholder="password"
-          errorMessage="Password is required."
-          isError={passwordError}
-          bind:value={userLogin.password}
-          isPassword={true}
-        />
+          <Input
+            inputId="password"
+            labelText="Password"
+            placeholder="password"
+            errorMessage="Password is required."
+            isError={passwordError}
+            bind:value={userLogin.password}
+            isPassword={true}
+          />
 
-        <div class="form-control">
-          <a href={'#'} class="label-text-alt link link-hover mt-4 mb-4">Forgot password?</a>
-          <a
-            href="signup"
-            class="label-text-alt link link-hover"
-            class:active={$page.url.pathname === '/signup'}
-            >Are your Goals Smart yet? Sign up here!</a
-          >
+          <div class="form-control">
+            <a href={'#'} class="label-text-alt link link-hover mt-4 mb-4">Forgot password?</a>
+            <a
+              href="signup"
+              class="label-text-alt link link-hover"
+              class:active={$page.url.pathname === '/signup'}
+              >Are your Goals Smart yet? Sign up here!</a
+            >
+          </div>
+          <div class="form-control mt-6">
+            <button class="btn btn-primary" on:click={() => handleSubmit()} id="login-button"
+              >Login</button
+            >
+          </div>
+          <div class="form-control mt-6 text-center text-lg font-bold" />
         </div>
-        <div class="form-control mt-6">
-          <button class="btn btn-primary" on:click={() => handleSubmit()} id="login-button"
-            >Login</button
-          >
-        </div>
-        <div class="form-control mt-6 text-center text-lg font-bold" />
       </div>
-    </div>
+    {/if}
   </div>
 </div>

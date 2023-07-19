@@ -15,6 +15,7 @@ const getToken = (): AccessToken | null => {
 };
 
 export const accessToken = writable<AccessToken | null>(browser ? getToken() : null);
+export const isLoggedIn = writable<boolean>((browser && getToken()) !== null ? true : false);
 
 accessToken.subscribe((value: AccessToken | null) => {
   if (!browser) {
@@ -26,4 +27,18 @@ accessToken.subscribe((value: AccessToken | null) => {
   } else {
     localStorage.removeItem('accessToken');
   }
+
+  isLoggedIn.set(value !== null);
+});
+
+isLoggedIn.subscribe((value: boolean) => {
+  if (!browser) {
+    return false;
+  }
+
+  if (value === true) {
+    localStorage.setItem('isLoggedIn', 'true');
+  }
+
+  localStorage.setItem('isLoggedIn', 'false');
 });
