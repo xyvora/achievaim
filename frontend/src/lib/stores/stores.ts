@@ -42,3 +42,9 @@ isLoggedIn.subscribe((value: boolean) => {
 
   localStorage.setItem('isLoggedIn', 'false');
 });
+
+export const isLoading = writable<boolean>(false);
+
+isLoading.subscribe((value: boolean) => {
+  return value;
+});
