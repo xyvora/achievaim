@@ -1,6 +1,11 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import ThemeSelector from './ThemeSelector.svelte';
+  import { accessToken, isLoggedIn } from '$lib/stores/stores';
+
+  async function logOut() {
+    accessToken.set(null);
+  }
 </script>
 
 <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content max-h-16" id="navbar">
@@ -71,5 +76,10 @@
         />
       </svg>
     </a>
+    {#if $isLoggedIn}
+      <div class="ml-2">
+        <button on:click={() => logOut()}>Log Out</button>
+      </div>
+    {/if}
   </div>
 </div>
