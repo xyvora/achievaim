@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import Input from '$lib/components/Input.svelte';
-  import { accessToken, isLoggedIn } from '$lib/stores/stores';
+  import { accessToken, isLoading, isLoggedIn } from '$lib/stores/stores';
   import type { UserLogin } from '$lib/types';
   import { login } from '$lib/api';
 
@@ -14,6 +14,7 @@
   let passwordError = false;
 
   async function handleSubmit() {
+    isLoading.set(true);
     if (userLogin.userName == null || userLogin.userName.trim() === '') {
       userNameError = true;
     } else {
@@ -32,6 +33,7 @@
 
     const token = await login(userLogin);
     accessToken.set(token);
+    isLoading.set(false);
   }
 </script>
 
@@ -79,11 +81,17 @@
               >Are your Goals Smart yet? Sign up here!</a
             >
           </div>
-          <div class="form-control mt-6">
-            <button class="btn btn-primary" on:click={() => handleSubmit()} id="login-button"
-              >Login</button
-            >
-          </div>
+          {#if $isLoading}
+            <div class="mt-6 text-center">
+              <span class="loading loading-spinner text-primary" />
+            </div>
+          {:else}
+            <div class="form-control mt-6">
+              <button class="btn btn-primary" on:click={() => handleSubmit()} id="login-button"
+                >Login</button
+              >
+            </div>
+          {/if}
           <div class="form-control mt-6 text-center text-lg font-bold" />
         </div>
       </div>
