@@ -30,9 +30,9 @@
       </li>
       <li>
         <a
-          href="smartgoals"
+          href="smart-goals"
           aria-label="smart goals"
-          class:active={$page.url.pathname === '/smartgoals'}
+          class:active={$page.url.pathname === '/smart-goals'}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -57,9 +57,9 @@
     <ul class="menu menu-horizontal px-1" />
     <ThemeSelector />
     <a
-      href="/creategoals"
+      href="/create-goals"
       aria-label="create goals"
-      class:active={$page.url.pathname === '/creategoals'}
+      class:active={$page.url.pathname === '/create-goals'}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
