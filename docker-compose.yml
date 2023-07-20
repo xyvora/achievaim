@@ -29,7 +29,7 @@ services:
     depends_on:
       - backend
     env_file:
-      - .env
+      - frontend/.env
     ports:
       - "3000:3000"
   db:
