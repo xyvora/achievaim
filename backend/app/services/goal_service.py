@@ -22,16 +22,17 @@ async def create_goal(user_id: ObjectId | PydanticObjectId, goal: GoalCreate) ->
     if not user:
         raise UserNotFoundError("No user with the id {user_id} found")
 
-    if await get_goal_by_name(user_id, goal.name):
-        raise DuplicateGoalError(f"A goal with the name {goal.name} already exists")
+    if await get_goal_by_name(user_id, goal.goal):
+        raise DuplicateGoalError(f"A goal with the name {goal.goal} already exists")
 
     goal_insert = Goal(
         id=str(uuid4()),
-        name=goal.name.strip(),
+        goal=goal.goal.strip(),
         duration=goal.duration,
         days_of_week=goal.days_of_week,
         repeats_every=goal.repeats_every,
         progress=goal.progress,
+        goal_date=goal.goal_date,
     )
 
     if user.goals:
@@ -44,7 +45,7 @@ async def create_goal(user_id: ObjectId | PydanticObjectId, goal: GoalCreate) ->
         )
 
     if update_result.modified_count < 1:  # pragma: no cover
-        raise NoRecordsUpdatedError(f"Error adding goal {goal.name} to user {user_id}")
+        raise NoRecordsUpdatedError(f"Error adding goal {goal.goal} to user {user_id}")
 
     updated_user = await User.find_one(User.id == user.id)
 
@@ -82,7 +83,7 @@ async def delete_goal_by_name(user_id: ObjectId | PydanticObjectId, goal_name: s
         raise NoGoalsFoundError(f"User {user_id} has no goals")
 
     delete_result = await User.find_one(User.id == user_id).update(
-        Pull({"goals": {"name": goal_name}})
+        Pull({"goals": {"goal": goal_name}})
     )
 
     if delete_result.modified_count < 1:
@@ -115,7 +116,7 @@ async def get_goal_by_name(user_id: ObjectId | PydanticObjectId, goal_name: str)
         return None
 
     for goal in user.goals:
-        if goal.name == goal_name:
+        if goal.goal == goal_name:
             return goal
 
     return None
@@ -144,13 +145,13 @@ async def update_goal(user_id: ObjectId | PydanticObjectId, goal: Goal) -> list[
     except NoRecordsDeletedError:
         raise NoGoalsFoundError(f"No goal with id {goal.id} found")
 
-    if await get_goal_by_name(user_id, goal.name):
-        raise DuplicateGoalError(f"A goal with the name {goal.name} already exists")
+    if await get_goal_by_name(user_id, goal.goal):
+        raise DuplicateGoalError(f"A goal with the name {goal.goal} already exists")
 
     update_result = await User.find_one(User.id == user_id).update(Push({User.goals: goal}))
 
     if update_result.modified_count < 1:  # pragma: no cover
-        raise NoRecordsUpdatedError(f"Error updating goal {goal.name} to user {user_id}")
+        raise NoRecordsUpdatedError(f"Error updating goal {goal.goal} to user {user_id}")
 
     updated_user = await User.find_one(User.id == user.id)
 

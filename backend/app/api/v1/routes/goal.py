@@ -35,10 +35,10 @@ async def create_goal(goal: GoalCreate, current_user: CurrentUser) -> list[Goal]
     try:
         goals = await create_goal_service(ObjectId(current_user.id), goal)
     except DuplicateGoalError:
-        logger.error("Goal with the name %s already exists for user %s", goal.name, current_user.id)
+        logger.error("Goal with the name %s already exists for user %s", goal.goal, current_user.id)
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST,
-            detail=f"Goal with the name {goal.name} already exists",
+            detail=f"Goal with the name {goal.goal} already exists",
         )
     except ValueError as e:  # pragma: no cover
         if "Goal IDs must be unique" in str(e):
@@ -149,8 +149,8 @@ async def update_goal(goal: Goal, current_user: CurrentUser) -> list[Goal]:
             status_code=HTTP_404_NOT_FOUND, detail=f"No goal with the id {goal.id} found"
         )
     except DuplicateGoalError:  # pragma: no cover
-        logger.error("Goal with the name %s already exists for user %s", goal.name, current_user.id)
+        logger.error("Goal with the name %s already exists for user %s", goal.goal, current_user.id)
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST,
-            detail=f"Goal with the name {goal.name} already exists",
+            detail=f"Goal with the name {goal.goal} already exists",
         )

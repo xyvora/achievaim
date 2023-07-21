@@ -15,27 +15,39 @@ async def test_create_goal_no_goals(test_client, user_data, user_token_headers):
 
     got = response_json[0]
     got.pop("id")
+    got["goal_date"] = got["goal_date"].split(".", maxsplit=1)[0]
     user_data["goals"][0].pop("id")
+    for goal in user_data["goals"]:
+        if goal.get("goal_date"):
+            goal["goal_date"] = goal["goal_date"].split(".", maxsplit=1)[0]
+
     assert sorted(got.items()) == sorted(user_data["goals"][0].items())
 
 
 @pytest.mark.usefixtures("user_with_goals")
 async def test_create_goal_with_goals(test_client, user_data, user_token_headers):
     goal_data = deepcopy(user_data["goals"][0])
-    goal_data["name"] = str(uuid4())
+    goal_data["goal"] = str(uuid4())
     response = await test_client.post("goal/", headers=user_token_headers, json=goal_data)
 
     got = []
     for goal in response.json():
+        if goal["goal_date"]:
+            goal["goal_date"] = goal["goal_date"].split(".", maxsplit=1)[0]
         goal.pop("id")
         got.append(goal)
 
     expected = []
     for goal in user_data["goals"]:
         goal.pop("id")
+        if goal.get("goal_date"):
+            goal["goal_date"] = goal["goal_date"].split(".", maxsplit=1)[0]
+        else:
+            goal["goal_date"] = None
         expected.append(goal)
 
     goal_data.pop("id")
+    goal_data["goal_date"] = goal_data["goal_date"].split(".", maxsplit=1)[0]
     expected.append(goal_data)
 
     assert [sorted(x.items()) for x in got] == [sorted(x.items()) for x in expected]
@@ -83,7 +95,7 @@ async def test_delete_goal_by_id_not_found(test_client, user_token_headers):
 
 async def test_delete_goal_by_name(test_client, user_with_goals, user_token_headers):
     response = await test_client.delete(
-        f"goal/goal-name/{user_with_goals.goals[0].name}", headers=user_token_headers
+        f"goal/goal-name/{user_with_goals.goals[0].goal}", headers=user_token_headers
     )
     assert response.status_code == 204
 
@@ -110,7 +122,7 @@ async def test_delete_goal_by_name_not_found(test_client, user_token_headers):
 
 async def test_get_all_goals(test_client, user_with_goals, user_token_headers):
     response = await test_client.get("goal", headers=user_token_headers)
-    assert response.json()[0]["name"] == user_with_goals.goals[0].name
+    assert response.json()[0]["goal"] == user_with_goals.goals[0].goal
 
 
 @pytest.mark.usefixtures("user_no_goals")
@@ -142,14 +154,14 @@ async def test_get_goal_by_id(test_client, user_with_goals, user_token_headers):
     response = await test_client.get(
         f"goal/{user_with_goals.goals[0].id}", headers=user_token_headers
     )
-    assert response.json()["name"] == user_with_goals.goals[0].name
+    assert response.json()["goal"] == user_with_goals.goals[0].goal
 
 
 async def test_get_goal_by_name(test_client, user_with_goals, user_token_headers):
     response = await test_client.get(
-        f"goal/goal-name/{user_with_goals.goals[0].name}", headers=user_token_headers
+        f"goal/goal-name/{user_with_goals.goals[0].goal}", headers=user_token_headers
     )
-    assert response.json()["name"] == user_with_goals.goals[0].name
+    assert response.json()["goal"] == user_with_goals.goals[0].goal
 
 
 @pytest.mark.usefixtures("user_with_goals")
@@ -174,9 +186,9 @@ async def test_get_goal_by_name_not_authenticated(test_client):
 @pytest.mark.usefixtures("user_with_goals")
 async def test_update_goal(test_client, user_data, user_token_headers):
     goal_data = deepcopy(user_data["goals"][0])
-    goal_data["name"] = "Test"
+    goal_data["goal"] = "Test"
     response = await test_client.put("goal/", json=goal_data, headers=user_token_headers)
-    goals = [x["name"] for x in response.json()]
+    goals = [x["goal"] for x in response.json()]
     assert "Test" in goals
 
 
@@ -198,7 +210,7 @@ async def test_update_goal_no_goals(test_client, user_data, user_token_headers):
 async def test_update_goal_goal_not_found(test_client, user_data, user_token_headers):
     goal_data = deepcopy(user_data["goals"][0])
     goal_data["id"] = str(uuid4())
-    goal_data["name"] = str(uuid4())
+    goal_data["goal"] = str(uuid4())
     response = await test_client.put("goal/", headers=user_token_headers, json=goal_data)
     assert response.status_code == 404
     assert "No goals found for user" == response.json()["detail"]
@@ -207,6 +219,6 @@ async def test_update_goal_goal_not_found(test_client, user_data, user_token_hea
 @pytest.mark.usefixtures("user_with_goals")
 async def test_update_goal_duplicate_goal(test_client, user_data, user_token_headers):
     goal_data = deepcopy(user_data["goals"][0])
-    goal_data["name"] = user_data["goals"][1]
+    goal_data["goal"] = user_data["goals"][1]
     response = await test_client.put("goal/", json=goal_data, headers=user_token_headers)
     assert response.status_code == 422
