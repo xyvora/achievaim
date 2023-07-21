@@ -7,8 +7,7 @@ export interface Goal {
 }
 
 export interface Goals {
-  future: Goal[];
-  inProgress: Goal[];
+  active: Goal[];
   completed: Goal[];
 }
 
