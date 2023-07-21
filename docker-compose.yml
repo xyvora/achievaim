@@ -28,6 +28,8 @@ services:
       context: ./frontend
     depends_on:
       - backend
+    environment:
+      - VITE_API_PATH=http://localhost:8000/api/v1
     ports:
       - "3000:3000"
   db:
