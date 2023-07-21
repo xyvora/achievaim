@@ -26,11 +26,12 @@ class DaysOfWeek(BaseModel):
 
 
 class _GoalBase(BaseModel):
-    name: str
-    duration: int | None
-    days_of_week: DaysOfWeek | None
-    repeats_every: RepeatsEvery | None
-    progress: float | None
+    goal: str
+    duration: int | None = None
+    days_of_week: DaysOfWeek | None = None
+    repeats_every: RepeatsEvery | None = None
+    progress: float | None = None
+    goal_date: datetime | None = None
 
 
 class Goal(_GoalBase):
@@ -43,6 +44,7 @@ class Goal(_GoalBase):
             "days_of_week": "$days_of_week",
             "repeats_every": "$repeats_every",
             "progress": "$progress",
+            "goal_date": "$goal_date",
         }
 
 
@@ -189,8 +191,8 @@ class User(Document):
                 "Goal IDs must be unique",
             )
 
-        goal_names = {x.name for x in v}
-        if len(v) != len(goal_names):
+        goals = {x.goal for x in v}
+        if len(v) != len(goals):
             raise ValueError(
                 "Goal names must be unique",
             )

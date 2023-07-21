@@ -1,5 +1,6 @@
 import asyncio
 from copy import deepcopy
+from datetime import datetime
 from uuid import uuid4
 
 import pytest
@@ -55,7 +56,7 @@ def user_data():
         "goals": [
             {
                 "id": str(uuid4()),
-                "name": "Goal 1",
+                "goal": "Goal 1",
                 "duration": 5,
                 "days_of_week": {
                     "monday": False,
@@ -68,10 +69,11 @@ def user_data():
                 },
                 "repeats_every": "week",
                 "progress": 41.0,
+                "goal_date": datetime.now().isoformat(),
             },
             {
                 "id": str(uuid4()),
-                "name": "Goal 2",
+                "goal": "Goal 2",
                 "duration": 2,
                 "days_of_week": {
                     "monday": True,
