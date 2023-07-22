@@ -5,60 +5,41 @@
   let goals: Goals = {
     active: [
       {
+        name: 'Goal 1',
+        details: 'S.M.A.R.T details here',
+        date: new Date('2024-01-01T10:00:00'),
+        days: [10],
+        editing: false
+      }
+    ],
+    completed: [
+      {
         name: 'Goal 2',
         details: 'S.M.A.R.T details here',
         date: new Date('2024-01-02T14:00:00'),
         days: [15],
         editing: false
       }
-    ],
-    completed: [
-      {
-        name: 'Goal 3',
-        details: 'S.M.A.R.T details here',
-        date: new Date('2024-01-03T16:00:00'),
-        days: [20],
-        editing: false
-      }
     ]
   };
 
-  let showModal = true;
-  let selectedGoal: Goal | null = null;
-
-  function saveChanges(goal: Goal, newDetails: string) {
-    goal.details = newDetails;
-    goal.editing = false;
-  }
-
-  function deleteGoal(category: string | null, goal: Goal | null) {
-    if (category === null || goal === null) {
-      throw new Error('category and goal are required');
-    }
-
-    if (category !== 'active' && category !== 'completed') {
-      throw new Error('Unknown category');
-    }
-
-    const index = goals[category].indexOf(goal);
-    goals[category].splice(index, 1);
-
-    showModal = false;
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 </script>
 
-<div class="flex flex-col justify-center items-center h-screen mx-auto px-4 sm:px-6 lg:px-8">
-  <div class="flex flex-wrap justify-center -mx-2 overflow-hidden sm:-mx-3 md:-mx-3 lg:-mx-4 xl:-mx-4">
+<div class="flex flex-col items-center justify-center h-screen">
+  <div class="flex flex-wrap -mx-2 overflow-hidden sm:-mx-3 md:-mx-3 lg:-mx-4 xl:-mx-4 justify-center">
     {#each Object.entries(goals) as [category, value]}
       <div
-        class="my-2 px-2 w-full overflow-hidden sm:my-2 sm:px-2 sm:w-1/2 md:my-3 md:px-3 md:w-1/2 lg:my-4 lg:px-4 lg:w-1/2 xl:my-4 xl:px-4 xl:w-1/2"
+        class="my-2 px-2 w-full overflow-hidden sm:my-2 sm:px-2 sm:w-1/2 md:my-3 md:px-3 md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3 xl:my-4 xl:px-4 xl:w-1/3"
       >
-        <div class="text-lg font-bold mb-4">{category}</div>
+        <div class="text-lg font-bold mb-4">{capitalizeFirstLetter(category)}</div>
         {#each value as goal (goal.name)}
-          <div class="rounded-lg p-6 mb-4 bg-white shadow-sm border border-gray-200">
+          <div class="rounded-lg p-6 mb-4 bg-white shadow-sm border border-gray-200 space-y-4">
             <button
               class="text-neutral font-bold text-xl mb-2 cursor-pointer"
-              on:click={() => goto('/creategoals')}
+              on:click={() => goto(`/creategoals/${goal.name}`)}
             >
               {goal.name}
             </button>
@@ -87,6 +68,20 @@
   </div>
 </div>
 
-{#if showModal && selectedGoal}
-  <!-- modal code -->
-{/if}
+<style>
+  .animate-fade-in-down {
+    animation: fade-in-down 0.3s ease-out both;
+  }
+
+  @keyframes fade-in-down {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, -50%, 0);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+</style>
