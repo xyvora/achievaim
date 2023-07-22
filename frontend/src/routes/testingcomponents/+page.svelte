@@ -69,10 +69,6 @@
 </div>
 
 <style>
-  .animate-fade-in-down {
-    animation: fade-in-down 0.3s ease-out both;
-  }
-
   @keyframes fade-in-down {
     0% {
       opacity: 0;
