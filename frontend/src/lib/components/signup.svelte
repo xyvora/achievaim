@@ -10,11 +10,10 @@
   };
   import { isLoggedIn, accessToken } from '$lib/stores/stores';
 
-async function logOut() {
+  async function logOut() {
     accessToken.set(null);
-}
+  }
 </script>
-
 
 <form class="w-full max-w-lg mx-auto my-10 p-5 bg-white rounded shadow">
   <div class="flex flex-wrap -mx-3 mb-6">
@@ -124,11 +123,13 @@ async function logOut() {
       Sign Up
     </button>
     {#if $isLoggedIn}
-<div class="ml-2">
-    <button class="px-4 py-2 text-white bg-red-500 rounded-lg focus:outline-none hover:bg-red-600 active:bg-red-700 transition-colors duration-200 ease-in-out" on:click={() => logOut()}>Log Out</button>
-</div>
-{/if}
-
+      <div class="ml-2">
+        <button
+          class="px-4 py-2 text-white bg-red-500 rounded-lg focus:outline-none hover:bg-red-600 active:bg-red-700 transition-colors duration-200 ease-in-out"
+          on:click={() => logOut()}>Log Out</button
+        >
+      </div>
+    {/if}
   </div>
 </form>
 
