@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Goal, Goals } from '$lib/types';
+  import type { Goals } from '$lib/types';
   import { goto } from '$app/navigation';
 
   let goals: Goals = {
