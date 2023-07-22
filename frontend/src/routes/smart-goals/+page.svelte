@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { Goal, Goals } from '$lib/types';
+  import { goto } from '$app/navigation';
 
   let goals: Goals = {
-    future: [
+    active: [
       {
         name: 'Goal 1',
         details: 'S.M.A.R.T details here',
@@ -11,7 +12,7 @@
         editing: false
       }
     ],
-    inProgress: [
+    completed: [
       {
         name: 'Goal 2',
         details: 'S.M.A.R.T details here',
@@ -19,166 +20,55 @@
         days: [15],
         editing: false
       }
-    ],
-    completed: [
-      {
-        name: 'Goal 3',
-        details: 'S.M.A.R.T details here',
-        date: new Date('2024-01-03T16:00:00'),
-        days: [20],
-        editing: false
-      }
     ]
   };
 
-  let showModal = true;
-  let selectedGoal: Goal | null = null;
-  let selectedCategory: string | null = null;
-
-  function toggleEditing(goal: Goal | null) {
-    if (goal === null) {
-      throw new Error('No goal selected');
-    }
-
-    goal.editing = !goal.editing;
-    showModal = false;
-  }
-
-  function saveChanges(goal: Goal, newDetails: string) {
-    goal.details = newDetails;
-    goal.editing = false;
-  }
-
-  function deleteGoal(category: string | null, goal: Goal | null) {
-    if (category === null || goal === null) {
-      throw new Error('category and goal are required');
-    }
-
-    if (category !== 'future' && category !== 'inProgress' && category !== 'completed') {
-      throw new Error('Unknown category');
-    }
-
-    const index = goals[category].indexOf(goal);
-    goals[category].splice(index, 1);
-
-    showModal = false;
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 </script>
 
-<div class="container mx-auto px-4 sm:px-6 lg:px-8">
-  <div class="flex flex-wrap -mx-2 overflow-hidden sm:-mx-3 md:-mx-3 lg:-mx-4 xl:-mx-4">
+<div class="flex flex-col items-center justify-center h-screen">
+  <div class="flex flex-wrap -mx-2 overflow-hidden sm:-mx-3 md:-mx-3 lg:-mx-4 xl:-mx-4 justify-center">
     {#each Object.entries(goals) as [category, value]}
       <div
         class="my-2 px-2 w-full overflow-hidden sm:my-2 sm:px-2 sm:w-1/2 md:my-3 md:px-3 md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3 xl:my-4 xl:px-4 xl:w-1/3"
       >
-        <div class="text-lg font-bold mb-4">{category}</div>
+        <div class="text-lg font-bold mb-4">{capitalizeFirstLetter(category)}</div>
         {#each value as goal (goal.name)}
-          <div class="rounded-lg p-6 mb-4 bg-white shadow-sm border border-gray-200">
+          <div class="rounded-lg p-6 mb-4 bg-white shadow-sm border border-gray-200 space-y-4">
             <button
               class="text-neutral font-bold text-xl mb-2 cursor-pointer"
-              on:click={() => {
-                showModal = true;
-                selectedGoal = goal;
-              }}
-              on:keyup={() => {
-                showModal = true;
-                selectedGoal = goal;
-              }}
+              on:click={() => goto(`/creategoals/${goal.name}`)}
             >
               {goal.name}
             </button>
-            {#if goal.editing}
-              <textarea class="w-full h-16 p-2 mb-2 border rounded" bind:value={goal.details} />
-              <button
-                class="py-1 px-4 border rounded bg-blue-500 text-white"
-                on:click={() => saveChanges(goal, goal.details)}>Save</button
-              >
-            {:else}
-              <div class="text-base text-gray-900 font-bold my-2">S.M.A.R.T</div>
-              <p class="text-gray-900"><strong>Specific:</strong> {goal.specific}</p>
-              <p class="text-gray-900"><strong>Measurable:</strong> {goal.measurable}</p>
-              <p class="text-gray-900"><strong>Attainable:</strong> {goal.attainable}</p>
-              <p class="text-gray-900"><strong>Relevant:</strong> {goal.relevant}</p>
-              <p class="text-gray-900"><strong>Time-Bound:</strong> {goal.timeBound}</p>
-              <div class="grid grid-cols-2 gap-2 text-sm text-gray-500 mt-4">
-                <div><strong>Date:</strong></div>
-                <div>{goal.date}</div>
-                <div><strong>Days:</strong></div>
-                <div>
-                  <div class="flex flex-row">
-                    {#each goal.days as day}<span class="mx-1">{day}</span>{/each}
-                  </div>
+            <div class="text-base text-gray-900 font-bold my-2">S.M.A.R.T</div>
+            <p class="text-gray-900"><strong>Specific:</strong> {goal.specific}</p>
+            <p class="text-gray-900"><strong>Measurable:</strong> {goal.measurable}</p>
+            <p class="text-gray-900"><strong>Attainable:</strong> {goal.attainable}</p>
+            <p class="text-gray-900"><strong>Relevant:</strong> {goal.relevant}</p>
+            <p class="text-gray-900"><strong>Time-Bound:</strong> {goal.timeBound}</p>
+            <div class="grid grid-cols-2 gap-2 text-sm text-gray-500 mt-4">
+              <div><strong>Date:</strong></div>
+              <div>{goal.date}</div>
+              <div><strong>Days:</strong></div>
+              <div>
+                <div class="flex flex-row">
+                  {#each goal.days as day}<span class="mx-1">{day}</span>{/each}
                 </div>
-                <div><strong>Time:</strong></div>
-                <div>{goal.time}</div>
               </div>
-            {/if}
+              <div><strong>Time:</strong></div>
+              <div>{goal.time}</div>
+            </div>
           </div>
         {/each}
       </div>
     {/each}
   </div>
-
-  {#if showModal && selectedGoal}
-    <div class="fixed z-10 inset-0 overflow-y-auto">
-      <div
-        class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
-      >
-        <div class="fixed inset-0 transition-opacity ease-out duration-500">
-          <div class="absolute inset-0 bg-gray-500 opacity-75" />
-        </div>
-        <div
-          class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full animate-fade-in-down"
-        >
-          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div class="sm:flex sm:items-start">
-              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                  What would you like to do with {selectedGoal.name}?
-                </h3>
-              </div>
-            </div>
-          </div>
-          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-              <button
-                type="button"
-                class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5"
-                on:click={() => toggleEditing(selectedGoal)}
-              >
-                Edit
-              </button>
-            </span>
-            <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
-              <button
-                type="button"
-                class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5"
-                on:click={() => (showModal = false)}
-              >
-                Cancel
-              </button>
-            </span>
-            <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
-              <button
-                type="button"
-                class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5"
-                on:click={() => deleteGoal(selectedCategory, selectedGoal)}
-              >
-                Delete
-              </button>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  {/if}
 </div>
 
 <style>
-  .animate-fade-in-down {
-    animation: fade-in-down 0.3s ease-out both;
-  }
-
   @keyframes fade-in-down {
     0% {
       opacity: 0;
