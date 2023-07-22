@@ -1,127 +1,97 @@
 <script lang="ts">
+  import { createUser } from '$lib/api';
   import type { User } from '$lib/types';
-  let user: User = {
-    username: '',
-    avatar: '',
-    firstName: '',
-    lastName: '',
-    country: '',
-    gmail: ''
-  };
   import { isLoggedIn, accessToken } from '$lib/stores/stores';
+  import Input from '$lib/components/Input.svelte';
+
+  let user: User = {
+    username: null,
+    avatar: null,
+    firstName: null,
+    lastName: null,
+    country: null,
+    password: null
+  };
+
+  let genericError = false;
+  let firstNameError = false;
+  let lastNameError = false;
+  let userNameError = false;
+  let passwordError = false;
 
   async function logOut() {
     accessToken.set(null);
   }
 </script>
 
-<form class="w-full max-w-lg mx-auto my-10 p-5 bg-white rounded shadow">
+<form class="w-full max-w-lg mx-auto my-10 p-5 rounded shadow">
   <div class="flex flex-wrap -mx-3 mb-6">
     <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-      <label
-        class="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2"
-        for="first-name"
-      >
-        First Name*
-      </label>
-      <input
-        class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-        id="first-name"
-        type="text"
-        placeholder="Jane"
+      <Input
+        inputId="first-name"
+        labelText="First Name"
+        placeholder="first name"
+        errorMessage="First Name is required."
+        isError={firstNameError}
         bind:value={user.firstName}
-        required
       />
     </div>
     <div class="w-full md:w-1/2 px-3">
-      <label
-        class="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2"
-        for="last-name"
-      >
-        Last Name*
-      </label>
-      <input
-        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-        id="last-name"
-        type="text"
-        placeholder="Doe"
+      <Input
+        inputId="last-name"
+        labelText="Last Name"
+        placeholder="last name"
+        errorMessage="Last Name is required."
+        isError={lastNameError}
         bind:value={user.lastName}
-        required
       />
     </div>
   </div>
   <div class="flex flex-wrap -mx-3 mb-6">
     <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-      <label
-        class="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2"
-        for="username"
-      >
-        Username*
-      </label>
-      <input
-        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-        id="username"
-        type="text"
-        placeholder="jane.doe"
-        bind:value={user.username}
-        required
+      <Input
+        inputId="user-name"
+        labelText="User Name"
+        placeholder="user name"
+        errorMessage="User Name is required."
+        isError={userNameError}
+        bind:value={user.userName}
       />
     </div>
     <div class="w-full md:w-1/2 px-3">
-      <label class="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2" for="gmail">
-        Gmail Account
-      </label>
-      <input
-        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-        id="gmail"
-        type="email"
-        placeholder="jane.doe@gmail.com"
-        bind:value={user.gmail}
+      <Input
+        inputId="password"
+        labelText="Password"
+        placeholder="password"
+        errorMessage="Password is required."
+        isError={passwordError}
+        isPassword={true}
+        bind:value={user.password}
       />
     </div>
   </div>
   <div class="flex flex-wrap -mx-3 mb-6">
     <div class="w-full px-3">
-      <label
-        class="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2"
-        for="country"
-      >
-        Country
-      </label>
-      <input
-        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-        id="country"
-        type="text"
-        placeholder="United States"
+      <Input
+        inputId="country"
+        labelText="Country"
+        placeholder="country"
         bind:value={user.country}
       />
     </div>
   </div>
   <div class="flex flex-wrap -mx-3 mb-6">
     <div class="w-full px-3">
-      <label
-        class="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2"
-        for="avatar"
-      >
-        Avatar Photo URL
-      </label>
-      <input
-        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-        id="avatar"
-        type="url"
-        placeholder="https://example.com/image.jpg"
+      <Input
+        inputId="avatar"
+        labelText="Avatar Photo URL"
+        placeholder="avatar photo url"
         bind:value={user.avatar}
       />
     </div>
   </div>
   <div class="flex items-center justify-between">
-    <button
-      class="bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-      type="submit"
-      id="btnSubmit"
-    >
-      Sign Up
-    </button>
+    <button class="btn btn-primary" type="submit" id="btnSubmit">Sign Up</button>
     {#if $isLoggedIn}
       <div class="ml-2">
         <button
@@ -132,9 +102,3 @@
     {/if}
   </div>
 </form>
-
-<style>
-  input:invalid {
-    border: 2px solid red;
-  }
-</style>
