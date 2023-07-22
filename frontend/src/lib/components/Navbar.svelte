@@ -7,7 +7,7 @@
   <div class="flex-none sm:px-2 sm:mx-2">
     <ul class="menu menu-horizontal bg-base-200 rounded-box">
       <li>
-        <a href="/" aria-label="home" class:active={$page.url.pathname === '/'}>
+        <a href="/" aria-label="home" title="Home" class:active={$page.url.pathname === '/'}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5"
@@ -27,6 +27,7 @@
         <a
           href="smart-goals"
           aria-label="smart goals"
+          title=" Smart Goals"
           class:active={$page.url.pathname === '/smart-goals'}
         >
           <svg
@@ -48,6 +49,7 @@
         <a
           href="/create-goals"
           aria-label="create goals"
+          title="Create Goals"
           class:active={$page.url.pathname === '/create-goals'}
         >
           <svg
@@ -68,7 +70,12 @@
       </li>
 
       <li>
-        <a href="/account-settings" aria-label="account-settings">
+        <a
+          href="/account-settings"
+          aria-label="account-settings"
+          title="Account Settings"
+          class:active={$page.url.pathname === '/account-settings'}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5"
