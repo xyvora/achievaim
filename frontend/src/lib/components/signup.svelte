@@ -211,20 +211,19 @@
     showError={genericError}
   />
   <div class="flex items-center justify-between">
-    {#if $isLoading}
+    {#if $isLoggedIn}
+      <div class="ml-2">
+        <button class="btn btn-primary" type="submit" id="btnSubmit">Save</button>
+      </div>
+      <div>
+        <button class="btn btn-secondary" on:click={() => logOut()}>Log Out</button>
+      </div>
+    {:else if $isLoading}
       <div class="mt-6 text-center">
         <span class="loading loading-spinner text-primary" />
       </div>
     {:else}
       <button class="btn btn-primary" type="submit" id="btnSubmit">Sign Up</button>
-    {/if}
-    {#if $isLoggedIn}
-      <div class="ml-2">
-        <button
-          class="px-4 py-2 text-white bg-red-500 rounded-lg focus:outline-none hover:bg-red-600 active:bg-red-700 transition-colors duration-200 ease-in-out"
-          on:click={() => logOut()}>Log Out</button
-        >
-      </div>
     {/if}
   </div>
 </form>
