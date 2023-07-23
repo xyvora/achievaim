@@ -12,7 +12,7 @@ export interface Goals {
 }
 
 export interface User {
-  username: string | null;
+  userName: string | null;
   avatar: string | null;
   firstName: string | null;
   lastName: string | null;

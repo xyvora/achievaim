@@ -1,35 +1,99 @@
 <script lang="ts">
   import { createUser } from '$lib/api';
   import type { User } from '$lib/types';
-  import { isLoggedIn, accessToken } from '$lib/stores/stores';
+  import type { UserCreate } from '$lib/generated';
+  import { isLoading, isLoggedIn, accessToken } from '$lib/stores/stores';
   import Input from '$lib/components/Input.svelte';
+  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 
-  let user: User = {
-    username: null,
+  let user = {
+    userName: null,
     avatar: null,
     firstName: null,
     lastName: null,
     country: null,
-    password: null
+    password: null,
+    verifyPassword: null
   };
 
   let genericError = false;
+  let genericErrorMessage = '';
+  let passwordVerifyError = false;
   let firstNameError = false;
   let lastNameError = false;
   let userNameError = false;
   let passwordError = false;
+  let countryError = false;
+
+  function isMissing(check: string | null): boolean {
+    if (check === null || check.trim() === '') {
+      return true;
+    }
+
+    return false;
+  }
 
   async function logOut() {
     accessToken.set(null);
   }
+
+  async function handleSubmit() {
+    isLoading.set(true);
+    firstNameError = isMissing(user.firstName);
+    lastNameError = isMissing(user.lastName);
+    userNameError = isMissing(user.userName);
+    passwordError = isMissing(user.password);
+    countryError = isMissing(user.country);
+
+    if (!passwordError && user.password !== user.verifyPassword) {
+      isLoading.set(false);
+      passwordVerifyError = true;
+    } else {
+      passwordVerifyError = false;
+    }
+
+    if (
+      firstNameError === true ||
+      lastNameError === true ||
+      userNameError === true ||
+      passwordError === true ||
+      countryError === true ||
+      passwordVerifyError === true
+    ) {
+      isLoading.set(false);
+      return;
+    }
+
+    const userCreate: UserCreate = {
+      first_name: user.firstName,
+      last_name: user.lastName,
+      user_name: user.userName,
+      country: user.country,
+      password: user.password,
+      avatar: user.avatar
+    };
+
+    try {
+      const userInfo = await createUser(userCreate);
+    } catch (error) {
+      genericError = true;
+      genericErrorMessage =
+        'An error occurred trying to connect to the sever. Please try again later.';
+    }
+
+    isLoading.set(false);
+  }
 </script>
 
-<form class="w-full max-w-lg mx-auto my-10 p-5 rounded shadow">
+<form
+  on:submit|preventDefault={handleSubmit}
+  class="w-full max-w-lg mx-auto my-10 p-5 rounded shadow"
+>
   <div class="flex flex-wrap -mx-3 mb-6">
     <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
       <Input
         inputId="first-name"
-        labelText="First Name"
+        labelText="First Name*"
         placeholder="first name"
         errorMessage="First Name is required."
         isError={firstNameError}
@@ -39,7 +103,7 @@
     <div class="w-full md:w-1/2 px-3">
       <Input
         inputId="last-name"
-        labelText="Last Name"
+        labelText="Last Name*"
         placeholder="last name"
         errorMessage="Last Name is required."
         isError={lastNameError}
@@ -51,7 +115,7 @@
     <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
       <Input
         inputId="user-name"
-        labelText="User Name"
+        labelText="User Name*"
         placeholder="user name"
         errorMessage="User Name is required."
         isError={userNameError}
@@ -60,8 +124,18 @@
     </div>
     <div class="w-full md:w-1/2 px-3">
       <Input
+        inputId="country"
+        labelText="Country"
+        placeholder="country"
+        bind:value={user.country}
+      />
+    </div>
+  </div>
+  <div class="flex flex-wrap -mx-3 mb-6">
+    <div class="w-full md:w-1/2 px-3">
+      <Input
         inputId="password"
-        labelText="Password"
+        labelText="Password*"
         placeholder="password"
         errorMessage="Password is required."
         isError={passwordError}
@@ -69,16 +143,24 @@
         bind:value={user.password}
       />
     </div>
-  </div>
-  <div class="flex flex-wrap -mx-3 mb-6">
-    <div class="w-full px-3">
+    <div class="w-full md:w-1/2 px-3">
       <Input
-        inputId="country"
-        labelText="Country"
-        placeholder="country"
-        bind:value={user.country}
+        inputId="verify-password"
+        labelText="Verify Password*"
+        placeholder="verify password"
+        isPassword={true}
+        bind:value={user.verifyPassword}
       />
     </div>
+    {#if passwordVerifyError}
+      <div class="w-full text-center">
+        <ErrorMessage
+          errorMessageId="password-verify-error"
+          errorMessage="Passwords don't match"
+          showError={passwordVerifyError}
+        />
+      </div>
+    {/if}
   </div>
   <div class="flex flex-wrap -mx-3 mb-6">
     <div class="w-full px-3">
@@ -90,6 +172,11 @@
       />
     </div>
   </div>
+  <ErrorMessage
+    errorMessageId="generic-error"
+    errorMessage={genericErrorMessage}
+    showError={genericError}
+  />
   <div class="flex items-center justify-between">
     <button class="btn btn-primary" type="submit" id="btnSubmit">Sign Up</button>
     {#if $isLoggedIn}

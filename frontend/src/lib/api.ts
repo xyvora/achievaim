@@ -7,6 +7,12 @@ import { LoginError } from '$lib/errors';
 export const createUser = async (user: UserCreate): Promise<UserNoPassword> => {
   try {
     const response = await axiosInstance.post('/user', user);
+
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      throw new Error(response.statusText);
+    }
   } catch (error) {
     if (error instanceof AxiosError) {
       if (
