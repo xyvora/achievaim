@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { createUser } from '$lib/api';
+  import { createUser, login } from '$lib/api';
   import type { UserCreate } from '$lib/generated';
+  import type { UserLogin } from '$lib/types';
+  import { LoginError } from '$lib/errors';
   import { isLoading, isLoggedIn, accessToken } from '$lib/stores/stores';
   import Input from '$lib/components/Input.svelte';
   import ErrorMessage from '$lib/components/ErrorMessage.svelte';
@@ -83,6 +85,29 @@
         genericError = true;
         genericErrorMessage =
           'An error occurred trying to connect to the sever. Please try again later.';
+      }
+
+      let userLogin: UserLogin = {
+        userName: user.userName,
+        password: user.password
+      };
+
+      try {
+        const token = await login(userLogin);
+        accessToken.set(token);
+      } catch (error) {
+        if (
+          error instanceof LoginError &&
+          error.message !== undefined &&
+          error.message === 'Incorrect user name or password'
+        ) {
+          genericError = true;
+          genericErrorMessage = 'Incorrect user name or password';
+        } else {
+          genericError = true;
+          genericErrorMessage =
+            'An error occurred trying to connect to the sever. Please try again later.';
+        }
       }
     } else {
       genericError = true;
