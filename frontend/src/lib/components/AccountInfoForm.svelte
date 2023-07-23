@@ -1,14 +1,25 @@
 <script lang="ts">
   import { navigate } from 'svelte-routing';
-  import { createUser, login } from '$lib/api';
+  import { onMount } from 'svelte';
+  import { createUser, getMe, login } from '$lib/api';
   import type { UserCreate } from '$lib/generated';
-  import type { UserLogin } from '$lib/types';
+  import type { AccessToken, UserLogin } from '$lib/types';
   import { LoginError } from '$lib/errors';
   import { isLoading, isLoggedIn, accessToken } from '$lib/stores/stores';
   import Input from '$lib/components/Input.svelte';
   import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 
-  let user = {
+  interface User {
+    userName: string | null;
+    avatar: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    country: string | null;
+    password: string | null;
+    verifyPassword: string | null;
+  }
+
+  let user: User = {
     userName: null,
     avatar: null,
     firstName: null,
@@ -119,6 +130,24 @@
 
     isLoading.set(false);
   }
+
+  onMount(async () => {
+    let token: AccessToken | null;
+    accessToken.subscribe(async (value: AccessToken | null) => {
+      token = value;
+      if (token) {
+        const info = await getMe();
+        user.firstName = info.first_name;
+        user.lastName = info.last_name;
+        user.userName = info.user_name;
+        user.country = info.country;
+
+        if (info.avatar_url !== undefined) {
+          user.avatar = info.avatar_url;
+        }
+      }
+    });
+  });
 </script>
 
 <form

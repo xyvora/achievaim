@@ -1,29 +1,48 @@
 import { AxiosError } from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 import { axiosInstance } from '$lib/axios-config';
 import type { UserCreate, UserNoPassword } from '$lib/generated';
 import type { AccessToken, UserLogin } from '$lib/types';
 import { LoginError } from '$lib/errors';
+import { accessToken } from '$lib/stores/stores';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function authHeaders(): Promise<AxiosRequestConfig<any>> {
+  const token: AccessToken | null = await new Promise<AccessToken | null>((resolve) => {
+    accessToken.subscribe((value: AccessToken | null) => resolve(value));
+  });
+
+  if (token) {
+    return {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`
+      }
+    };
+  }
+
+  throw new Error('No access token found');
+}
 
 export const createUser = async (user: UserCreate): Promise<UserNoPassword> => {
-  try {
-    const response = await axiosInstance.post('/user', user);
+  // TODO: Better handle errors
+  const response = await axiosInstance.post('/user', user);
 
-    if (response.status == 200) {
-      return response.data;
-    } else {
-      throw new Error(response.statusText);
-    }
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      if (
-        error.response !== undefined &&
-        error.response.data !== undefined &&
-        error.response.data.detail !== undefined
-      ) {
-        throw new LoginError(error.response.data.detail);
-      }
-    }
-    throw error;
+  if (response.status === 200) {
+    return response.data;
+  } else {
+    throw new Error(response.statusText);
+  }
+};
+
+export const getMe = async (): Promise<UserNoPassword> => {
+  // TODO: Better handle errors
+  const headers = await authHeaders();
+  const response = await axiosInstance.get('/user/me', headers);
+
+  if (response.status === 200) {
+    return response.data;
+  } else {
+    throw new Error(response.statusText);
   }
 };
 
@@ -40,7 +59,7 @@ export const login = async (loginInfo: UserLogin): Promise<AccessToken> => {
         'Content-Type': 'multipart/form-data'
       }
     });
-    if (response.status == 200) {
+    if (response.status === 200) {
       return response.data;
     } else {
       throw new LoginError(response.statusText);
