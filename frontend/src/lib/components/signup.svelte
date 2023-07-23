@@ -27,7 +27,7 @@
   let countryError = false;
 
   function isMissing(check: string | null): boolean {
-    if (check === null || check.trim() === '') {
+    if (check == null || check.trim() === '') {
       return true;
     }
 

@@ -77,52 +77,55 @@
     {#if !$isLoggedIn}
       <div class="card flex-shrink-0 w-full lg:w-1/3 max-w-sm shadow-2xl bg-base-100">
         <div class="card-body">
-          <Input
-            inputId="user-name"
-            labelText="User Name"
-            placeholder="user name"
-            errorMessage="User Name is required."
-            isError={userNameError}
-            bind:value={userLogin.userName}
-          />
+          <form
+            on:submit|preventDefault={handleSubmit}
+            class="w-full max-w-lg mx-auto my-10 p-5 rounded shadow"
+          >
+            <Input
+              inputId="user-name"
+              labelText="User Name"
+              placeholder="user name"
+              errorMessage="User Name is required."
+              isError={userNameError}
+              bind:value={userLogin.userName}
+            />
 
-          <Input
-            inputId="password"
-            labelText="Password"
-            placeholder="password"
-            errorMessage="Password is required."
-            isError={passwordError}
-            bind:value={userLogin.password}
-            isPassword={true}
-          />
+            <Input
+              inputId="password"
+              labelText="Password"
+              placeholder="password"
+              errorMessage="Password is required."
+              isError={passwordError}
+              bind:value={userLogin.password}
+              isPassword={true}
+            />
 
-          <ErrorMessage
-            errorMessageId="generic-error"
-            errorMessage={genericErrorMessage}
-            showError={genericError}
-          />
+            <ErrorMessage
+              errorMessageId="generic-error"
+              errorMessage={genericErrorMessage}
+              showError={genericError}
+            />
 
-          <div class="form-control">
-            <a href={'#'} class="label-text-alt link link-hover mt-4 mb-4">Forgot password?</a>
-            <a
-              href="signup"
-              class="label-text-alt link link-hover"
-              class:active={$page.url.pathname === '/signup'}
-              >Are your Goals Smart yet? Sign up here!</a
-            >
-          </div>
-          {#if $isLoading}
-            <div class="mt-6 text-center">
-              <span class="loading loading-spinner text-primary" />
-            </div>
-          {:else}
-            <div class="form-control mt-6">
-              <button class="btn btn-primary" on:click={() => handleSubmit()} id="login-button"
-                >Login</button
+            <div class="form-control">
+              <a href={'#'} class="label-text-alt link link-hover mt-4 mb-4">Forgot password?</a>
+              <a
+                href="signup"
+                class="label-text-alt link link-hover"
+                class:active={$page.url.pathname === '/signup'}
+                >Are your Goals Smart yet? Sign up here!</a
               >
             </div>
-          {/if}
-          <div class="form-control mt-6 text-center text-lg font-bold" />
+            {#if $isLoading}
+              <div class="mt-6 text-center">
+                <span class="loading loading-spinner text-primary" />
+              </div>
+            {:else}
+              <div class="form-control mt-6">
+                <button class="btn btn-primary" type="submit" id="login-button">Login</button>
+              </div>
+            {/if}
+            <div class="form-control mt-6 text-center text-lg font-bold" />
+          </form>
         </div>
       </div>
     {/if}
