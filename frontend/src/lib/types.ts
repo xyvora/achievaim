@@ -11,15 +11,6 @@ export interface Goals {
   completed: Goal[];
 }
 
-export interface User {
-  userName: string | null;
-  avatar: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  country: string | null;
-  password: string | null;
-}
-
 export interface UserLogin {
   userName?: string;
   password?: string;
