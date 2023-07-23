@@ -9,7 +9,7 @@
         details: 'S.M.A.R.T details here',
         date: new Date('2024-01-01T10:00:00'),
         days: [10],
-        editing: false,
+        editing: false
       }
     ],
     completed: [
@@ -18,7 +18,7 @@
         details: 'S.M.A.R.T details here',
         date: new Date('2024-01-02T14:00:00'),
         days: [15],
-        editing: false,
+        editing: false
       }
     ]
   };
