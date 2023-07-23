@@ -3,7 +3,7 @@
   import { onMount } from 'svelte';
   import { createUser, getMe, login } from '$lib/api';
   import type { UserCreate } from '$lib/generated';
-  import type { UserLogin } from '$lib/types';
+  import type { AccessToken, UserLogin } from '$lib/types';
   import { LoginError } from '$lib/errors';
   import { isLoading, isLoggedIn, accessToken } from '$lib/stores/stores';
   import Input from '$lib/components/Input.svelte';

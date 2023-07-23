@@ -1,7 +1,5 @@
 import { AxiosError } from 'axios';
-import { browser } from '$app/environment';
 import { axiosInstance } from '$lib/axios-config';
-import { API } from '$lib/variables';
 import type { UserCreate, UserNoPassword } from '$lib/generated';
 import type { AccessToken, UserLogin } from '$lib/types';
 import { LoginError } from '$lib/errors';
@@ -19,32 +17,24 @@ function authHeaders() {
 }
 
 export const createUser = async (user: UserCreate): Promise<UserNoPassword> => {
-  try {
-    const response = await axiosInstance.post('/user', user);
+  // TODO: Better handle errors
+  const response = await axiosInstance.post('/user', user);
 
-    if (response.status === 200) {
-      return response.data;
-    } else {
-      throw new Error(response.statusText);
-    }
-  } catch (error) {
-    // TODO: Better handle errors
-    throw error;
+  if (response.status === 200) {
+    return response.data;
+  } else {
+    throw new Error(response.statusText);
   }
 };
 
 export const getMe = async (): Promise<UserNoPassword> => {
-  try {
-    const response = await axiosInstance.get('/user/me', authHeaders());
+  // TODO: Better handle errors
+  const response = await axiosInstance.get('/user/me', authHeaders());
 
-    if (response.status === 200) {
-      return response.data;
-    } else {
-      throw new Error(response.statusText);
-    }
-  } catch (error) {
-    // TODO: Better handle errors
-    throw error;
+  if (response.status === 200) {
+    return response.data;
+  } else {
+    throw new Error(response.statusText);
   }
 };
 
