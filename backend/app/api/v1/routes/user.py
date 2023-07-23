@@ -153,7 +153,7 @@ async def delete_user_by_user_name(user_name: str, _: CurrentAdminUser) -> None:
         )
 
 
-@router.put("/")
+@router.put("/me")
 async def update_me(user: UserUpdateMe, current_user: CurrentUser) -> UserNoPassword:
     """Update the logged in user's information."""
     logger.info("Updating user")

@@ -207,7 +207,7 @@ async def test_update_me(user_with_goals, user_data, test_client, user_token_hea
     user_data["password"] = "new_password"
     user_data["user_name"] = str(uuid4())
     user_data["id"] = str(user_with_goals.id)
-    response = await test_client.put("user/", headers=user_token_headers, json=user_data)
+    response = await test_client.put("user/me", headers=user_token_headers, json=user_data)
 
     assert response.json()["user_name"] == user_data["user_name"]
 
@@ -230,7 +230,7 @@ async def test_update_me_different_user(user_data, test_client, user_token_heade
     user_data["password"] = "new_password"
     user_data["user_name"] = str(uuid4())
     user_data["id"] = response.json()["id"]
-    response = await test_client.put("user/", headers=user_token_headers, json=user_data)
+    response = await test_client.put("user/me", headers=user_token_headers, json=user_data)
 
     assert response.status_code == 400
     assert "Invalid user ID" == response.json()["detail"]
@@ -247,7 +247,7 @@ async def test_update_me_duplicate_user_name(test_client, user_with_goals, user_
     response = await test_client.post("user/", json=user_data)
     assert response.status_code == 200
     user_data["id"] = str(user_with_goals.id)
-    response = await test_client.put("user/", headers=user_token_headers, json=user_data)
+    response = await test_client.put("user/me", headers=user_token_headers, json=user_data)
 
     assert response.status_code == 400
 
@@ -258,6 +258,6 @@ async def test_update_me_not_authenticated(user_with_goals, user_data, test_clie
     user_data["password"] = "new_password"
     user_data["user_name"] = str(uuid4())
     user_data["id"] = str(user_with_goals.id)
-    response = await test_client.put("user/", json=user_data)
+    response = await test_client.put("user/me", json=user_data)
 
     assert response.status_code == 401

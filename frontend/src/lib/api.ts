@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import type { AxiosRequestConfig } from 'axios';
 import { axiosInstance } from '$lib/axios-config';
-import type { UserCreate, UserNoPassword } from '$lib/generated';
+import type { UserCreate, UserNoPassword, UserUpdateMe } from '$lib/generated';
 import type { AccessToken, UserLogin } from '$lib/types';
 import { LoginError } from '$lib/errors';
 import { accessToken } from '$lib/stores/stores';
@@ -75,5 +75,17 @@ export const login = async (loginInfo: UserLogin): Promise<AccessToken> => {
       }
     }
     throw error;
+  }
+};
+
+export const updateMe = async (payload: UserUpdateMe): Promise<UserNoPassword> => {
+  // TODO: Better handle errors
+  const headers = await authHeaders();
+  const response = await axiosInstance.put('/user/me', payload, headers);
+
+  if (response.status === 200) {
+    return response.data;
+  } else {
+    throw new Error(response.statusText);
   }
 };

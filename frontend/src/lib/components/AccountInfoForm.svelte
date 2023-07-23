@@ -1,8 +1,8 @@
 <script lang="ts">
   import { navigate } from 'svelte-routing';
   import { onMount } from 'svelte';
-  import { createUser, getMe, login } from '$lib/api';
-  import type { UserCreate } from '$lib/generated';
+  import { createUser, getMe, login, updateMe } from '$lib/api';
+  import type { UserCreate, UserUpdateMe } from '$lib/generated';
   import type { AccessToken, UserLogin } from '$lib/types';
   import { LoginError } from '$lib/errors';
   import { isLoading, isLoggedIn, accessToken } from '$lib/stores/stores';
@@ -10,6 +10,7 @@
   import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 
   interface User {
+    id?: string;
     userName: string | null;
     avatar: string | null;
     firstName: string | null;
@@ -79,74 +80,117 @@
       return;
     }
 
-    // This is already checked, but typescript refuses to believe it without this.
-    if (user.firstName && user.lastName && user.userName && user.country && user.password) {
-      const userCreate: UserCreate = {
-        first_name: user.firstName,
-        last_name: user.lastName,
-        user_name: user.userName,
-        country: user.country,
-        password: user.password
-      };
+    const token: AccessToken | null = await new Promise<AccessToken | null>((resolve) => {
+      accessToken.subscribe((value: AccessToken | null) => resolve(value));
+    });
 
-      if (user.avatar) {
-        userCreate['avatar_url'] = user.avatar;
-      }
+    if (token) {
+      // This is already checked, but typescript refuses to believe it without this.
+      if (
+        user.id &&
+        user.firstName &&
+        user.lastName &&
+        user.userName &&
+        user.country &&
+        user.password
+      ) {
+        const userUpdate: UserUpdateMe = {
+          id: user.id,
+          first_name: user.firstName,
+          last_name: user.lastName,
+          user_name: user.userName,
+          country: user.country,
+          password: user.password
+        };
 
-      try {
-        await createUser(userCreate);
-      } catch (error) {
-        genericError = true;
-        genericErrorMessage =
-          'An error occurred trying to connect to the sever. Please try again later.';
-      }
+        if (user.avatar) {
+          userUpdate['avatar_url'] = user.avatar;
+        }
 
-      let userLogin: UserLogin = {
-        userName: user.userName,
-        password: user.password
-      };
-
-      try {
-        const token = await login(userLogin);
-        accessToken.set(token);
-      } catch (error) {
-        if (
-          error instanceof LoginError &&
-          error.message !== undefined &&
-          error.message === 'Incorrect user name or password'
-        ) {
-          genericError = true;
-          genericErrorMessage = 'Incorrect user name or password';
-        } else {
+        try {
+          await updateMe(userUpdate);
+        } catch (error) {
           genericError = true;
           genericErrorMessage =
             'An error occurred trying to connect to the sever. Please try again later.';
         }
+      } else {
+        genericError = true;
+        genericErrorMessage =
+          'An error occurred trying to create the user. Please try again later.';
       }
     } else {
-      genericError = true;
-      genericErrorMessage = 'An error occurred trying to create the user. Please try again later.';
+      // This is already checked, but typescript refuses to believe it without this.
+      if (user.firstName && user.lastName && user.userName && user.country && user.password) {
+        const userCreate: UserCreate = {
+          first_name: user.firstName,
+          last_name: user.lastName,
+          user_name: user.userName,
+          country: user.country,
+          password: user.password
+        };
+
+        if (user.avatar) {
+          userCreate['avatar_url'] = user.avatar;
+        }
+
+        try {
+          await createUser(userCreate);
+        } catch (error) {
+          genericError = true;
+          genericErrorMessage =
+            'An error occurred trying to connect to the sever. Please try again later.';
+        }
+
+        let userLogin: UserLogin = {
+          userName: user.userName,
+          password: user.password
+        };
+
+        try {
+          const token = await login(userLogin);
+          accessToken.set(token);
+        } catch (error) {
+          if (
+            error instanceof LoginError &&
+            error.message !== undefined &&
+            error.message === 'Incorrect user name or password'
+          ) {
+            genericError = true;
+            genericErrorMessage = 'Incorrect user name or password';
+          } else {
+            genericError = true;
+            genericErrorMessage =
+              'An error occurred trying to connect to the sever. Please try again later.';
+          }
+        }
+      } else {
+        genericError = true;
+        genericErrorMessage =
+          'An error occurred trying to create the user. Please try again later.';
+      }
     }
 
     isLoading.set(false);
   }
 
   onMount(async () => {
-    let token: AccessToken | null;
-    accessToken.subscribe(async (value: AccessToken | null) => {
-      token = value;
-      if (token) {
-        const info = await getMe();
-        user.firstName = info.first_name;
-        user.lastName = info.last_name;
-        user.userName = info.user_name;
-        user.country = info.country;
-
-        if (info.avatar_url !== undefined) {
-          user.avatar = info.avatar_url;
-        }
-      }
+    const token: AccessToken | null = await new Promise<AccessToken | null>((resolve) => {
+      accessToken.subscribe((value: AccessToken | null) => resolve(value));
     });
+
+    if (token) {
+      const info = await getMe();
+      user.id = info.id;
+      user.firstName = info.first_name;
+      user.lastName = info.last_name;
+      user.userName = info.user_name;
+      user.country = info.country;
+
+      if (info.avatar_url !== undefined) {
+        user.avatar = info.avatar_url;
+      }
+    }
   });
 </script>
 
