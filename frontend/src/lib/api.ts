@@ -1,19 +1,26 @@
 import { AxiosError } from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 import { axiosInstance } from '$lib/axios-config';
 import type { UserCreate, UserNoPassword } from '$lib/generated';
 import type { AccessToken, UserLogin } from '$lib/types';
 import { LoginError } from '$lib/errors';
 import { accessToken } from '$lib/stores/stores';
 
-function authHeaders() {
-  let token: AccessToken | null;
-  accessToken.subscribe((value: AccessToken | null) => (token = value));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function authHeaders(): Promise<AxiosRequestConfig<any>> {
+  const token: AccessToken | null = await new Promise<AccessToken | null>((resolve) => {
+    accessToken.subscribe((value: AccessToken | null) => resolve(value));
+  });
 
-  return {
-    headers: {
-      Authorization: `Bearer ${token.access_token}`
-    }
-  };
+  if (token) {
+    return {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`
+      }
+    };
+  }
+
+  throw new Error('No access token found');
 }
 
 export const createUser = async (user: UserCreate): Promise<UserNoPassword> => {
@@ -29,7 +36,8 @@ export const createUser = async (user: UserCreate): Promise<UserNoPassword> => {
 
 export const getMe = async (): Promise<UserNoPassword> => {
   // TODO: Better handle errors
-  const response = await axiosInstance.get('/user/me', authHeaders());
+  const headers = await authHeaders();
+  const response = await axiosInstance.get('/user/me', headers);
 
   if (response.status === 200) {
     return response.data;

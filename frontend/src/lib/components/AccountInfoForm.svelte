@@ -9,7 +9,17 @@
   import Input from '$lib/components/Input.svelte';
   import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 
-  let user = {
+  interface User {
+    userName: string | null;
+    avatar: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    country: string | null;
+    password: string | null;
+    verifyPassword: string | null;
+  }
+
+  let user: User = {
     userName: null,
     avatar: null,
     firstName: null,
@@ -123,19 +133,20 @@
 
   onMount(async () => {
     let token: AccessToken | null;
-    accessToken.subscribe((value: AccessToken | null) => (token = value));
+    accessToken.subscribe(async (value: AccessToken | null) => {
+      token = value;
+      if (token) {
+        const info = await getMe();
+        user.firstName = info.first_name;
+        user.lastName = info.last_name;
+        user.userName = info.user_name;
+        user.country = info.country;
 
-    if (token != null) {
-      const info = await getMe();
-      user.firstName = info.first_name;
-      user.lastName = info.last_name;
-      user.userName = info.user_name;
-      user.country = info.country;
-
-      if (info.avatar_url !== undefined) {
-        user.avatar = info.avatar_url;
+        if (info.avatar_url !== undefined) {
+          user.avatar = info.avatar_url;
+        }
       }
-    }
+    });
   });
 </script>
 
