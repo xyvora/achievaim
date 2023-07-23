@@ -186,7 +186,13 @@
     showError={genericError}
   />
   <div class="flex items-center justify-between">
-    <button class="btn btn-primary" type="submit" id="btnSubmit">Sign Up</button>
+    {#if $isLoading}
+      <div class="mt-6 text-center">
+        <span class="loading loading-spinner text-primary" />
+      </div>
+    {:else}
+      <button class="btn btn-primary" type="submit" id="btnSubmit">Sign Up</button>
+    {/if}
     {#if $isLoggedIn}
       <div class="ml-2">
         <button
