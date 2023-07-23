@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { navigate } from 'svelte-routing';
   import { createUser, login } from '$lib/api';
   import type { UserCreate } from '$lib/generated';
   import type { UserLogin } from '$lib/types';
@@ -36,6 +37,8 @@
 
   async function logOut() {
     accessToken.set(null);
+    navigate('/');
+    window.location.reload();
   }
 
   async function handleSubmit() {
