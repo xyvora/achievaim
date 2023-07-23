@@ -1,7 +1,7 @@
 <script>
-  import Signup from '$lib/components/signup.svelte';
+  import AccountInfoForm from '$lib/components/AccountInfoForm.svelte';
 </script>
 
 <main>
-  <Signup />
+  <AccountInfoForm />
 </main>
