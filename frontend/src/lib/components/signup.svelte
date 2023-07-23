@@ -1,6 +1,5 @@
 <script lang="ts">
   import { createUser } from '$lib/api';
-  import type { User } from '$lib/types';
   import type { UserCreate } from '$lib/generated';
   import { isLoading, isLoggedIn, accessToken } from '$lib/stores/stores';
   import Input from '$lib/components/Input.svelte';
@@ -64,21 +63,30 @@
       return;
     }
 
-    const userCreate: UserCreate = {
-      first_name: user.firstName,
-      last_name: user.lastName,
-      user_name: user.userName,
-      country: user.country,
-      password: user.password,
-      avatar: user.avatar
-    };
+    // This is already checked, but typescript refuses to believe it without this.
+    if (user.firstName && user.lastName && user.userName && user.country && user.password) {
+      const userCreate: UserCreate = {
+        first_name: user.firstName,
+        last_name: user.lastName,
+        user_name: user.userName,
+        country: user.country,
+        password: user.password
+      };
 
-    try {
-      const userInfo = await createUser(userCreate);
-    } catch (error) {
+      if (user.avatar) {
+        userCreate['avatar_url'] = user.avatar;
+      }
+
+      try {
+        await createUser(userCreate);
+      } catch (error) {
+        genericError = true;
+        genericErrorMessage =
+          'An error occurred trying to connect to the sever. Please try again later.';
+      }
+    } else {
       genericError = true;
-      genericErrorMessage =
-        'An error occurred trying to connect to the sever. Please try again later.';
+      genericErrorMessage = 'An error occurred trying to create the user. Please try again later.';
     }
 
     isLoading.set(false);
