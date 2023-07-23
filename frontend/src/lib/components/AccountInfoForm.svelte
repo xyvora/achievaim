@@ -1,6 +1,7 @@
 <script lang="ts">
   import { navigate } from 'svelte-routing';
-  import { createUser, login } from '$lib/api';
+  import { onMount } from 'svelte';
+  import { createUser, getMe, login } from '$lib/api';
   import type { UserCreate } from '$lib/generated';
   import type { UserLogin } from '$lib/types';
   import { LoginError } from '$lib/errors';
@@ -119,6 +120,23 @@
 
     isLoading.set(false);
   }
+
+  onMount(async () => {
+    let token: AccessToken | null;
+    accessToken.subscribe((value: AccessToken | null) => (token = value));
+
+    if (token != null) {
+      const info = await getMe();
+      user.firstName = info.first_name;
+      user.lastName = info.last_name;
+      user.userName = info.user_name;
+      user.country = info.country;
+
+      if (info.avatar_url !== undefined) {
+        user.avatar = info.avatar_url;
+      }
+    }
+  });
 </script>
 
 <form

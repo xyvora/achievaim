@@ -1,28 +1,49 @@
 import { AxiosError } from 'axios';
+import { browser } from '$app/environment';
 import { axiosInstance } from '$lib/axios-config';
+import { API } from '$lib/variables';
 import type { UserCreate, UserNoPassword } from '$lib/generated';
 import type { AccessToken, UserLogin } from '$lib/types';
 import { LoginError } from '$lib/errors';
+import { accessToken } from '$lib/stores/stores';
+
+function authHeaders() {
+  let token: AccessToken | null;
+  accessToken.subscribe((value: AccessToken | null) => (token = value));
+
+  return {
+    headers: {
+      Authorization: `Bearer ${token.access_token}`
+    }
+  };
+}
 
 export const createUser = async (user: UserCreate): Promise<UserNoPassword> => {
   try {
     const response = await axiosInstance.post('/user', user);
 
-    if (response.status == 200) {
+    if (response.status === 200) {
       return response.data;
     } else {
       throw new Error(response.statusText);
     }
   } catch (error) {
-    if (error instanceof AxiosError) {
-      if (
-        error.response !== undefined &&
-        error.response.data !== undefined &&
-        error.response.data.detail !== undefined
-      ) {
-        throw new LoginError(error.response.data.detail);
-      }
+    // TODO: Better handle errors
+    throw error;
+  }
+};
+
+export const getMe = async (): Promise<UserNoPassword> => {
+  try {
+    const response = await axiosInstance.get('/user/me', authHeaders());
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(response.statusText);
     }
+  } catch (error) {
+    // TODO: Better handle errors
     throw error;
   }
 };
@@ -40,7 +61,7 @@ export const login = async (loginInfo: UserLogin): Promise<AccessToken> => {
         'Content-Type': 'multipart/form-data'
       }
     });
-    if (response.status == 200) {
+    if (response.status === 200) {
       return response.data;
     } else {
       throw new LoginError(response.statusText);
