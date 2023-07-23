@@ -1,7 +1,7 @@
 <script lang="ts">
   import { navigate } from 'svelte-routing';
   import { onMount } from 'svelte';
-  import { createUser, getMe, login, updateMe } from '$lib/api';
+  import { createUser, deleteMe, getMe, login, updateMe } from '$lib/api';
   import type { UserCreate, UserUpdateMe } from '$lib/generated';
   import type { AccessToken, UserLogin } from '$lib/types';
   import { LoginError } from '$lib/errors';
@@ -45,6 +45,21 @@
     }
 
     return false;
+  }
+
+  async function deleteUser() {
+    if (
+      window.confirm('Are you sure you want to delete your information? This cannot be undone.')
+    ) {
+      try {
+        await deleteMe();
+        await logOut();
+      } catch (error) {
+        genericError = true;
+        genericErrorMessage =
+          'An error occurred trying to delete the information. Please try again later.';
+      }
+    }
   }
 
   async function logOut() {
@@ -292,7 +307,11 @@
         <button class="btn btn-primary" type="submit" id="btnSubmit">Save</button>
       </div>
       <div>
-        <button class="btn btn-secondary" on:click={() => logOut()}>Log Out</button>
+        <button class="btn btn-primary" type="button" on:click={() => logOut()}>Log Out</button>
+      </div>
+      <div>
+        <button class="btn btn-secondary" type="button" on:click={() => deleteUser()}>Delete</button
+        >
       </div>
     {:else if $isLoading}
       <div class="mt-6 text-center">

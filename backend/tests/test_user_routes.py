@@ -189,7 +189,7 @@ async def test_delete_user_by_user_name_not_authenticated(user_with_goals, test_
 
 
 async def test_delete_me(user_with_goals, test_client, user_token_headers, superuser_token_headers):
-    response = await test_client.delete("user/", headers=user_token_headers)
+    response = await test_client.delete("user/me", headers=user_token_headers)
     assert response.status_code == 204
 
     response = await test_client.get(f"user/{user_with_goals.id}", headers=superuser_token_headers)
@@ -197,7 +197,7 @@ async def test_delete_me(user_with_goals, test_client, user_token_headers, super
 
 
 async def test_delete_me_not_authenticated(test_client):
-    response = await test_client.delete("user/")
+    response = await test_client.delete("user/me")
     assert response.status_code == 401
 
 

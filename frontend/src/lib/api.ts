@@ -34,6 +34,16 @@ export const createUser = async (user: UserCreate): Promise<UserNoPassword> => {
   }
 };
 
+export const deleteMe = async () => {
+  // TODO: Better handle errors
+  const headers = await authHeaders();
+  const response = await axiosInstance.delete('/user/me', headers);
+
+  if (response.status !== 204) {
+    throw new Error(response.statusText);
+  }
+};
+
 export const getMe = async (): Promise<UserNoPassword> => {
   // TODO: Better handle errors
   const headers = await authHeaders();

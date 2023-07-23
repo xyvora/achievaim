@@ -98,7 +98,7 @@ async def get_user_by_user_name(user_name: str, _: CurrentAdminUser) -> UserNoPa
     return user
 
 
-@router.delete("/", response_model=None, status_code=HTTP_204_NO_CONTENT)
+@router.delete("/me", response_model=None, status_code=HTTP_204_NO_CONTENT)
 async def delete_me(current_user: CurrentUser) -> None:
     """Delete the current logged in user."""
     # fail-safe, shouldn't be possible to hit
