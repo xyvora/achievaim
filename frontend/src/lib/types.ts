@@ -12,12 +12,12 @@ export interface Goals {
 }
 
 export interface User {
-  username: string;
-  avatar: string;
-  firstName: string;
-  lastName: string;
-  country: string;
-  gmail: string;
+  userName: string | null;
+  avatar: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  country: string | null;
+  password: string | null;
 }
 
 export interface UserLogin {
