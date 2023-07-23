@@ -10,7 +10,6 @@
         date: new Date('2024-01-01T10:00:00'),
         days: [10],
         editing: false,
-        placeholder: true
       }
     ],
     completed: [
@@ -20,7 +19,6 @@
         date: new Date('2024-01-02T14:00:00'),
         days: [15],
         editing: false,
-        placeholder: true
       }
     ]
   };
