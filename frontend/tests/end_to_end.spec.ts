@@ -1,11 +1,11 @@
 import { test, expect } from '@playwright/test';
 
 test('end to end test', async ({ page }) => {
-  await page.goto('http://localhost:3000/');
+  await page.goto('http://127.0.0.1:3000/');
 
   // Test create user
   await page.getByRole('link', { name: 'Are your Goals Smart yet? Sign up here!' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/signup');
+  await expect(page).toHaveURL('http://127.0.0.1:3000/signup');
   await page.locator('#first-name').click();
   await page.locator('#first-name').fill('Imma');
   await page.locator('#last-name').click();
@@ -23,7 +23,7 @@ test('end to end test', async ({ page }) => {
 
   // Test log out
   await page.getByRole('button', { name: 'Log Out' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/');
+  await expect(page).toHaveURL('http://127.0.0.1:3000/');
 
   // Test log in
   await page.locator('#user-name').click();
@@ -44,13 +44,13 @@ test('end to end test', async ({ page }) => {
   await expect(page.locator('#country')).toHaveValue('Italy');
 
   // Test delete user
-  await expect(page).toHaveURL('http://localhost:3000/account-settings');
+  await expect(page).toHaveURL('http://127.0.0.1:3000/account-settings');
   await expect(page.getByRole('button', { name: 'Delete' })).toBeVisible();
   page.once('dialog', async (dialog) => {
     await dialog.accept();
   });
   await page.getByRole('button', { name: 'Delete' }).click();
-  await expect(page).toHaveURL('http://localhost:3000/');
+  await expect(page).toHaveURL('http://127.0.0.1:3000/');
 
   // Test invalid user can't log in
   await page.locator('#user-name').click();
