@@ -6,10 +6,7 @@ const config: PlaywrightTestConfig = {
     port: 4173
   },
   testDir: 'tests',
-  testMatch: /(.+\.)?(test|spec)\.[jt]s/,
-  use: {
-    baseURL: 'http://127.0.0.1:3000/'
-  }
+  testMatch: /(.+\.)?(test|spec)\.[jt]s/
 };
 
 export default config;
