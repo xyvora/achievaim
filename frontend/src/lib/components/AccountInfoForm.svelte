@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { navigate } from 'svelte-routing';
+  import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import { createUser, deleteMe, getMe, login, updateMe } from '$lib/api';
   import type { UserCreate, UserUpdateMe } from '$lib/generated';
@@ -64,8 +64,7 @@
 
   async function logOut() {
     accessToken.set(null);
-    navigate('/');
-    window.location.reload();
+    goto('/');
   }
 
   async function handleSubmit() {
@@ -304,13 +303,19 @@
   <div class="flex items-center justify-between">
     {#if $isLoggedIn}
       <div class="ml-2">
-        <button class="btn btn-primary" type="submit" id="btnSubmit">Save</button>
+        <button class="btn btn-primary" type="submit" id="btn-save">Save</button>
       </div>
       <div>
-        <button class="btn btn-primary" type="button" on:click={() => logOut()}>Log Out</button>
+        <button class="btn btn-primary" type="button" id="btn-log-out" on:click={() => logOut()}
+          >Log Out</button
+        >
       </div>
       <div>
-        <button class="btn btn-secondary" type="button" on:click={() => deleteUser()}>Delete</button
+        <button
+          class="btn btn-secondary"
+          type="button"
+          id="btn-delete"
+          on:click={() => deleteUser()}>Delete</button
         >
       </div>
     {:else if $isLoading}
@@ -318,7 +323,7 @@
         <span class="loading loading-spinner text-primary" />
       </div>
     {:else}
-      <button class="btn btn-primary" type="submit" id="btnSubmit">Sign Up</button>
+      <button class="btn btn-primary" type="submit" id="btn-sign-up">Sign Up</button>
     {/if}
   </div>
 </form>
