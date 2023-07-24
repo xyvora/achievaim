@@ -15,7 +15,7 @@ const getToken = (): AccessToken | null => {
 };
 
 export const accessToken = writable<AccessToken | null>(browser ? getToken() : null);
-export const isLoggedIn = writable<boolean>((browser && getToken()) !== null ? true : false);
+export const isLoggedIn = writable<boolean>(browser && getToken() !== null ? true : false);
 
 accessToken.subscribe((value: AccessToken | null) => {
   if (!browser) {
