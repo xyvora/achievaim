@@ -117,7 +117,7 @@
             </div>
             {#if $isLoading}
               <div class="mt-6 text-center">
-                <span class="loading loading-spinner text-primary" />
+                <span class="loading loading-spinner text-primary" id="login-spinner" />
               </div>
             {:else}
               <div class="form-control mt-6">

@@ -178,6 +178,7 @@
               'An error occurred trying to connect to the sever. Please try again later.';
           }
         }
+        goto('/account-settings');
       } else {
         genericError = true;
         genericErrorMessage =
@@ -320,7 +321,7 @@
       </div>
     {:else if $isLoading}
       <div class="mt-6 text-center">
-        <span class="loading loading-spinner text-primary" />
+        <span class="loading loading-spinner text-primary" id="sign-up-spinner" />
       </div>
     {:else}
       <button class="btn btn-primary" type="submit" id="btn-sign-up">Sign Up</button>
