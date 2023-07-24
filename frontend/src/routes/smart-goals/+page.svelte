@@ -5,7 +5,7 @@
   let goals: Goals = {
     active: [
       {
-        name: 'Goal 1',
+        name: 'Active Placeholder',
         details: 'S.M.A.R.T details here',
         date: new Date('2024-01-01T10:00:00'),
         days: [10],
@@ -14,7 +14,7 @@
     ],
     completed: [
       {
-        name: 'Goal 2',
+        name: 'Completed Placeholder',
         details: 'S.M.A.R.T details here',
         date: new Date('2024-01-02T14:00:00'),
         days: [15],
@@ -28,66 +28,56 @@
   }
 </script>
 
-<div class="flex flex-col items-center justify-center h-screen">
-  <div
-    class="flex flex-wrap -mx-2 overflow-hidden sm:-mx-3 md:-mx-3 lg:-mx-4 xl:-mx-4 justify-center"
-  >
+<div class="container mx-auto p-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
     {#each Object.entries(goals) as [category, value]}
-      <div
-        class="my-2 px-2 w-full overflow-hidden sm:my-2 sm:px-2 sm:w-1/2 md:my-3 md:px-3 md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3 xl:my-4 xl:px-4 xl:w-1/3"
-      >
-        <div class="text-lg font-bold mb-4">{capitalizeFirstLetter(category)}</div>
-        {#each value as goal (goal.name)}
-          <div class="rounded-lg p-6 mb-4 bg-white shadow-sm border border-gray-200 space-y-4">
-            <button
-              class="text-neutral font-bold text-xl mb-2 cursor-pointer"
-              on:click={() => goto(`/creategoals/${goal.name}`)}
+      <div class="bg-white rounded shadow overflow-hidden">
+        <div class="bg-gray-200 text-gray-700 text-lg sm:text-xl font-semibold p-3">
+          {capitalizeFirstLetter(category)}
+        </div>
+        <div class="p-4">
+          {#if value.length === 0}
+            <div
+              class="bg-gray-100 border-2 border-dashed border-gray-200 rounded-lg h-40 flex items-center justify-center text-gray-500"
             >
-              {goal.name}
-            </button>
-            <div class="text-base text-gray-900 font-bold my-2">S.M.A.R.T</div>
-            <p class="text-gray-900"><strong>Specific:</strong> {goal.specific}</p>
-            <p class="text-gray-900"><strong>Measurable:</strong> {goal.measurable}</p>
-            <p class="text-gray-900"><strong>Attainable:</strong> {goal.attainable}</p>
-            <p class="text-gray-900"><strong>Relevant:</strong> {goal.relevant}</p>
-            <p class="text-gray-900"><strong>Time-Bound:</strong> {goal.timeBound}</p>
-            <div class="grid grid-cols-2 gap-2 text-sm text-gray-500 mt-4">
-              <div><strong>Date:</strong></div>
-              <div>{goal.date}</div>
-              <div><strong>Days:</strong></div>
-              <div>
-                <div class="flex flex-row">
-                  {#each goal.days as day}<span class="mx-1">{day}</span>{/each}
+              Add a Goal
+            </div>
+          {:else}
+            {#each value as goal (goal.name)}
+              <div
+                class={`rounded-lg p-4 sm:p-6 mb-4 ${
+                  goal.placeholder ? 'bg-gray-200' : 'bg-white'
+                } shadow-sm border border-gray-200 space-y-2 sm:space-y-4`}
+              >
+                <button
+                  class="text-neutral font-bold text-lg sm:text-xl mb-2 cursor-pointer"
+                  on:click={() => goto(`/creategoals/${goal.name}`)}
+                >
+                  {goal.name}
+                </button>
+                <div class="text-sm sm:text-base text-gray-900 font-bold my-2">Details:</div>
+                <p class="text-gray-900"><strong>S:</strong> {goal.specific}</p>
+                <p class="text-gray-900"><strong>M:</strong> {goal.measurable}</p>
+                <p class="text-gray-900"><strong>A:</strong> {goal.attainable}</p>
+                <p class="text-gray-900"><strong>R:</strong> {goal.relevant}</p>
+                <p class="text-gray-900"><strong>T:</strong> {goal.timeBound}</p>
+                <div class="grid grid-cols-2 gap-2 text-xs sm:text-sm text-gray-500 mt-4">
+                  <div><strong>Date:</strong></div>
+                  <div>{goal.date}</div>
+                  <div><strong>Days:</strong></div>
+                  <div>
+                    <div class="flex flex-row">
+                      {#each goal.days as day}<span class="mx-1">{day}</span>{/each}
+                    </div>
+                  </div>
+                  <div><strong>Time:</strong></div>
+                  <div>{goal.time}</div>
                 </div>
               </div>
-              <div><strong>Time:</strong></div>
-              <div>{goal.time}</div>
-            </div>
-          </div>
-        {/each}
+            {/each}
+          {/if}
+        </div>
       </div>
     {/each}
   </div>
 </div>
-
-<style>
-  @keyframes bounce {
-    0%,
-    20%,
-    50%,
-    80%,
-    100% {
-      transform: translateY(0);
-    }
-    40% {
-      transform: translateY(-20px);
-    }
-    60% {
-      transform: translateY(-10px);
-    }
-  }
-
-  button {
-    animation: bounce 1s ease;
-  }
-</style>
