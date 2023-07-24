@@ -51,6 +51,9 @@
 @compose-up:
   docker compose up --build
 
+@compose-up-detached:
+  docker compose up -d --build
+
 @db:
   docker compose up db
 
