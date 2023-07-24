@@ -19,6 +19,7 @@ test('end to end test', async ({ page }) => {
   await page.locator('#verify-password').click();
   await page.locator('#verify-password').fill('mypassword');
   await page.getByRole('button', { name: 'Sign Up' }).click();
+  await expect(page.getByRole('button', { name: 'Log Out' })).toBeVisible();
 
   // Test log out
   await page.getByRole('button', { name: 'Log Out' }).click();
@@ -44,6 +45,7 @@ test('end to end test', async ({ page }) => {
 
   // Test delete user
   await expect(page).toHaveURL('http://localhost:3000/account-settings');
+  await expect(page.getByRole('button', { name: 'Delete' })).toBeVisible();
   page.once('dialog', async (dialog) => {
     await dialog.accept();
   });
