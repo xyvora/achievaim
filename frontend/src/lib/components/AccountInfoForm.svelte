@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { navigate } from 'svelte-routing';
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import { createUser, deleteMe, getMe, login, updateMe } from '$lib/api';
