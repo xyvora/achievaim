@@ -24,7 +24,7 @@
     "daisyui": "^3.3.1",
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-svelte": "^2.32.2",
+    "eslint-plugin-svelte": "^2.32.4",
     "openapi-typescript-codegen": "^0.25.0",
     "postcss": "^8.4.27",
     "prettier": "^2.8.0",
