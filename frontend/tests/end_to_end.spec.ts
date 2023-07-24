@@ -21,7 +21,7 @@ test('end to end test', async ({ page }) => {
   await page.locator('#btn-sign-up').click();
 
   // Wait for save to finish
-  await expect(page).toHaveURL('http://localhost:3000/account-settings', { timeout: 10000 });
+  await expect(page).toHaveURL('http://localhost:3000/account-settings');
   await expect(page.locator('#btn-log-out')).toBeVisible();
 
   // Test log out
