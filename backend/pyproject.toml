@@ -14,7 +14,7 @@ camel-converter = {version = "3.0.2", extras = ["pydantic"]}
 fastapi = {version = "0.99.1", extras = ["all"]}
 passlib = "1.7.4"
 pydantic = "1.10.11"
-pyjwt = "2.7.0"
+pyjwt = "2.8.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "23.7.0"
