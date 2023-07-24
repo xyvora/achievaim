@@ -178,6 +178,7 @@
               'An error occurred trying to connect to the sever. Please try again later.';
           }
         }
+        goto('/account-settings');
       } else {
         genericError = true;
         genericErrorMessage =

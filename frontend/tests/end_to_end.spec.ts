@@ -18,8 +18,9 @@ test('end to end test', async ({ page }) => {
   await page.locator('#password').fill('mypassword');
   await page.locator('#verify-password').click();
   await page.locator('#verify-password').fill('mypassword');
-  await page.getByRole('button', { name: 'Sign Up' }).click();
-  await expect(page.getByRole('button', { name: 'Log Out' })).toBeVisible();
+  await page.locator('#btn-sign-up').click();
+  await expect(page).toHaveURL('http://127.0.0.1:3000/account-settings');
+  await expect(page.locator('#btn-log-out')).toBeVisible();
 
   // Test log out
   await page.getByRole('button', { name: 'Log Out' }).click();
@@ -30,26 +31,26 @@ test('end to end test', async ({ page }) => {
   await page.locator('#user-name').fill('imma');
   await page.locator('#password').click();
   await page.locator('#password').fill('mypassword');
-  await page.getByRole('button', { name: 'Login' }).click();
+  await page.locator('#login-button').click();
 
   // Test user update
   await page.getByLabel('account-settings').click();
+  await expect(page).toHaveURL('http://127.0.0.1:3000/account-settings');
   await page.locator('#country').click();
   await page.locator('#country').fill('Italy');
   await page.locator('#password').click();
   await page.locator('#password').fill('mypassword');
   await page.locator('#verify-password').click();
   await page.locator('#verify-password').fill('mypassword');
-  await page.getByRole('button', { name: 'Save' }).click();
+  await page.locator('#btn-save').click();
   await expect(page.locator('#country')).toHaveValue('Italy');
 
   // Test delete user
-  await expect(page).toHaveURL('http://127.0.0.1:3000/account-settings');
-  await expect(page.getByRole('button', { name: 'Delete' })).toBeVisible();
+  await expect(page.locator('#btn-delete')).toBeVisible();
   page.once('dialog', async (dialog) => {
     await dialog.accept();
   });
-  await page.getByRole('button', { name: 'Delete' }).click();
+  await page.locator('#btn-delete').click();
   await expect(page).toHaveURL('http://127.0.0.1:3000/');
 
   // Test invalid user can't log in
@@ -57,6 +58,6 @@ test('end to end test', async ({ page }) => {
   await page.locator('#user-name').fill('imma');
   await page.locator('#password').click();
   await page.locator('#password').fill('mypassword');
-  await page.getByRole('button', { name: 'Login' }).click();
+  await page.locator('#login-button').click();
   await expect(page.locator('#generic-error')).toBeVisible();
 });
