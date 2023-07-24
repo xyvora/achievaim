@@ -14,8 +14,8 @@ test('end to end test', async ({ page }) => {
   await page.locator('#user-name').fill('imma');
   await page.locator('#country').click();
   await page.locator('#country').fill('USA');
-  await page.locator('#password', { exact: true }).click();
-  await page.locator('#password', { exact: true }).fill('mypassword');
+  await page.locator('#password').click();
+  await page.locator('#password').fill('mypassword');
   await page.locator('#verify-password').click();
   await page.locator('#verify-password').fill('mypassword');
   await page.getByRole('button', { name: 'Sign Up' }).click();
@@ -35,8 +35,8 @@ test('end to end test', async ({ page }) => {
   await page.getByLabel('account-settings').click();
   await page.locator('#country').click();
   await page.locator('#country').fill('Italy');
-  await page.locator('#password', { exact: true }).click();
-  await page.locator('#password', { exact: true }).fill('mypassword');
+  await page.locator('#password').click();
+  await page.locator('#password').fill('mypassword');
   await page.locator('#verify-password').click();
   await page.locator('#verify-password').fill('mypassword');
   await page.getByRole('button', { name: 'Save' }).click();
