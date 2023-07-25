@@ -23,7 +23,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           context: ${{ matrix.build_image }}
           target: prod
-          outputs: type=docker,dest=/tmp/{{ matrix.build_image }}.tar
+          outputs: type=docker,dest=/tmp/${{ matrix.build_image }}.tar
           push: false
           tags: "dev"
       - name: Upload container
