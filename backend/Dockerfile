@@ -24,13 +24,14 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN curl -sSL https://install.python-poetry.org/install-poetry.py | python -
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
-COPY pyproject.toml poetry.lock /app
+COPY pyproject.toml poetry.lock /app/
 
 RUN poetry install --without dev --no-root --no-cache
 
 copy . /app
 
 RUN poetry install --only-root --no-cache
+
 
 FROM python:3.11-slim-bullseye as prod
 
@@ -39,13 +40,13 @@ WORKDIR /app
 ENV PYTHONBUFFERED=true
 
 COPY --from=builder /opt/venv /opt/venv
-COPY --from=builder /app/app app/app
+COPY --from=builder /app/app /app/app
 
 ENV PATH="/opt/venv/bin:$PATH"
 
 EXPOSE 80
 
-ENTRYPOINT ["gunicorn", "app.main:app", "--forward-allow-ips='*'", "--access-logfile", "-", "-k", "uvicorn.workers.UvicornWorker", "-b", ":80"]
+ENTRYPOINT ["gunicorn", "app.main:app", "--forwarded-allow-ips='*'", "--access-logfile", "-", "-k", "uvicorn.workers.UvicornWorker", "-b", ":8000"]
 
 
 FROM builder as dev
