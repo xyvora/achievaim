@@ -12,6 +12,10 @@ test('required fields', async ({ page }) => {
   await expect(page.locator('#last-name-error')).toBeVisible();
   await expect(page.locator('#user-name-error')).toBeVisible();
   await expect(page.locator('#password-error')).toBeVisible();
+});
+
+test('not logged in buttons', async ({ page }) => {
+  await page.goto('/signup');
   await expect(page.locator('#btn-sign-up')).toBeVisible();
   await expect(page.locator('#btn-save')).not.toBeVisible();
   await expect(page.locator('#btn-log-out')).not.toBeVisible();
