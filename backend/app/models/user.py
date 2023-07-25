@@ -63,7 +63,7 @@ class UserCreate(BaseModel):
     user_name: str
     first_name: str
     last_name: str
-    country: str
+    country: str | None = None
     avatar_url: AnyHttpUrl | None = None
     password: str
 
