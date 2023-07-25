@@ -18,8 +18,8 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v2
       - name: Build ${{ matrix.build_image }} container
-        working-directory: ./${{ matrix.build_image }}
         uses: docker/build-push-action@v4
+        working-directory: ./${{ matrix.build_image }}
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
