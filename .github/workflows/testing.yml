@@ -19,10 +19,9 @@ jobs:
         uses: docker/setup-buildx-action@v2
       - name: Build ${{ matrix.build_image }} container
         uses: docker/build-push-action@v4
-        working-directory: ./${{ matrix.build_image }}
         with:
           builder: ${{ steps.buildx.outputs.name }}
-          context: .
+          context: ${{ matrix.build_image }}
           target: prod
           outputs: type=docker,dest=/tmp/{{ matrix.build_image }}.tar
           push: false
