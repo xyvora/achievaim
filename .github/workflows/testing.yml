@@ -7,7 +7,6 @@ on:
   pull_request:
 jobs:
   Build:
-    needs: Collect-Tests
     strategy:
       matrix:
         build_image: ["backend", "frontend"]
