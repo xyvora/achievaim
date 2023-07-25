@@ -146,7 +146,8 @@ jobs:
           name: frontend
           path: /tmp/
       - name: Load image
-        run: docker load --input /tmp/backend.tar
+        run: |
+          docker load --input /tmp/backend.tar
           docker load --input /tmp/frontend.tar
       - uses: actions/checkout@v3
       - name: Install just
