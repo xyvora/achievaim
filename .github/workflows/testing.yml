@@ -115,7 +115,7 @@ jobs:
         with:
           node-version: "18"
       - name: install chromium
-        run: sudo apt update && sudo apt install chromium
+        run: sudo apt update && sudo apt install chromium-browser
       - name: Install Dependencies
         run: just install-frontend
       - name: Playwright install
