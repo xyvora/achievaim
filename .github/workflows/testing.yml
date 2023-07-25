@@ -163,6 +163,4 @@ jobs:
       - name: Start Servers
         run: just compose-up-ci
       - name: Frontend Tests
-        run: |
-          docker ps
-          just frontend-test-ci
+        run: just frontend-test-ci
