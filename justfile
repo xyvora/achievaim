@@ -105,7 +105,7 @@
 
 @frontend-test-ci:
   cd frontend && \
-  npm run test && \
+  npx playwright test && \
   cd ..
 
 @generate-types:
