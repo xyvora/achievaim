@@ -25,7 +25,7 @@ jobs:
           target: prod
           outputs: type=docker,dest=/tmp/{{ matrix.build_image }}.tar
           push: false
-          tags: ${{ env.IMAGE }}
+          tags: "dev"
       - name: Upload container
         uses: actions/upload-artifact@v3
         with:
