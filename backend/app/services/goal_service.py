@@ -28,11 +28,14 @@ async def create_goal(user_id: ObjectId | PydanticObjectId, goal: GoalCreate) ->
     goal_insert = Goal(
         id=str(uuid4()),
         goal=goal.goal.strip(),
-        duration=goal.duration,
+        specific=goal.specific.strip() if goal.specific else None,
+        measurable=goal.measurable.strip() if goal.measurable else None,
+        attainable=goal.attainable.strip() if goal.attainable else None,
+        relevant=goal.relevant.strip() if goal.relevant else None,
+        date_for_achievement=goal.date_for_achievement if goal.date_for_achievement else None,
         days_of_week=goal.days_of_week,
-        repeats_every=goal.repeats_every,
         progress=goal.progress,
-        goal_date=goal.goal_date,
+        time_of_day=goal.time_of_day,
     )
 
     if user.goals:

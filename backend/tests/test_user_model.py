@@ -3,7 +3,7 @@ from uuid import uuid4
 
 import pytest
 
-from app.models.user import User
+from app.models.user import GoalCreate, User
 
 
 def test_user_goal_duplicate_id_error(user_data):
@@ -22,3 +22,9 @@ def test_user_goal_duplicate_name_error(user_data):
         User(**user_data)
 
     assert "Goal names must be unique" in str(exc.value)
+
+
+@pytest.mark.parametrize("time", ["1212", "24:00", "-12:00", "12:60", "12:-01", "a:01", "01:a"])
+def test_goal_invalid_time(time):
+    with pytest.raises(ValueError):
+        GoalCreate(goal="test", time_of_day=time)
