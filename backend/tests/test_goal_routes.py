@@ -15,11 +15,11 @@ async def test_create_goal_no_goals(test_client, user_data, user_token_headers):
 
     got = response_json[0]
     got.pop("id")
-    got["goal_date"] = got["goal_date"].split(".", maxsplit=1)[0]
+    got["date_for_achievement"] = got["date_for_achievement"].split(".", maxsplit=1)[0]
     user_data["goals"][0].pop("id")
     for goal in user_data["goals"]:
-        if goal.get("goal_date"):
-            goal["goal_date"] = goal["goal_date"].split(".", maxsplit=1)[0]
+        if goal.get("date_for_achievement"):
+            goal["date_for_achievement"] = goal["date_for_achievement"].split(".", maxsplit=1)[0]
 
     assert sorted(got.items()) == sorted(user_data["goals"][0].items())
 
@@ -32,22 +32,22 @@ async def test_create_goal_with_goals(test_client, user_data, user_token_headers
 
     got = []
     for goal in response.json():
-        if goal["goal_date"]:
-            goal["goal_date"] = goal["goal_date"].split(".", maxsplit=1)[0]
+        if goal["date_for_achievement"]:
+            goal["date_for_achievement"] = goal["date_for_achievement"].split(".", maxsplit=1)[0]
         goal.pop("id")
         got.append(goal)
 
     expected = []
     for goal in user_data["goals"]:
         goal.pop("id")
-        if goal.get("goal_date"):
-            goal["goal_date"] = goal["goal_date"].split(".", maxsplit=1)[0]
+        if goal.get("date_for_achievement"):
+            goal["date_for_achievement"] = goal["date_for_achievement"].split(".", maxsplit=1)[0]
         else:
-            goal["goal_date"] = None
+            goal["date_for_achievement"] = None
         expected.append(goal)
 
     goal_data.pop("id")
-    goal_data["goal_date"] = goal_data["goal_date"].split(".", maxsplit=1)[0]
+    goal_data["date_for_achievement"] = goal_data["date_for_achievement"].split(".", maxsplit=1)[0]
     expected.append(goal_data)
 
     assert [sorted(x.items()) for x in got] == [sorted(x.items()) for x in expected]

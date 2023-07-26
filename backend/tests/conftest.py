@@ -56,11 +56,14 @@ def user_data():
         "goals": [
             {
                 "id": str(uuid4()),
+                "goal": "Goal 1",
                 "specific": "specific 1",
                 "measurable": "measurable 1",
                 "attainable": "attainable 1",
                 "relevant": "relevant 1",
-                "date_for_achievement": datetime.now(),
+                "date_for_achievement": datetime.now().isoformat(),
+                "days_of_week": None,
+                "time_of_day": None,
                 "progress": 41.0,
             },
             {
@@ -70,6 +73,7 @@ def user_data():
                 "measurable": "measurable 2",
                 "attainable": "attainable 2",
                 "relevant": "relevant 2",
+                "date_for_achievement": None,
                 "days_of_week": {
                     "monday": True,
                     "tuesday": True,
@@ -79,6 +83,7 @@ def user_data():
                     "saturday": True,
                     "sunday": True,
                 },
+                "time_of_day": "14:41",
                 "progress": 42.0,
             },
         ],
