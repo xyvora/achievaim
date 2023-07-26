@@ -105,7 +105,8 @@
 
 @frontend-test-ci:
   cd frontend && \
-  npm run test && \
+  npx pywright test --browser "firefox"
+  # npm run test && \
   cd ..
 
 @generate-types:

@@ -35,7 +35,7 @@ test('end to end test', async ({ page }) => {
   await expect(page.locator('#btn-log-out')).toBeVisible();
 
   // Test log out
-  await page.getByRole('button', { name: 'Log Out' }).click();
+  await page.locator('#btn-log-out').click();
   await expect(page).toHaveURL('/');
 
   // Test log in
