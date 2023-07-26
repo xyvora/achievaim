@@ -105,8 +105,7 @@
 
 @frontend-test-ci:
   cd frontend && \
-  npx playwright test --browser "firefox"
-  # npm run test && \
+  npm run test && \
   cd ..
 
 @generate-types:
@@ -154,7 +153,7 @@
 
 @playwright-install:
   -cd frontend && \
-  npx playwright install && \
+  npx playwright install --with-deps && \
   cd ..
 
 @ruff:
