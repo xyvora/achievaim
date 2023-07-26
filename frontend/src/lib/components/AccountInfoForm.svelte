@@ -37,7 +37,6 @@
   let lastNameError = false;
   let userNameError = false;
   let passwordError = false;
-  let countryError = false;
 
   function isMissing(check: string | null): boolean {
     if (check == null || check.trim() === '') {
@@ -74,7 +73,6 @@
     lastNameError = isMissing(user.lastName);
     userNameError = isMissing(user.userName);
     passwordError = isMissing(user.password);
-    countryError = isMissing(user.country);
 
     if (!passwordError && user.password !== user.verifyPassword) {
       isLoading.set(false);
@@ -88,7 +86,6 @@
       lastNameError === true ||
       userNameError === true ||
       passwordError === true ||
-      countryError === true ||
       passwordVerifyError === true
     ) {
       isLoading.set(false);

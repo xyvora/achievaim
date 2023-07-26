@@ -4,13 +4,16 @@
 /* eslint-disable */
 
 import type { DaysOfWeek } from './DaysOfWeek';
-import type { RepeatsEvery } from './RepeatsEvery';
 
 export type Goal = {
-  name: string;
-  duration?: number;
+  goal: string;
+  specific?: string;
+  measurable?: string;
+  attainable?: string;
+  relevant?: string;
+  date_for_achievement?: string;
   days_of_week?: DaysOfWeek;
-  repeats_every?: RepeatsEvery;
+  time_of_day?: string;
   progress?: number;
   id: string;
 };
