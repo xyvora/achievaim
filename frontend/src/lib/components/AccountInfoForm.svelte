@@ -143,6 +143,10 @@
           password: user.password
         };
 
+        if (user.country) {
+          userCreate['country'] = user.country;
+        }
+
         if (user.avatar) {
           userCreate['avatar_url'] = user.avatar;
         }
