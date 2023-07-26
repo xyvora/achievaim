@@ -55,6 +55,7 @@
         await deleteMe();
         await logOut();
       } catch (error) {
+        console.log(error);
         genericError = true;
         genericErrorMessage =
           'An error occurred trying to delete the information. Please try again later.';
@@ -124,6 +125,7 @@
         try {
           await updateMe(userUpdate);
         } catch (error) {
+          console.log(error);
           genericError = true;
           genericErrorMessage =
             'An error occurred trying to connect to the sever. Please try again later.';
@@ -151,6 +153,7 @@
         try {
           await createUser(userCreate);
         } catch (error) {
+          console.log(error);
           genericError = true;
           genericErrorMessage =
             'An error occurred trying to connect to the sever. Please try again later.';
@@ -165,6 +168,7 @@
           const token = await login(userLogin);
           accessToken.set(token);
         } catch (error) {
+          console.log(error);
           if (
             error instanceof LoginError &&
             error.message !== undefined &&

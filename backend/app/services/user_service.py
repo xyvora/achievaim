@@ -22,7 +22,8 @@ async def create_user(user: UserCreate) -> UserNoPassword:
 
     first_name = user.first_name.strip()
     last_name = user.last_name.strip()
-    country = user.country.strip()
+    if user.country:
+        country = user.country.strip()
     hashed_password = get_password_hash(user.password)
     user = User(
         user_name=user_name,
