@@ -98,7 +98,7 @@ class UserNoPassword(BaseModel):
     user_name: str
     first_name: str
     last_name: str
-    country: str
+    country: str | None = None
     avatar_url: AnyHttpUrl | None = None
 
     class Config:
@@ -159,7 +159,7 @@ class UserUpdateMe(BaseModel):
     user_name: str
     first_name: str
     last_name: str
-    country: str
+    country: str | None = None
     avatar_url: AnyHttpUrl | None = None
 
     class Config:
@@ -175,7 +175,7 @@ class User(Document):
     user_name: str
     first_name: str
     last_name: str
-    country: str
+    country: str | None = None
     hashed_password: str
     avatar_url: AnyHttpUrl | None = None
     goals: list[Goal] | None = None
