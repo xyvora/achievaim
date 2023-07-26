@@ -55,7 +55,7 @@
   docker compose up -d --build
 
 @compose-up-ci:
-  docker compose up -d
+  docker compose up -f docker-compose-testing.yml -d --build
 
 @db:
   docker compose up db
