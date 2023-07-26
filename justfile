@@ -105,7 +105,7 @@
 
 @frontend-test-ci:
   cd frontend && \
-  npx pywright test --browser "firefox"
+  npx playwright test --browser "firefox"
   # npm run test && \
   cd ..
 
