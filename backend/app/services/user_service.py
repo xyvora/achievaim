@@ -22,10 +22,9 @@ async def create_user(user: UserCreate) -> UserNoPassword:
 
     first_name = user.first_name.strip()
     last_name = user.last_name.strip()
-    if user.country:
-        country = user.country.strip()
+    country = user.country.strip() if user.country else None
     hashed_password = get_password_hash(user.password)
-    user = User(
+    user_info = User(
         user_name=user_name,
         first_name=first_name,
         last_name=last_name,
@@ -33,9 +32,10 @@ async def create_user(user: UserCreate) -> UserNoPassword:
         avatar_url=user.avatar_url,
         hashed_password=hashed_password,
     )
-    await user.save()
 
-    updated_user = await User.find_one(User.id == user.id, projection_model=UserNoPassword)
+    await user_info.save()
+
+    updated_user = await User.find_one(User.user_name == user_name, projection_model=UserNoPassword)
 
     if not updated_user:  # pragma: no cover
         raise UserNotFoundError("User not found after update")
@@ -88,7 +88,7 @@ async def update_me(update_info: UserUpdateMe) -> UserNoPassword:
     user_name = update_info.user_name.lower().strip()
     first_name = update_info.first_name.strip()
     last_name = update_info.last_name.strip()
-    country = update_info.country.strip()
+    country = update_info.country.strip() if update_info.country else None
     password = update_info.password.strip()
     hashed_password = get_password_hash(password)
     update_result = await User.find_one(User.id == update_info.id).update(
@@ -120,7 +120,7 @@ async def update_user(update_info: UserUpdate) -> UserNoPassword:
     user_name = update_info.user_name.lower().strip()
     first_name = update_info.first_name.strip()
     last_name = update_info.last_name.strip()
-    country = update_info.country.strip()
+    country = update_info.country.strip() if update_info.country else None
     password = update_info.password.strip()
     hashed_password = get_password_hash(password)
     update_result = await User.find_one(User.id == update_info.id).update(
