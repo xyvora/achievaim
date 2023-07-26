@@ -46,10 +46,10 @@ class _GoalBase(BaseModel):
         except ValueError:
             raise ValueError(f"{v} is not a valid time")
 
-        if 0 > hour > 23:
+        if hour < 0 or hour > 23:
             raise ValueError(f"{v} is not a valid time")
 
-        if 0 > minutes > 59:
+        if minutes < 0 or minutes > 59:
             raise ValueError(f"{v} is not a valid time")
 
         return v
