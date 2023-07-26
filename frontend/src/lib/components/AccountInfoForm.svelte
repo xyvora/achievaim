@@ -139,7 +139,6 @@
           first_name: user.firstName,
           last_name: user.lastName,
           user_name: user.userName,
-          country: user.country,
           password: user.password
         };
 
