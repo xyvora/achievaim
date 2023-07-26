@@ -134,14 +134,17 @@
       }
     } else {
       // This is already checked, but typescript refuses to believe it without this.
-      if (user.firstName && user.lastName && user.userName && user.country && user.password) {
+      if (user.firstName && user.lastName && user.userName && user.password) {
         const userCreate: UserCreate = {
           first_name: user.firstName,
           last_name: user.lastName,
           user_name: user.userName,
-          country: user.country,
           password: user.password
         };
+
+        if (user.country) {
+          userCreate['country'] = user.country;
+        }
 
         if (user.avatar) {
           userCreate['avatar_url'] = user.avatar;
