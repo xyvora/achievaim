@@ -204,7 +204,10 @@
       user.firstName = info.first_name;
       user.lastName = info.last_name;
       user.userName = info.user_name;
-      user.country = info.country;
+
+      if (info.country) {
+        user.country = info.country;
+      }
 
       if (info.avatar_url !== undefined) {
         user.avatar = info.avatar_url;

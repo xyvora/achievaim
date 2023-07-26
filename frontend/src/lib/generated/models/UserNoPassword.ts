@@ -8,6 +8,6 @@ export type UserNoPassword = {
   user_name: string;
   first_name: string;
   last_name: string;
-  country: string;
+  country?: string;
   avatar_url?: string;
 };
