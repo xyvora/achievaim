@@ -134,7 +134,7 @@
       }
     } else {
       // This is already checked, but typescript refuses to believe it without this.
-      if (user.firstName && user.lastName && user.userName && user.country && user.password) {
+      if (user.firstName && user.lastName && user.userName && user.password) {
         const userCreate: UserCreate = {
           first_name: user.firstName,
           last_name: user.lastName,
