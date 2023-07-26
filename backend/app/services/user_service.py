@@ -62,7 +62,7 @@ async def get_full_user(user_id: ObjectId | PydanticObjectId) -> User | None:
 
 
 async def get_full_user_by_username(user_name: str) -> User | None:
-    return await User.find_one(User.user_name == user_name)
+    return await User.find_one(User.user_name == user_name.lower().strip())
 
 
 async def get_user_by_id(user_id: ObjectId | PydanticObjectId) -> UserNoPassword | None:
