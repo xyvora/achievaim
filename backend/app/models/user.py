@@ -1,5 +1,4 @@
 from datetime import datetime
-from enum import Enum
 
 from beanie import Document
 from bson import ObjectId
@@ -7,12 +6,6 @@ from pydantic import AnyHttpUrl, BaseModel, Field, validator
 from pymongo import ASCENDING, IndexModel
 
 from app.models.object_id import ObjectIdStr
-
-
-class RepeatsEvery(str, Enum):
-    day = "day"
-    week = "week"
-    month = "month"
 
 
 class DaysOfWeek(BaseModel):
@@ -27,11 +20,39 @@ class DaysOfWeek(BaseModel):
 
 class _GoalBase(BaseModel):
     goal: str
-    duration: int | None = None
+    specific: str | None = None
+    measurable: str | None = None
+    attainable: str | None = None
+    relevant: str | None = None
+    date_for_achievement: datetime | None = None
     days_of_week: DaysOfWeek | None = None
-    repeats_every: RepeatsEvery | None = None
+    time_of_day: str | None
     progress: float | None = None
-    goal_date: datetime | None = None
+
+    @validator("time_of_day")
+    @classmethod
+    def validate_time_of_day(cls, v: str | None) -> str | None:
+        if not v:
+            return None
+
+        split_time = v.split(":", maxsplit=1)
+
+        if len(split_time) != 2:
+            raise ValueError(f"{v} is not a valid time")
+
+        try:
+            hour = int(split_time[0])
+            minutes = int(split_time[1])
+        except ValueError:
+            raise ValueError(f"{v} is not a valid time")
+
+        if 0 > hour > 23:
+            raise ValueError(f"{v} is not a valid time")
+
+        if 0 > minutes > 59:
+            raise ValueError(f"{v} is not a valid time")
+
+        return v
 
 
 class Goal(_GoalBase):
@@ -40,11 +61,15 @@ class Goal(_GoalBase):
     class Settings:
         projection = {
             "id": "$_id",
-            "name": "$name",
+            "goal": "$goal",
+            "specific": "$specific",
+            "measurable": "$measurable",
+            "attainable": "$attainable",
+            "relevant": "$relevant",
+            "date_for_achievement": "$date_for_achievement",
             "days_of_week": "$days_of_week",
-            "repeats_every": "$repeats_every",
-            "progress": "$progress",
-            "goal_date": "$goal_date",
+            "time_of_day": "$time_of_day",
+            "progress": "$prograss",
         }
 
 
@@ -171,7 +196,7 @@ class User(Document):
                 keys=[("_id", ASCENDING), ("goals.id", ASCENDING)], name="goal_id", unique=True
             ),
             IndexModel(
-                keys=[("_id", ASCENDING), ("goals.name", ASCENDING)], name="goal_name", unique=True
+                keys=[("_id", ASCENDING), ("goals.goal", ASCENDING)], name="goal", unique=True
             ),
         ]
 
