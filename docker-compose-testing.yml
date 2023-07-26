@@ -17,6 +17,16 @@ services:
       - MONGO_PORT=27017
       - MONGO_HOST=db
       - SECRET_KEY=secret
+  frontend:
+    image: frontend:dev
+    build:
+      context: ./frontend
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_PATH=http://localhost:8000/api/v1
+    ports:
+      - "3000:3000"
   db:
     image: mongo:6.0
     environment:
