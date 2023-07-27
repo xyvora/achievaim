@@ -83,16 +83,6 @@
         </div>
       {/if}
     </div>
-    <div class="mt-3 flex flex-col items-right">
-      <button id="save" class="btn btn-primary" on:click={handleClickSave} disabled={loadingSave}>
-        Save
-      </button>
-      {#if loadingSave}
-        <div class="mt-3 flex justify-center items-center">
-          <span class="loading loading-infinity loading-md" />
-        </div>
-      {/if}
-    </div>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
