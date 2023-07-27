@@ -1,15 +1,16 @@
 <script lang="ts">
   import { onMount, createEventDispatcher } from 'svelte';
+  import type { DaysOfWeek, GoalCreate } from '$lib/generated';
 
-  let daysOfWeek = [
-    { name: 'Monday', selected: false },
-    { name: 'Tuesday', selected: false },
-    { name: 'Wednesday', selected: false },
-    { name: 'Thursday', selected: false },
-    { name: 'Friday', selected: false },
-    { name: 'Saturday', selected: false },
-    { name: 'Sunday', selected: false }
-  ];
+  let daysOfWeek: DaysOfWeek = {
+    monday: false,
+    tuesday: false,
+    wednesday: false,
+    thrusday: false,
+    friday: false,
+    saturday: false,
+    sunday: false
+  };
 
   let selectAll = false;
 
@@ -27,15 +28,6 @@
     dispatch('save');
     // add your saving logic here
   }
-
-  onMount(async () => {
-    // Fetch data from API
-    // const response = await axios.get('your-api-endpoint');
-    // const data = response.data;
-    // Assign the fetched data to variables or update the necessary parts of the component
-    // goalDate = data.goalDate;
-    // goalTime = data.goalTime;
-  });
 
   let loadingGenerate = false;
   let loadingSave = false;
