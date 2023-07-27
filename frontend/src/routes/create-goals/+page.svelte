@@ -120,7 +120,9 @@
             SmartGoalAI's Measurable suggestion
           </p>
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary">Keep Measurable Suggestion</button>
+            <button on:click={handleClick} class="btn btn-primary"
+              >Keep Measurable Suggestion</button
+            >
           </div>
         </figcaption>
       </figure>
@@ -135,7 +137,9 @@
             SmartGoalAI's Attainable suggestion
           </p>
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary">Keep Attainable Suggestion</button>
+            <button on:click={handleClick} class="btn btn-primary"
+              >Keep Attainable Suggestion</button
+            >
           </div>
         </figcaption>
       </figure>
@@ -165,7 +169,9 @@
             SmartGoalAI's Time-Bound suggestion
           </p>
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary">Keep Time-Bound Suggestion</button>
+            <button on:click={handleClick} class="btn btn-primary"
+              >Keep Time-Bound Suggestion</button
+            >
           </div>
         </figcaption>
       </figure>
@@ -195,14 +201,18 @@
 </div>
 
 <div class="mt-4 flex flex-col items-center">
-  <label class="block text-lg font-bold mb-2" for="goal-date"> Choose the Date for Completing Your SMART Goal. Usually Associated with Bigger Goals: </label>
+  <label class="block text-lg font-bold mb-2" for="goal-date">
+    Choose the Date for Completing Your SMART Goal. Usually Associated with Bigger Goals:
+  </label>
   <input
     bind:value={goalDate}
     class="shadow appearance-none border rounded w-1/2 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
     id="goal-date"
     type="date"
   />
-  <label class="block text-lg font-bold mb-2 mt-4" for="goal-time"> Choose the Time for Your SMART Goal Alert: </label>
+  <label class="block text-lg font-bold mb-2 mt-4" for="goal-time">
+    Choose the Time for Your SMART Goal Alert:
+  </label>
   <input
     bind:value={goalTime}
     class="shadow appearance-none border rounded w-1/2 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
