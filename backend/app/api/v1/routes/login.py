@@ -25,7 +25,7 @@ async def login_access_token(
     user = await get_full_user_by_username(form_data.username)
 
     if not user:
-        logger.info("Incorrect user name")
+        logger.info("User not found")
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail="Incorrect user name or password"
         )

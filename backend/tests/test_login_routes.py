@@ -8,10 +8,11 @@ from app.models.user import UserUpdate
 from app.services.user_service import update_user
 
 
+@pytest.mark.parametrize("username", ["immauser", "ImmaUser"])
 @pytest.mark.usefixtures("user_with_goals")
-async def test_get_access_token(test_client):
+async def test_get_access_token(username, test_client):
     login_data = {
-        "username": "immauser",
+        "username": username,
         "password": "test_password",
     }
     response = await test_client.post("login/access-token", data=login_data)
