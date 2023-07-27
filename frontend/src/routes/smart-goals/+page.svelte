@@ -62,15 +62,15 @@
                 <p class="text-gray-900"><strong>R:</strong> {goal.relevant}</p>
                 <p class="text-gray-900"><strong>T:</strong> {goal.timeBound}</p>
                 <div class="grid grid-cols-2 gap-2 text-xs sm:text-sm text-gray-500 mt-4">
-                  <div><strong>Date:</strong></div>
+                  <div><strong>Date for Completing Your SMART Goal:</strong></div>
                   <div>{goal.date}</div>
-                  <div><strong>Days:</strong></div>
+                  <div><strong>Days Your SMART Goal Repeats:</strong></div>
                   <div>
                     <div class="flex flex-row">
                       {#each goal.days as day}<span class="mx-1">{day}</span>{/each}
                     </div>
                   </div>
-                  <div><strong>Time:</strong></div>
+                  <div><strong>Time for Your SMART Goal Alert:</strong></div>
                   <div>{goal.time}</div>
                 </div>
               </div>
