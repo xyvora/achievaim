@@ -19,6 +19,7 @@ async def test_create_user(country, test_client):
 
     assert response_json["user_name"] == user_data["user_name"]
 
+
 async def test_create_user_duplicate(user_with_goals, test_client):
     user_data = {
         "user_name": user_with_goals.user_name,
