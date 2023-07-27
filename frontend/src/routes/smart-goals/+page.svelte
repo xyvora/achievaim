@@ -62,7 +62,12 @@
                 <p class="text-gray-900"><strong>R:</strong> {goal.relevant}</p>
                 <p class="text-gray-900"><strong>T:</strong> {goal.timeBound}</p>
                 <div class="grid grid-cols-2 gap-2 text-xs sm:text-sm text-gray-500 mt-4">
-                  <div><strong>Choose the Date for Completing Your SMART Goal. Usually Associated with Bigger Goals:</strong></div>
+                  <div>
+                    <strong
+                      >Choose the Date for Completing Your SMART Goal. Usually Associated with
+                      Bigger Goals:</strong
+                    >
+                  </div>
                   <div>{goal.date}</div>
                   <div><strong>Select the Days Your SMART Goal Repeats:</strong></div>
                   <div>
