@@ -105,7 +105,7 @@
             SmartGoalAI's Specific suggestion
           </p>
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary">Save</button>
+            <button on:click={handleClick} class="btn btn-primary">Keep Specific Suggestion</button>
           </div>
         </figcaption>
       </figure>
@@ -120,7 +120,7 @@
             SmartGoalAI's Measurable suggestion
           </p>
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary">Save</button>
+            <button on:click={handleClick} class="btn btn-primary">Keep Measurable Suggestion</button>
           </div>
         </figcaption>
       </figure>
@@ -135,7 +135,7 @@
             SmartGoalAI's Attainable suggestion
           </p>
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary">Save</button>
+            <button on:click={handleClick} class="btn btn-primary">Keep Attainable Suggestion</button>
           </div>
         </figcaption>
       </figure>
@@ -150,7 +150,7 @@
             SmartGoalAI's Relevant suggestion
           </p>
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary">Save</button>
+            <button on:click={handleClick} class="btn btn-primary">Keep Relevant Suggestion</button>
           </div>
         </figcaption>
       </figure>
@@ -165,7 +165,7 @@
             SmartGoalAI's Time-Bound suggestion
           </p>
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary">Save</button>
+            <button on:click={handleClick} class="btn btn-primary">Keep Time-Bound Suggestion</button>
           </div>
         </figcaption>
       </figure>
@@ -174,7 +174,7 @@
 </div>
 
 <div class="mt-4 pd-4 flex flex-col items-center">
-  <span class="block text-xl font-bold mb-2">Days of the week</span>
+  <span class="block text-xl font-bold mb-2">Select the Days Your SMART Goal Repeats:</span>
   <button class="btn btn-primary mt-4" on:click={toggleAll}>
     {#if selectAll}Deselect All{:else}Select All{/if}
   </button>
@@ -195,14 +195,14 @@
 </div>
 
 <div class="mt-4 flex flex-col items-center">
-  <label class="block text-lg font-bold mb-2" for="goal-date"> Date </label>
+  <label class="block text-lg font-bold mb-2" for="goal-date"> Choose the Date for Completing Your SMART Goal. Usually Associated with Bigger Goals: </label>
   <input
     bind:value={goalDate}
     class="shadow appearance-none border rounded w-1/2 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
     id="goal-date"
     type="date"
   />
-  <label class="block text-lg font-bold mb-2 mt-4" for="goal-time"> Time </label>
+  <label class="block text-lg font-bold mb-2 mt-4" for="goal-time"> Choose the Time for Your SMART Goal Alert: </label>
   <input
     bind:value={goalTime}
     class="shadow appearance-none border rounded w-1/2 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
