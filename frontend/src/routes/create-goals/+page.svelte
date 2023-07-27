@@ -102,7 +102,7 @@
         <figcaption class="p-4 card-body">
           <h2 class="card-title">Specific</h2>
           <p id="specific" class="text-gray-600" contenteditable="true">
-            SmartGoalAI's Specific suggestion
+            AchievAIm's Specific suggestion
           </p>
           <div class="mt-3">
             <button on:click={handleClick} class="btn btn-primary">Keep Specific Suggestion</button>
@@ -117,7 +117,7 @@
         <figcaption class="p-4 card-body">
           <h2 class="card-title">Measurable</h2>
           <p id="measurable" class="text-gray-600" contenteditable="true">
-            SmartGoalAI's Measurable suggestion
+            AchievAIm's Measurable suggestion
           </p>
           <div class="mt-3">
             <button on:click={handleClick} class="btn btn-primary"
@@ -134,7 +134,7 @@
         <figcaption class="p-4 card-body">
           <h2 class="card-title">Attainable</h2>
           <p id="attainable" class="text-gray-600" contenteditable="true">
-            SmartGoalAI's Attainable suggestion
+            AchievAIm's Attainable suggestion
           </p>
           <div class="mt-3">
             <button on:click={handleClick} class="btn btn-primary"
@@ -151,7 +151,7 @@
         <figcaption class="p-4 card-body">
           <h2 class="card-title">Relevant</h2>
           <p id="relevant" class="text-gray-600" contenteditable="true">
-            SmartGoalAI's Relevant suggestion
+            AchievAIm's Relevant suggestion
           </p>
           <div class="mt-3">
             <button on:click={handleClick} class="btn btn-primary">Keep Relevant Suggestion</button>
@@ -166,7 +166,7 @@
         <figcaption class="p-4 card-body">
           <h2 class="card-title">Time-Bound</h2>
           <p id="time-bound" class="text-gray-600" contenteditable="true">
-            SmartGoalAI's Time-Bound suggestion
+            AchievAIm's Time-Bound suggestion
           </p>
           <div class="mt-3">
             <button on:click={handleClick} class="btn btn-primary"
