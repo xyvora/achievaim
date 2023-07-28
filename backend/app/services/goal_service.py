@@ -17,6 +17,9 @@ from app.services.user_service import get_full_user
 
 
 async def create_goal(user_id: ObjectId | PydanticObjectId, goal: GoalCreate) -> list[Goal]:
+    if not goal.goal:
+        raise ValueError("Goal is required")
+
     user = await get_full_user(user_id)
 
     if not user:

@@ -74,6 +74,7 @@ class Goal(_GoalBase):
 
 
 class GoalCreate(_GoalBase):
+    goal: str | None = None
     pass
 
 
