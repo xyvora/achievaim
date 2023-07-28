@@ -14,16 +14,17 @@
 
   let selectAll = false;
 
-  /* const toggleAll = () => {
+  const toggleAll = () => {
     selectAll = !selectAll;
-    daysOfWeek = daysOfWeek.map((day) => ({ ...day, selected: selectAll }));
-  }; */
+    Object.keys(daysOfWeek).forEach((day) => {
+      daysOfWeek[day as keyof DaysOfWeek] = selectAll;
+    });
+  };
 
   let goalDate: string;
   let goalTime: string;
 
   let loadingGenerate = false;
-  let loadingSave = false;
 </script>
 
 <div class="flex">
@@ -47,14 +48,6 @@
         </div>
       {/if}
     </div>
-    <div class="mt-3 flex flex-col items-right">
-      <button id="save" class="btn btn-primary">Save</button>
-      {#if loadingSave}
-        <div class="mt-3 flex justify-center items-center">
-          <span class="loading loading-infinity loading-md" />
-        </div>
-      {/if}
-    </div>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -63,9 +56,12 @@
       <figure>
         <figcaption class="p-4 card-body">
           <h2 class="card-title">Specific</h2>
-          <p id="specific" class="text-gray-600" contenteditable="true">
-            SmartGoalAI's Specific suggestion
-          </p>
+          <input
+            id="specific"
+            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            placeholder="AchievAIm's Specific suggestion"
+          />
           <div class="mt-3">
             <button class="btn btn-primary">Keep Specific Suggestion</button>
           </div>
@@ -78,9 +74,12 @@
       <figure>
         <figcaption class="p-4 card-body">
           <h2 class="card-title">Measurable</h2>
-          <p id="measurable" class="text-gray-600" contenteditable="true">
-            SmartGoalAI's Measurable suggestion
-          </p>
+          <input
+            id="measurable"
+            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            placeholder="AchievAIm's Measurable suggestion"
+          />
           <div class="mt-3">
             <button class="btn btn-primary">Keep Measurable Suggestion</button>
           </div>
@@ -93,9 +92,12 @@
       <figure>
         <figcaption class="p-4 card-body">
           <h2 class="card-title">Attainable</h2>
-          <p id="attainable" class="text-gray-600" contenteditable="true">
-            SmartGoalAI's Attainable suggestion
-          </p>
+          <input
+            id="attainable"
+            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            placeholder="AchievAIm's Attainable suggestion"
+          />
           <div class="mt-3">
             <button class="btn btn-primary">Keep Attainable Suggestion</button>
           </div>
@@ -108,9 +110,12 @@
       <figure>
         <figcaption class="p-4 card-body">
           <h2 class="card-title">Relevant</h2>
-          <p id="relevant" class="text-gray-600" contenteditable="true">
-            SmartGoalAI's Relevant suggestion
-          </p>
+          <input
+            id="relevant"
+            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            placeholder="AchievAIm's Relevant suggestion"
+          />
           <div class="mt-3">
             <button class="btn btn-primary">Keep Relevant Suggestion</button>
           </div>
@@ -123,9 +128,12 @@
       <figure>
         <figcaption class="p-4 card-body">
           <h2 class="card-title">Time-Bound</h2>
-          <p id="time-bound" class="text-gray-600" contenteditable="true">
-            SmartGoalAI's Time-Bound suggestion
-          </p>
+          <input
+            id="time-bound"
+            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            placeholder="AchievAIm's Time-Bound suggestion"
+          />
           <div class="mt-3">
             <button class="btn btn-primary">Keep Time-Bound Suggestion</button>
           </div>
@@ -137,24 +145,10 @@
 
 <div class="mt-4 pd-4 flex flex-col items-center">
   <span class="block text-xl font-bold mb-2">Select the Days Your SMART Goal Repeats:</span>
-  <button class="btn btn-primary mt-4">
+  <button class="btn btn-primary mt-4" on:click={toggleAll}>
     {#if selectAll}Deselect All{:else}Select All{/if}
   </button>
   <DaysOfWeekSelector {daysOfWeek} />
-  <!-- <div class="grid grid-cols-2 md:grid-cols- gap-5 mt-4">
-    {#each daysOfWeek as day (day.name)}
-      <div class="rounded shadow p-2">
-        <label class="inline-flex items-center">
-          <input
-            type="checkbox"
-            class={day.selected ? 'toggle toggle-primary' : 'toggle toggle-info'}
-            bind:checked={day.selected}
-          />
-          <span class="ml-2 text-md">{day.name}</span>
-        </label>
-      </div>
-    {/each}
-  </div> -->
 </div>
 
 <div class="mt-4 flex flex-col items-center">
