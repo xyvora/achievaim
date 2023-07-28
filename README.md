@@ -97,7 +97,7 @@ generated after running.
 
 ## Contributing
 
-Contributions are welcome! If you are interesting in contributing please see our
+Contributions are welcome! If you are interested in contributing please see our
 [contributing guide](CONTRIBUTING.md)
 
 ## License

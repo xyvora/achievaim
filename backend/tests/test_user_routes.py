@@ -4,14 +4,16 @@ import pytest
 from bson import ObjectId
 
 
-async def test_create_user(test_client):
+@pytest.mark.parametrize("country", ["USA", None])
+async def test_create_user(country, test_client):
     user_data = {
         "user_name": "arthurdent",
         "first_name": "Imma",
         "last_name": "User",
-        "country": "USA",
         "password": "immapassword",
     }
+    if country:
+        user_data["country"] = country
     response = await test_client.post("user/", json=user_data)
     response_json = response.json()
 

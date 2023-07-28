@@ -1,12 +1,13 @@
 <script lang="ts">
   import { onMount, createEventDispatcher } from 'svelte';
   import type { DaysOfWeek, GoalCreate } from '$lib/generated';
+  import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
 
   let daysOfWeek: DaysOfWeek = {
     monday: false,
     tuesday: false,
     wednesday: false,
-    thrusday: false,
+    thursday: false,
     friday: false,
     saturday: false,
     sunday: false
@@ -16,35 +17,14 @@
 
   const toggleAll = () => {
     selectAll = !selectAll;
-    daysOfWeek = daysOfWeek.map((day) => ({ ...day, selected: selectAll }));
+    Object.keys(daysOfWeek).forEach((day) => {
+      daysOfWeek[day as keyof DaysOfWeek] = selectAll;
+    });
   };
 
   let goalDate: string;
   let goalTime: string;
-
-  const dispatch = createEventDispatcher();
-
-  function handleClick() {
-    dispatch('save');
-    // add your saving logic here
-  }
-
   let loadingGenerate = false;
-  let loadingSave = false;
-
-  const handleClickGenerate = async () => {
-    loadingGenerate = true;
-    // Simulate an API call delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    loadingGenerate = false;
-  };
-
-  const handleClickSave = async () => {
-    loadingSave = true;
-    // Simulate an API call delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    loadingSave = false;
-  };
 </script>
 
 <div class="flex">
@@ -52,7 +32,7 @@
 </div>
 <div class="container mx-auto px-4 pt-5 md:max-w-xl lg:max-w-3xl z-10">
   <div class="mb-5">
-    <label class="block text-xl font-bold mb-2" for="goal"> Goal </label>
+    <label class="block text-xl font-bold mb-2" for="goal">Goal</label>
     <input
       class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
       id="goal"
@@ -61,25 +41,8 @@
     />
 
     <div class="mt-3 flex flex-col items-left">
-      <button
-        id="generate"
-        class="btn btn-primary"
-        on:click={handleClickGenerate}
-        disabled={loadingGenerate}
-      >
-        Generate
-      </button>
+      <button id="generate" class="btn btn-primary">Generate</button>
       {#if loadingGenerate}
-        <div class="mt-3 flex justify-center items-center">
-          <span class="loading loading-infinity loading-md" />
-        </div>
-      {/if}
-    </div>
-    <div class="mt-3 flex flex-col items-right">
-      <button id="save" class="btn btn-primary" on:click={handleClickSave} disabled={loadingSave}>
-        Save
-      </button>
-      {#if loadingSave}
         <div class="mt-3 flex justify-center items-center">
           <span class="loading loading-infinity loading-md" />
         </div>
@@ -93,11 +56,14 @@
       <figure>
         <figcaption class="p-4 card-body">
           <h2 class="card-title">Specific</h2>
-          <p id="specific" class="text-gray-600" contenteditable="true">
-            SmartGoalAI's Specific suggestion
-          </p>
+          <input
+            id="specific"
+            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            placeholder="AchievAIm's Specific suggestion"
+          />
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary">Keep Specific Suggestion</button>
+            <button class="btn btn-primary">Keep Specific Suggestion</button>
           </div>
         </figcaption>
       </figure>
@@ -108,13 +74,14 @@
       <figure>
         <figcaption class="p-4 card-body">
           <h2 class="card-title">Measurable</h2>
-          <p id="measurable" class="text-gray-600" contenteditable="true">
-            SmartGoalAI's Measurable suggestion
-          </p>
+          <input
+            id="measurable"
+            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            placeholder="AchievAIm's Measurable suggestion"
+          />
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary"
-              >Keep Measurable Suggestion</button
-            >
+            <button class="btn btn-primary">Keep Measurable Suggestion</button>
           </div>
         </figcaption>
       </figure>
@@ -125,13 +92,14 @@
       <figure>
         <figcaption class="p-4 card-body">
           <h2 class="card-title">Attainable</h2>
-          <p id="attainable" class="text-gray-600" contenteditable="true">
-            SmartGoalAI's Attainable suggestion
-          </p>
+          <input
+            id="attainable"
+            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            placeholder="AchievAIm's Attainable suggestion"
+          />
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary"
-              >Keep Attainable Suggestion</button
-            >
+            <button class="btn btn-primary">Keep Attainable Suggestion</button>
           </div>
         </figcaption>
       </figure>
@@ -142,11 +110,14 @@
       <figure>
         <figcaption class="p-4 card-body">
           <h2 class="card-title">Relevant</h2>
-          <p id="relevant" class="text-gray-600" contenteditable="true">
-            SmartGoalAI's Relevant suggestion
-          </p>
+          <input
+            id="relevant"
+            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            placeholder="AchievAIm's Relevant suggestion"
+          />
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary">Keep Relevant Suggestion</button>
+            <button class="btn btn-primary">Keep Relevant Suggestion</button>
           </div>
         </figcaption>
       </figure>
@@ -157,13 +128,14 @@
       <figure>
         <figcaption class="p-4 card-body">
           <h2 class="card-title">Time-Bound</h2>
-          <p id="time-bound" class="text-gray-600" contenteditable="true">
-            SmartGoalAI's Time-Bound suggestion
-          </p>
+          <input
+            id="time-bound"
+            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            placeholder="AchievAIm's Time-Bound suggestion"
+          />
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary"
-              >Keep Time-Bound Suggestion</button
-            >
+            <button class="btn btn-primary">Keep Time-Bound Suggestion</button>
           </div>
         </figcaption>
       </figure>
@@ -176,20 +148,7 @@
   <button class="btn btn-primary mt-4" on:click={toggleAll}>
     {#if selectAll}Deselect All{:else}Select All{/if}
   </button>
-  <div class="grid grid-cols-2 md:grid-cols- gap-5 mt-4">
-    {#each daysOfWeek as day (day.name)}
-      <div class="rounded shadow p-2">
-        <label class="inline-flex items-center">
-          <input
-            type="checkbox"
-            class={day.selected ? 'toggle toggle-primary' : 'toggle toggle-info'}
-            bind:checked={day.selected}
-          />
-          <span class="ml-2 text-md">{day.name}</span>
-        </label>
-      </div>
-    {/each}
-  </div>
+  <DaysOfWeekSelector {daysOfWeek} />
 </div>
 
 <div class="mt-4 flex flex-col items-center">
@@ -214,7 +173,7 @@
 </div>
 
 <div class="mt-4 flex flex-col items-center">
-  <button class="btn btn-primary" on:click={handleClick}>Save Smart Goal</button>
+  <button class="btn btn-primary">Save Smart Goal</button>
 </div>
 
 <div class="flex">
