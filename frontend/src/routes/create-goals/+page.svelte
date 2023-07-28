@@ -16,14 +16,15 @@
 
   const toggleAll = () => {
     selectAll = !selectAll;
-    daysOfWeek = daysOfWeek.map((day) => ({ ...day, selected: selectAll }));
+    for (const day in daysOfWeek) {
+      daysOfWeek[day] = selectAll;
+    }
   };
 
   let goalDate: string;
   let goalTime: string;
 
   let loadingGenerate = false;
-  let loadingSave = false;
 </script>
 
 <div class="flex">
