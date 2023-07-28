@@ -58,7 +58,7 @@
 <div class="flex">
   <div class="divider" />
 </div>
-<div class="container mx-auto px-4 pt-5 md:max-w-xl lg:max-w-3xl z-10">
+<div class="container mx-auto px-4 pt-5 md:max-w-xl lg:max-w-3xl z-10"> 
   <div class="mb-5">
     <label class="block text-xl font-bold mb-2" for="goal"> Goal </label>
     <input
@@ -86,87 +86,95 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-    <!-- Specific card -->
-    <div class="card bordered">
-      <figure>
-        <figcaption class="p-4 card-body">
-          <h2 class="card-title">Specific</h2>
-          <p id="specific" class="text-gray-600" contenteditable="true">
-            AchievAIm's Specific suggestion
-          </p>
-          <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary">Keep Specific Suggestion</button>
-          </div>
-        </figcaption>
-      </figure>
-    </div>
+  <!-- Specific card -->
+<div class="card bordered">
+  <figure>
+    <figcaption class="p-4 card-body">
+      <h2 class="card-title">Specific</h2>
+      <input
+        id="specific"
+        class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+        type="text"
+        placeholder="AchievAIm's Specific suggestion"
+      />
+      <div class="mt-3">
+        <button on:click={handleClick} class="btn btn-primary">Keep Specific Suggestion</button>
+      </div>
+    </figcaption>
+  </figure>
+</div>
 
-    <!-- Measurable card -->
-    <div class="card bordered">
-      <figure>
-        <figcaption class="p-4 card-body">
-          <h2 class="card-title">Measurable</h2>
-          <p id="measurable" class="text-gray-600" contenteditable="true">
-            AchievAIm's Measurable suggestion
-          </p>
-          <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary"
-              >Keep Measurable Suggestion</button
-            >
-          </div>
-        </figcaption>
-      </figure>
-    </div>
+<!-- Measurable card -->
+<div class="card bordered">
+  <figure>
+    <figcaption class="p-4 card-body">
+      <h2 class="card-title">Measurable</h2>
+      <input
+        id="measurable"
+        class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+        type="text"
+        placeholder="AchievAIm's Measurable suggestion"
+      />
+      <div class="mt-3">
+        <button on:click={handleClick} class="btn btn-primary">Keep Measurable Suggestion</button>
+      </div>
+    </figcaption>
+  </figure>
+</div>
 
-    <!-- Attainable card -->
-    <div class="card bordered">
-      <figure>
-        <figcaption class="p-4 card-body">
-          <h2 class="card-title">Attainable</h2>
-          <p id="attainable" class="text-gray-600" contenteditable="true">
-            AchievAIm's Attainable suggestion
-          </p>
-          <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary"
-              >Keep Attainable Suggestion</button
-            >
-          </div>
-        </figcaption>
-      </figure>
-    </div>
+<!-- Attainable card -->
+<div class="card bordered">
+  <figure>
+    <figcaption class="p-4 card-body">
+      <h2 class="card-title">Attainable</h2>
+      <input
+        id="attainable"
+        class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+        type="text"
+        placeholder="AchievAIm's Attainable suggestion"
+      />
+      <div class="mt-3">
+        <button on:click={handleClick} class="btn btn-primary">Keep Attainable Suggestion</button>
+      </div>
+    </figcaption>
+  </figure>
+</div>
 
-    <!-- Relevant card -->
-    <div class="card bordered">
-      <figure>
-        <figcaption class="p-4 card-body">
-          <h2 class="card-title">Relevant</h2>
-          <p id="relevant" class="text-gray-600" contenteditable="true">
-            AchievAIm's Relevant suggestion
-          </p>
-          <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary">Keep Relevant Suggestion</button>
-          </div>
-        </figcaption>
-      </figure>
-    </div>
+<!-- Relevant card -->
+<div class="card bordered">
+  <figure>
+    <figcaption class="p-4 card-body">
+      <h2 class="card-title">Relevant</h2>
+      <input
+        id="relevant"
+        class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+        type="text"
+        placeholder="AchievAIm's Relevant suggestion"
+      />
+      <div class="mt-3">
+        <button on:click={handleClick} class="btn btn-primary">Keep Relevant Suggestion</button>
+      </div>
+    </figcaption>
+  </figure>
+</div>
 
-    <!-- Time-Bound card -->
-    <div class="card bordered">
-      <figure>
-        <figcaption class="p-4 card-body">
-          <h2 class="card-title">Time-Bound</h2>
-          <p id="time-bound" class="text-gray-600" contenteditable="true">
-            AchievAIm's Time-Bound suggestion
-          </p>
-          <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary"
-              >Keep Time-Bound Suggestion</button
-            >
-          </div>
-        </figcaption>
-      </figure>
-    </div>
-  </div>
+<!-- Time-Bound card -->
+<div class="card bordered">
+  <figure>
+    <figcaption class="p-4 card-body">
+      <h2 class="card-title">Time-Bound</h2>
+      <input
+        id="time-bound"
+        class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+        type="text"
+        placeholder="AchievAIm's Time-Bound suggestion"
+      />
+      <div class="mt-3">
+        <button on:click={handleClick} class="btn btn-primary">Keep Time-Bound Suggestion</button>
+      </div>
+    </figcaption>
+  </figure>
+</div>
 </div>
 
 <div class="mt-4 pd-4 flex flex-col items-center">
@@ -189,7 +197,7 @@
     {/each}
   </div>
 </div>
-
+</div>
 <div class="mt-4 flex flex-col items-center">
   <label class="block text-lg font-bold mb-2" for="goal-date">
     Choose the Date for Completing Your SMART Goal. Usually Associated with Bigger Goals:
