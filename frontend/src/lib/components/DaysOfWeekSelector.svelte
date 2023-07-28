@@ -3,7 +3,7 @@
   import { toTitleCase } from '$lib/utils';
 
   export let daysOfWeek: DaysOfWeek;
-  export let readOnly: boolean = false;
+  export let readOnly = false;
 
   // Function to prevent changes to the checkbox state
   function handleCheckboxClick(event: Event) {
