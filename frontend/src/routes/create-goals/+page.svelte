@@ -1,58 +1,29 @@
 <script lang="ts">
-  import { onMount, createEventDispatcher } from 'svelte';
+  import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
+  import type { DaysOfWeek } from '$lib/generated';
 
-  let daysOfWeek = [
-    { name: 'Monday', selected: false },
-    { name: 'Tuesday', selected: false },
-    { name: 'Wednesday', selected: false },
-    { name: 'Thursday', selected: false },
-    { name: 'Friday', selected: false },
-    { name: 'Saturday', selected: false },
-    { name: 'Sunday', selected: false }
-  ];
+  let daysOfWeek: DaysOfWeek = {
+    monday: true,
+    tuesday: false,
+    wednesday: false,
+    thursday: false,
+    friday: false,
+    saturday: false,
+    sunday: false
+  };
 
   let selectAll = false;
 
-  const toggleAll = () => {
+  /* const toggleAll = () => {
     selectAll = !selectAll;
     daysOfWeek = daysOfWeek.map((day) => ({ ...day, selected: selectAll }));
-  };
+  }; */
 
   let goalDate: string;
   let goalTime: string;
 
-  const dispatch = createEventDispatcher();
-
-  function handleClick() {
-    dispatch('save');
-    // add your saving logic here
-  }
-
-  onMount(async () => {
-    // Fetch data from API
-    // const response = await axios.get('your-api-endpoint');
-    // const data = response.data;
-    // Assign the fetched data to variables or update the necessary parts of the component
-    // goalDate = data.goalDate;
-    // goalTime = data.goalTime;
-  });
-
   let loadingGenerate = false;
   let loadingSave = false;
-
-  const handleClickGenerate = async () => {
-    loadingGenerate = true;
-    // Simulate an API call delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    loadingGenerate = false;
-  };
-
-  const handleClickSave = async () => {
-    loadingSave = true;
-    // Simulate an API call delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    loadingSave = false;
-  };
 </script>
 
 <div class="flex">
@@ -60,7 +31,7 @@
 </div>
 <div class="container mx-auto px-4 pt-5 md:max-w-xl lg:max-w-3xl z-10">
   <div class="mb-5">
-    <label class="block text-xl font-bold mb-2" for="goal"> Goal </label>
+    <label class="block text-xl font-bold mb-2" for="goal">Goal</label>
     <input
       class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
       id="goal"
@@ -69,14 +40,7 @@
     />
 
     <div class="mt-3 flex flex-col items-left">
-      <button
-        id="generate"
-        class="btn btn-primary"
-        on:click={handleClickGenerate}
-        disabled={loadingGenerate}
-      >
-        Generate
-      </button>
+      <button id="generate" class="btn btn-primary">Generate</button>
       {#if loadingGenerate}
         <div class="mt-3 flex justify-center items-center">
           <span class="loading loading-infinity loading-md" />
@@ -84,9 +48,7 @@
       {/if}
     </div>
     <div class="mt-3 flex flex-col items-right">
-      <button id="save" class="btn btn-primary" on:click={handleClickSave} disabled={loadingSave}>
-        Save
-      </button>
+      <button id="save" class="btn btn-primary">Save</button>
       {#if loadingSave}
         <div class="mt-3 flex justify-center items-center">
           <span class="loading loading-infinity loading-md" />
@@ -105,7 +67,7 @@
             SmartGoalAI's Specific suggestion
           </p>
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary">Keep Specific Suggestion</button>
+            <button class="btn btn-primary">Keep Specific Suggestion</button>
           </div>
         </figcaption>
       </figure>
@@ -120,9 +82,7 @@
             SmartGoalAI's Measurable suggestion
           </p>
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary"
-              >Keep Measurable Suggestion</button
-            >
+            <button class="btn btn-primary">Keep Measurable Suggestion</button>
           </div>
         </figcaption>
       </figure>
@@ -137,9 +97,7 @@
             SmartGoalAI's Attainable suggestion
           </p>
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary"
-              >Keep Attainable Suggestion</button
-            >
+            <button class="btn btn-primary">Keep Attainable Suggestion</button>
           </div>
         </figcaption>
       </figure>
@@ -154,7 +112,7 @@
             SmartGoalAI's Relevant suggestion
           </p>
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary">Keep Relevant Suggestion</button>
+            <button class="btn btn-primary">Keep Relevant Suggestion</button>
           </div>
         </figcaption>
       </figure>
@@ -169,9 +127,7 @@
             SmartGoalAI's Time-Bound suggestion
           </p>
           <div class="mt-3">
-            <button on:click={handleClick} class="btn btn-primary"
-              >Keep Time-Bound Suggestion</button
-            >
+            <button class="btn btn-primary">Keep Time-Bound Suggestion</button>
           </div>
         </figcaption>
       </figure>
@@ -181,10 +137,11 @@
 
 <div class="mt-4 pd-4 flex flex-col items-center">
   <span class="block text-xl font-bold mb-2">Select the Days Your SMART Goal Repeats:</span>
-  <button class="btn btn-primary mt-4" on:click={toggleAll}>
+  <button class="btn btn-primary mt-4">
     {#if selectAll}Deselect All{:else}Select All{/if}
   </button>
-  <div class="grid grid-cols-2 md:grid-cols- gap-5 mt-4">
+  <DaysOfWeekSelector {daysOfWeek} />
+  <!-- <div class="grid grid-cols-2 md:grid-cols- gap-5 mt-4">
     {#each daysOfWeek as day (day.name)}
       <div class="rounded shadow p-2">
         <label class="inline-flex items-center">
@@ -197,7 +154,7 @@
         </label>
       </div>
     {/each}
-  </div>
+  </div> -->
 </div>
 
 <div class="mt-4 flex flex-col items-center">
@@ -222,7 +179,7 @@
 </div>
 
 <div class="mt-4 flex flex-col items-center">
-  <button class="btn btn-primary" on:click={handleClick}>Save Smart Goal</button>
+  <button class="btn btn-primary">Save Smart Goal</button>
 </div>
 
 <div class="flex">
