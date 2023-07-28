@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import type { AxiosRequestConfig } from 'axios';
 import { axiosInstance } from '$lib/axios-config';
-import type { UserCreate, UserNoPassword, UserUpdateMe } from '$lib/generated';
+import type { Goal, UserCreate, UserNoPassword, UserUpdateMe } from '$lib/generated';
 import type { AccessToken, UserLogin } from '$lib/types';
 import { LoginError } from '$lib/errors';
 import { accessToken } from '$lib/stores/stores';
@@ -42,6 +42,17 @@ export const deleteMe = async () => {
   if (response.status !== 204) {
     throw new Error(response.statusText);
   }
+};
+
+export const createGoal = async (): Promise<Goal> => {
+  const headers = await authHeaders();
+  const response = await axiosInstance.post('/goal', headers);
+
+  if (response.status === 200) {
+    return response.data;
+  }
+
+  throw new Error(response.statusText);
 };
 
 export const getMe = async (): Promise<UserNoPassword> => {

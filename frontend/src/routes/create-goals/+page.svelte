@@ -2,6 +2,7 @@
   import { onMount, createEventDispatcher } from 'svelte';
   import type { DaysOfWeek, GoalCreate } from '$lib/generated';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
+  import { createGoal } from '$lib/api';
 
   let daysOfWeek: DaysOfWeek = {
     monday: false,
