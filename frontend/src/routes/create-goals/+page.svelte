@@ -3,7 +3,7 @@
   import type { DaysOfWeek } from '$lib/generated';
 
   let daysOfWeek: DaysOfWeek = {
-    monday: true,
+    monday: false,
     tuesday: false,
     wednesday: false,
     thursday: false,
