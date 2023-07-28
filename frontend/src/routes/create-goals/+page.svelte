@@ -16,9 +16,9 @@
 
   const toggleAll = () => {
     selectAll = !selectAll;
-    for (const day in daysOfWeek) {
-      daysOfWeek[day] = selectAll;
-    }
+    Object.keys(daysOfWeek).forEach((day) => {
+      daysOfWeek[day as keyof DaysOfWeek] = selectAll;
+    });
   };
 
   let goalDate: string;
