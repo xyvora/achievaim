@@ -1,6 +1,19 @@
 <script lang="ts">
   import type { Goals } from '$lib/types';
   import { goto } from '$app/navigation';
+  import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
+  import type { DaysOfWeek } from '$lib/generated';
+
+  // NOTE: Temporary, will be replaced will call to the API
+  const daysOfWeek: DaysOfWeek = {
+    monday: true,
+    tuesday: false,
+    wednesday: true,
+    thursday: false,
+    friday: true,
+    saturday: false,
+    sunday: false
+  };
 
   let goals: Goals = {
     active: [
@@ -66,6 +79,7 @@
                   <div>{goal.date}</div>
                   <div><strong>Days Your SMART Goal Repeats:</strong></div>
                   <div>
+                    <DaysOfWeekSelector {daysOfWeek} readOnly={true} />
                     <div class="flex flex-row">
                       {#each goal.days as day}<span class="mx-1">{day}</span>{/each}
                     </div>
