@@ -61,6 +61,7 @@ def user_data():
                 "measurable": "measurable 1",
                 "attainable": "attainable 1",
                 "relevant": "relevant 1",
+                "time_bound": "time bound 1",
                 "date_for_achievement": datetime.now().isoformat(),
                 "days_of_week": None,
                 "time_of_day": None,

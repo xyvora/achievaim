@@ -19,11 +19,12 @@ class DaysOfWeek(BaseModel):
 
 
 class _GoalBase(BaseModel):
-    goal: str
+    goal: str | None = None
     specific: str | None = None
     measurable: str | None = None
     attainable: str | None = None
     relevant: str | None = None
+    time_bound: str | None = None
     date_for_achievement: datetime | None = None
     days_of_week: DaysOfWeek | None = None
     time_of_day: str | None
@@ -57,6 +58,7 @@ class _GoalBase(BaseModel):
 
 class Goal(_GoalBase):
     id: str
+    goal: str
 
     class Settings:
         projection = {
@@ -66,6 +68,7 @@ class Goal(_GoalBase):
             "measurable": "$measurable",
             "attainable": "$attainable",
             "relevant": "$relevant",
+            "time_bound": "$time_bound",
             "date_for_achievement": "$date_for_achievement",
             "days_of_week": "$days_of_week",
             "time_of_day": "$time_of_day",
@@ -74,7 +77,6 @@ class Goal(_GoalBase):
 
 
 class GoalCreate(_GoalBase):
-    goal: str | None = None
     pass
 
 

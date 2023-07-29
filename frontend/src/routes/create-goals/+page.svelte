@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount, createEventDispatcher } from 'svelte';
   import type { DaysOfWeek, GoalCreate } from '$lib/generated';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
   import ErrorMessage from '$lib/components/ErrorMessage.svelte';
@@ -23,9 +22,14 @@
 
   const toggleAll = () => {
     selectAll = !selectAll;
-    Object.keys(goal.days_of_week).forEach((day) => {
-      goal.days_of_week[day as keyof DaysOfWeek] = selectAll;
-    });
+    if (goal.days_of_week) {
+      Object.keys(goal.days_of_week).forEach((day) => {
+        // goal.days_of_week! is because TypeScript sucks and won't believe days_of_week is not
+        // undefined even when it is checked first.
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        goal.days_of_week![day as keyof DaysOfWeek] = selectAll;
+      });
+    }
   };
 
   async function handleSave() {
@@ -39,8 +43,11 @@
       return;
     }
 
-    const response = await createGoal(goal);
-    console.log(response);
+    try {
+      await createGoal(goal);
+    } catch (error) {
+      console.log(error);
+    }
   }
 </script>
 
@@ -172,11 +179,13 @@
 </div>
 
 <div class="mt-4 pd-4 flex flex-col items-center">
-  <span class="block text-xl font-bold mb-2">Select the Days Your SMART Goal Repeats:</span>
-  <button class="btn btn-primary mt-4" on:click={toggleAll}>
-    {#if selectAll}Deselect All{:else}Select All{/if}
-  </button>
-  <DaysOfWeekSelector daysOfWeek={goal.days_of_week} />
+  {#if goal.days_of_week}
+    <span class="block text-xl font-bold mb-2">Select the Days Your SMART Goal Repeats:</span>
+    <button class="btn btn-primary mt-4" on:click={toggleAll}>
+      {#if selectAll}Deselect All{:else}Select All{/if}
+    </button>
+    <DaysOfWeekSelector daysOfWeek={goal.days_of_week} />
+  {/if}
   <label class="block text-lg font-bold mb-2 mt-4" for="goal-time">
     Set the alert time for your SMART goals on selected days.
   </label>
