@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import type { AxiosRequestConfig } from 'axios';
 import { axiosInstance } from '$lib/axios-config';
-import type { Goal, UserCreate, UserNoPassword, UserUpdateMe } from '$lib/generated';
+import type { Goal, GoalCreate, UserCreate, UserNoPassword, UserUpdateMe } from '$lib/generated';
 import type { AccessToken, UserLogin } from '$lib/types';
 import { LoginError } from '$lib/errors';
 import { accessToken } from '$lib/stores/stores';
@@ -23,6 +23,17 @@ async function authHeaders(): Promise<AxiosRequestConfig<any>> {
   throw new Error('No access token found');
 }
 
+export const createGoal = async (payload: GoalCreate): Promise<Goal> => {
+  const headers = await authHeaders();
+  const response = await axiosInstance.post('/goal', payload, headers);
+
+  if (response.status === 200) {
+    return response.data;
+  }
+
+  throw new Error(response.statusText);
+};
+
 export const createUser = async (user: UserCreate): Promise<UserNoPassword> => {
   // TODO: Better handle errors
   const response = await axiosInstance.post('/user', user);
@@ -42,17 +53,6 @@ export const deleteMe = async () => {
   if (response.status !== 204) {
     throw new Error(response.statusText);
   }
-};
-
-export const createGoal = async (): Promise<Goal> => {
-  const headers = await authHeaders();
-  const response = await axiosInstance.post('/goal', headers);
-
-  if (response.status === 200) {
-    return response.data;
-  }
-
-  throw new Error(response.statusText);
 };
 
 export const getMe = async (): Promise<UserNoPassword> => {

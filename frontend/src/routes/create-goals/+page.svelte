@@ -2,6 +2,7 @@
   import { onMount, createEventDispatcher } from 'svelte';
   import type { DaysOfWeek, GoalCreate } from '$lib/generated';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
+  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
   import { createGoal } from '$lib/api';
 
   let goal: GoalCreate = {
@@ -18,6 +19,7 @@
 
   let selectAll = false;
   let loadingGenerate = false;
+  let goalError = false;
 
   const toggleAll = () => {
     selectAll = !selectAll;
@@ -26,8 +28,19 @@
     });
   };
 
-  function handleSave() {
-    console.log(goal);
+  async function handleSave() {
+    goalError = false;
+
+    if (!goal.goal) {
+      goalError = true;
+    }
+
+    if (goalError) {
+      return;
+    }
+
+    const response = await createGoal(goal);
+    console.log(response);
   }
 </script>
 
@@ -43,6 +56,11 @@
       type="text"
       placeholder="What's your SMART Goal?"
       bind:value={goal.goal}
+    />
+    <ErrorMessage
+      errorMessageId="goal-error"
+      errorMessage="SMART goal is required"
+      showError={goalError}
     />
 
     <div class="mt-3 flex flex-col items-left">
