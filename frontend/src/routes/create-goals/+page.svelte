@@ -162,8 +162,7 @@
 
 <div class="mt-4 flex flex-col items-center">
   <label class="block text-lg font-bold mb-2" for="goal-date">
-    Choose the Date for Completing Your SMART Goal.
-    Usually Associated with Bigger Goals:
+    Choose the Date for Completing Your SMART Goal. Usually Associated with Bigger Goals:
   </label>
   <input
     bind:value={goalDate}
