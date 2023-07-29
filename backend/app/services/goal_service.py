@@ -35,6 +35,7 @@ async def create_goal(user_id: ObjectId | PydanticObjectId, goal: GoalCreate) ->
         measurable=goal.measurable.strip() if goal.measurable else None,
         attainable=goal.attainable.strip() if goal.attainable else None,
         relevant=goal.relevant.strip() if goal.relevant else None,
+        time_bound=goal.time_bound.strip() if goal.time_bound else None,
         date_for_achievement=goal.date_for_achievement if goal.date_for_achievement else None,
         days_of_week=goal.days_of_week,
         progress=goal.progress,
