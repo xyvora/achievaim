@@ -180,12 +180,6 @@
     type="date"
     bind:value={goal.date_for_achievement}
   />
-  <input
-    class="shadow appearance-none border rounded w-1/2 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-    id="goal-time"
-    type="time"
-    bind:value={goal.time_of_day}
-  />
 </div>
 
 <div class="mt-4 flex flex-col items-center">
