@@ -4,28 +4,31 @@
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
   import { createGoal } from '$lib/api';
 
-  let daysOfWeek: DaysOfWeek = {
-    monday: false,
-    tuesday: false,
-    wednesday: false,
-    thursday: false,
-    friday: false,
-    saturday: false,
-    sunday: false
+  let goal: GoalCreate = {
+    days_of_week: {
+      monday: false,
+      tuesday: false,
+      wednesday: false,
+      thursday: false,
+      friday: false,
+      saturday: false,
+      sunday: false
+    }
   };
 
   let selectAll = false;
+  let loadingGenerate = false;
 
   const toggleAll = () => {
     selectAll = !selectAll;
-    Object.keys(daysOfWeek).forEach((day) => {
-      daysOfWeek[day as keyof DaysOfWeek] = selectAll;
+    Object.keys(goal.days_of_week).forEach((day) => {
+      goal.days_of_week[day as keyof DaysOfWeek] = selectAll;
     });
   };
 
-  let goalDate: string;
-  let goalTime: string;
-  let loadingGenerate = false;
+  function handleSave() {
+    console.log(goal);
+  }
 </script>
 
 <div class="flex">
@@ -39,6 +42,7 @@
       id="goal"
       type="text"
       placeholder="What's your SMART Goal?"
+      bind:value={goal.goal}
     />
 
     <div class="mt-3 flex flex-col items-left">
@@ -62,6 +66,7 @@
             class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             placeholder="AchievAIm's Specific suggestion"
+            bind:value={goal.specific}
           />
           <div class="mt-3">
             <button class="btn btn-primary">Keep Specific Suggestion</button>
@@ -80,6 +85,7 @@
             class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             placeholder="AchievAIm's Measurable suggestion"
+            bind:value={goal.measurable}
           />
           <div class="mt-3">
             <button class="btn btn-primary">Keep Measurable Suggestion</button>
@@ -98,6 +104,7 @@
             class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             placeholder="AchievAIm's Attainable suggestion"
+            bind:value={goal.attainable}
           />
           <div class="mt-3">
             <button class="btn btn-primary">Keep Attainable Suggestion</button>
@@ -116,6 +123,7 @@
             class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             placeholder="AchievAIm's Relevant suggestion"
+            bind:value={goal.relevant}
           />
           <div class="mt-3">
             <button class="btn btn-primary">Keep Relevant Suggestion</button>
@@ -134,6 +142,7 @@
             class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             placeholder="AchievAIm's Time-Bound suggestion"
+            bind:value={goal.time_bound}
           />
           <div class="mt-3">
             <button class="btn btn-primary">Keep Time-Bound Suggestion</button>
@@ -149,7 +158,7 @@
   <button class="btn btn-primary mt-4" on:click={toggleAll}>
     {#if selectAll}Deselect All{:else}Select All{/if}
   </button>
-  <DaysOfWeekSelector {daysOfWeek} />
+  <DaysOfWeekSelector daysOfWeek={goal.days_of_week} />
 </div>
 
 <div class="mt-4 flex flex-col items-center">
@@ -157,24 +166,24 @@
     Choose the Date for Completing Your SMART Goal. Usually Associated with Bigger Goals:
   </label>
   <input
-    bind:value={goalDate}
     class="shadow appearance-none border rounded w-1/2 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
     id="goal-date"
     type="date"
+    bind:value={goal.date_for_achievement}
   />
   <label class="block text-lg font-bold mb-2 mt-4" for="goal-time">
     Choose the Time for Your SMART Goal Alert:
   </label>
   <input
-    bind:value={goalTime}
     class="shadow appearance-none border rounded w-1/2 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
     id="goal-time"
     type="time"
+    bind:value={goal.time_of_day}
   />
 </div>
 
 <div class="mt-4 flex flex-col items-center">
-  <button class="btn btn-primary">Save Smart Goal</button>
+  <button class="btn btn-primary" on:click={handleSave}>Save Smart Goal</button>
 </div>
 
 <div class="flex">

@@ -6,7 +6,7 @@
 import type { DaysOfWeek } from './DaysOfWeek';
 
 export type GoalCreate = {
-  goal: string;
+  goal?: string;
   specific?: string;
   measurable?: string;
   attainable?: string;
