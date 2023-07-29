@@ -41,6 +41,9 @@ async def create_goal(goal: GoalCreate, current_user: CurrentUser) -> list[Goal]
             detail=f"Goal with the name {goal.goal} already exists",
         )
     except ValueError as e:  # pragma: no cover
+        if "Goal is required" in str(e):
+            logger.info("No goal provided: %s", e)
+            raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Goal is required")
         if "Goal IDs must be unique" in str(e):
             logger.info("Goal IDs must be unique: %s", e)
             raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Goal IDs must be unique")

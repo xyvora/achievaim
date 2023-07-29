@@ -61,6 +61,7 @@ def user_data():
                 "measurable": "measurable 1",
                 "attainable": "attainable 1",
                 "relevant": "relevant 1",
+                "time_bound": "time bound 1",
                 "date_for_achievement": datetime.now().isoformat(),
                 "days_of_week": None,
                 "time_of_day": None,
@@ -73,6 +74,7 @@ def user_data():
                 "measurable": "measurable 2",
                 "attainable": "attainable 2",
                 "relevant": "relevant 2",
+                "time_bound": "time bound 2",
                 "date_for_achievement": None,
                 "days_of_week": {
                     "monday": True,
