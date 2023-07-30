@@ -178,18 +178,18 @@
   </div>
 </div>
 
-<div class="mt-4 p-4 flex flex-col items-center">
-  <span class="block text-xl font-bold mb-2">Days Your SMART Goal Repeats:</span>
-  <DaysOfWeekSelector {daysOfWeek} />
-</div>
-
-<div class="mt-4 flex flex-col items-center">
-  <div class="text-center w-300px mb-2">
-    <label class="block text-lg" for="goal-time"> Set the Alert Time for Your SMART Goals </label>
-    <p class="text-sm text-gray-600 text-left">on Selected Days</p>
-  </div>
+<div class="mt-4 pd-4 flex flex-col items-center">
+  {#if goal.days_of_week}
+    <span class="block text-xl font-bold mb-2">Select the Days Your SMART Goal Repeats:</span>
+    <button class="btn btn-primary mt-4" on:click={toggleAll}>
+      {#if selectAll}Deselect All{:else}Select All{/if}
+    </button>
+    <DaysOfWeekSelector daysOfWeek={goal.days_of_week} />
+  {/if}
+  <label class="block text-lg font-bold mb-2 mt-4" for="goal-time">
+    Set the alert time for your SMART goals on selected days.
+  </label>
   <input
-    bind:value={goalTime}
     class="shadow appearance-none border rounded w-1/2 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
     id="goal-time"
     type="time"
@@ -198,10 +198,9 @@
 </div>
 
 <div class="mt-4 flex flex-col items-center">
-  <div class="text-center w-300px mb-2">
-    <label class="block text-lg" for="goal-date"> Choose the Date for Your SMART Goal </label>
-    <p class="text-sm text-gray-600 text-left">Usually Associated with Bigger Goals</p>
-  </div>
+  <label class="block text-lg font-bold mb-2" for="goal-date">
+    Choose the Date for Completing Your SMART Goal. Usually Associated with Bigger Goals:
+  </label>
   <input
     class="shadow appearance-none border rounded w-1/2 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
     id="goal-date"
