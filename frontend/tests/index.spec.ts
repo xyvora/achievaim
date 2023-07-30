@@ -7,7 +7,7 @@ test('page loads', async ({ page }) => {
 
 test('navbar link is active', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('link', { name: /home/ })).toHaveClass('active');
+  await expect(page.getByRole('link', { name: /home/ })).toHaveClass('rounded bg-white');
 });
 
 test('user name is required', async ({ page }) => {

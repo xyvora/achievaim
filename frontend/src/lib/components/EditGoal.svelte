@@ -255,14 +255,14 @@
   <label class="block text-lg font-bold mb-2" for="goal-date"> Date </label>
   <input
     bind:value={goalDate}
-    class="shadow appearance-none border rounded w-1/2 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+    class="shadow appearance-none border rounded w-300px py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
     id="goal-date"
     type="date"
   />
   <label class="block text-lg font-bold mb-2 mt-4" for="goal-time"> Time </label>
   <input
     bind:value={goalTime}
-    class="shadow appearance-none border rounded w-1/2 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+    class="shadow appearance-none border rounded w-300px py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
     id="goal-time"
     type="time"
   />
