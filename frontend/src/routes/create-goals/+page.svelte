@@ -150,12 +150,8 @@
 
 <div class="mt-4 flex flex-col items-center">
   <div class="text-center w-300px mb-2">
-    <label class="block text-lg" for="goal-time">
-      Set the Alert Time for Your SMART Goals
-    </label>
-    <p class="text-sm text-gray-600 text-left">
-      on Selected Days
-    </p>
+    <label class="block text-lg" for="goal-time"> Set the Alert Time for Your SMART Goals </label>
+    <p class="text-sm text-gray-600 text-left">on Selected Days</p>
   </div>
   <input
     bind:value={goalTime}
@@ -167,12 +163,8 @@
 
 <div class="mt-4 flex flex-col items-center">
   <div class="text-center w-300px mb-2">
-    <label class="block text-lg" for="goal-date">
-      Choose the Date for Your SMART Goal
-    </label>
-    <p class="text-sm text-gray-600 text-left">
-      Usually Associated with Bigger Goals
-    </p>
+    <label class="block text-lg" for="goal-date"> Choose the Date for Your SMART Goal </label>
+    <p class="text-sm text-gray-600 text-left">Usually Associated with Bigger Goals</p>
   </div>
   <input
     bind:value={goalDate}
