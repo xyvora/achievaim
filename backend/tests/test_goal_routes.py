@@ -60,6 +60,14 @@ async def test_create_goal_duplicate(test_client, user_data, user_token_headers)
     assert response.status_code == 400
 
 
+@pytest.mark.usefixtures("user_with_goals")
+async def test_create_goal_no_goal(test_client, user_data, user_token_headers):
+    goal_data = deepcopy(user_data["goals"][0])
+    goal_data.pop("goal")
+    response = await test_client.post("goal/", headers=user_token_headers, json=goal_data)
+    assert response.status_code == 400
+
+
 async def tests_create_goal_not_authenticated(test_client, user_data):
     goal_data = deepcopy(user_data["goals"][0])
     response = await test_client.post("goal/", json=goal_data)

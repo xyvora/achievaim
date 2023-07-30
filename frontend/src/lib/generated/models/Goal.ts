@@ -11,6 +11,7 @@ export type Goal = {
   measurable?: string;
   attainable?: string;
   relevant?: string;
+  time_bound?: string;
   date_for_achievement?: string;
   days_of_week?: DaysOfWeek;
   time_of_day?: string;

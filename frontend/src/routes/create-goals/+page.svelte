@@ -1,30 +1,54 @@
 <script lang="ts">
+  import type { DaysOfWeek, GoalCreate } from '$lib/generated';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
-  import type { DaysOfWeek } from '$lib/generated';
+  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+  import { createGoal } from '$lib/api';
 
-  let daysOfWeek: DaysOfWeek = {
-    monday: false,
-    tuesday: false,
-    wednesday: false,
-    thursday: false,
-    friday: false,
-    saturday: false,
-    sunday: false
+  let goal: GoalCreate = {
+    days_of_week: {
+      monday: false,
+      tuesday: false,
+      wednesday: false,
+      thursday: false,
+      friday: false,
+      saturday: false,
+      sunday: false
+    }
   };
 
   let selectAll = false;
+  let loadingGenerate = false;
+  let goalError = false;
 
   const toggleAll = () => {
     selectAll = !selectAll;
-    Object.keys(daysOfWeek).forEach((day) => {
-      daysOfWeek[day as keyof DaysOfWeek] = selectAll;
-    });
+    if (goal.days_of_week) {
+      Object.keys(goal.days_of_week).forEach((day) => {
+        // goal.days_of_week! is because TypeScript sucks and won't believe days_of_week is not
+        // undefined even when it is checked first.
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        goal.days_of_week![day as keyof DaysOfWeek] = selectAll;
+      });
+    }
   };
 
-  let goalDate: string;
-  let goalTime: string;
+  async function handleSave() {
+    goalError = false;
 
-  let loadingGenerate = false;
+    if (!goal.goal) {
+      goalError = true;
+    }
+
+    if (goalError) {
+      return;
+    }
+
+    try {
+      await createGoal(goal);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 </script>
 
 <div class="flex">
@@ -38,6 +62,12 @@
       id="goal"
       type="text"
       placeholder="What's your SMART Goal?"
+      bind:value={goal.goal}
+    />
+    <ErrorMessage
+      errorMessageId="goal-error"
+      errorMessage="SMART goal is required"
+      showError={goalError}
     />
 
     <div class="mt-3 flex flex-col items-left">
@@ -61,6 +91,7 @@
             class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             placeholder="AchievAIm's Specific suggestion"
+            bind:value={goal.specific}
           />
           <div class="mt-3">
             <button class="btn btn-primary">Keep Specific Suggestion</button>
@@ -79,6 +110,7 @@
             class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             placeholder="AchievAIm's Measurable suggestion"
+            bind:value={goal.measurable}
           />
           <div class="mt-3">
             <button class="btn btn-primary">Keep Measurable Suggestion</button>
@@ -97,6 +129,7 @@
             class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             placeholder="AchievAIm's Attainable suggestion"
+            bind:value={goal.attainable}
           />
           <div class="mt-3">
             <button class="btn btn-primary">Keep Attainable Suggestion</button>
@@ -115,6 +148,7 @@
             class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             placeholder="AchievAIm's Relevant suggestion"
+            bind:value={goal.relevant}
           />
           <div class="mt-3">
             <button class="btn btn-primary">Keep Relevant Suggestion</button>
@@ -133,6 +167,7 @@
             class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             placeholder="AchievAIm's Time-Bound suggestion"
+            bind:value={goal.time_bound}
           />
           <div class="mt-3">
             <button class="btn btn-primary">Keep Time-Bound Suggestion</button>
@@ -155,9 +190,10 @@
   </div>
   <input
     bind:value={goalTime}
-    class="shadow appearance-none border rounded w-300px py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+    class="shadow appearance-none border rounded w-1/2 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
     id="goal-time"
     type="time"
+    bind:value={goal.time_of_day}
   />
 </div>
 
@@ -167,15 +203,15 @@
     <p class="text-sm text-gray-600 text-left">Usually Associated with Bigger Goals</p>
   </div>
   <input
-    bind:value={goalDate}
-    class="shadow appearance-none border rounded w-300px py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+    class="shadow appearance-none border rounded w-1/2 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
     id="goal-date"
     type="date"
+    bind:value={goal.date_for_achievement}
   />
 </div>
 
 <div class="mt-4 flex flex-col items-center">
-  <button class="btn btn-primary">Save Smart Goal</button>
+  <button class="btn btn-primary" on:click={handleSave}>Save Smart Goal</button>
 </div>
 
 <div class="flex">
