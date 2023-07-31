@@ -29,7 +29,6 @@ async def create_user(user: UserCreate) -> UserNoPassword:
         first_name=first_name,
         last_name=last_name,
         country=country,
-        avatar_url=user.avatar_url,
         hashed_password=hashed_password,
     )
 
@@ -98,7 +97,6 @@ async def update_me(update_info: UserUpdateMe) -> UserNoPassword:
                 User.first_name: first_name,
                 User.last_name: last_name,
                 User.country: country,
-                User.avatar_url: update_info.avatar_url,
                 User.hashed_password: hashed_password,
                 User.last_update: datetime.now(),
             }
@@ -130,7 +128,6 @@ async def update_user(update_info: UserUpdate) -> UserNoPassword:
                 User.first_name: first_name,
                 User.last_name: last_name,
                 User.country: country,
-                User.avatar_url: update_info.avatar_url,
                 User.hashed_password: hashed_password,
                 User.last_update: datetime.now(),
                 User.is_active: update_info.is_active,
