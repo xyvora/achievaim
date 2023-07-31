@@ -2,7 +2,7 @@ from datetime import datetime
 
 from beanie import Document
 from bson import ObjectId
-from pydantic import AnyHttpUrl, BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator
 from pymongo import ASCENDING, IndexModel
 
 from app.models.object_id import ObjectIdStr
@@ -92,7 +92,6 @@ class UserCreate(BaseModel):
     first_name: str
     last_name: str
     country: str | None = None
-    avatar_url: AnyHttpUrl | None = None
     password: str
 
 
@@ -102,7 +101,6 @@ class UserNoPassword(BaseModel):
     first_name: str
     last_name: str
     country: str | None = None
-    avatar_url: AnyHttpUrl | None = None
 
     class Config:
         json_encoders = {ObjectId: lambda x: str(x)}
@@ -114,7 +112,6 @@ class UserNoPassword(BaseModel):
             "first_name": "$first_name",
             "last_name": "$last_name",
             "country": "$country",
-            "avatar_url": "$avatar_url",
         }
 
 
@@ -128,7 +125,6 @@ class UserWithGoals(UserNoPassword):
             "first_name": "$first_name",
             "last_name": "$last_name",
             "country": "$country",
-            "avatar_url": "$avatar_url",
             "goals": "$goals",
         }
 
@@ -147,7 +143,6 @@ class UserNoGoals(UserNoPassword):
             "first_name": "$first_name",
             "last_name": "$last_name",
             "country": "$country",
-            "avatar_url": "$avatar_url",
             "is_active": "$is_active",
             "is_admin": "$is_admin",
             "date_created": "$date_created",
@@ -163,7 +158,6 @@ class UserUpdateMe(BaseModel):
     first_name: str
     last_name: str
     country: str | None = None
-    avatar_url: AnyHttpUrl | None = None
 
     class Config:
         json_encoders = {ObjectId: lambda x: str(x)}
@@ -180,7 +174,6 @@ class User(Document):
     last_name: str
     country: str | None = None
     hashed_password: str
-    avatar_url: AnyHttpUrl | None = None
     goals: list[Goal] | None = None
     is_active: bool = True
     is_admin: bool = False

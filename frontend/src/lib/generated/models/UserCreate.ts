@@ -8,6 +8,5 @@ export type UserCreate = {
   first_name: string;
   last_name: string;
   country?: string;
-  avatar_url?: string;
   password: string;
 };
