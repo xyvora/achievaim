@@ -9,5 +9,4 @@ export type UserNoPassword = {
   first_name: string;
   last_name: string;
   country?: string;
-  avatar_url?: string;
 };
