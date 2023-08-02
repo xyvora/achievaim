@@ -12,7 +12,6 @@
   interface User {
     id?: string;
     userName: string | null;
-    avatar: string | null;
     firstName: string | null;
     lastName: string | null;
     country: string | null;
@@ -22,7 +21,6 @@
 
   let user: User = {
     userName: null,
-    avatar: null,
     firstName: null,
     lastName: null,
     country: null,
@@ -115,10 +113,6 @@
           password: user.password
         };
 
-        if (user.avatar) {
-          userUpdate['avatar_url'] = user.avatar;
-        }
-
         try {
           await updateMe(userUpdate);
         } catch (error) {
@@ -144,10 +138,6 @@
 
         if (user.country) {
           userCreate['country'] = user.country;
-        }
-
-        if (user.avatar) {
-          userCreate['avatar_url'] = user.avatar;
         }
 
         try {
@@ -207,10 +197,6 @@
 
       if (info.country) {
         user.country = info.country;
-      }
-
-      if (info.avatar_url !== undefined) {
-        user.avatar = info.avatar_url;
       }
     }
   });
@@ -292,16 +278,6 @@
         />
       </div>
     {/if}
-  </div>
-  <div class="flex flex-wrap -mx-3 mb-6">
-    <div class="w-full px-3">
-      <Input
-        inputId="avatar"
-        labelText="Avatar Photo URL"
-        placeholder="avatar photo url"
-        bind:value={user.avatar}
-      />
-    </div>
   </div>
   <ErrorMessage
     errorMessageId="generic-error"
