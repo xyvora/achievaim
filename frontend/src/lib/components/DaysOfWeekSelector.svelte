@@ -11,7 +11,7 @@
   }
 </script>
 
-<div class="grid grid-cols-2 md:grid-cols-2 gap-5 mt-4">
+<div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-4">
   {#each Object.entries(daysOfWeek) as [day, value]}
     {#if day === 'monday' || day === 'tuesday' || day === 'wednesday' || day === 'thursday' || day === 'friday' || day === 'saturday' || day === 'sunday'}
       <div class="rounded-xl shadow p-2">
