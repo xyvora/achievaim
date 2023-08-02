@@ -244,7 +244,8 @@
               </figcaption>
             </figure>
           </div>
-
+        </figcaption>
+      </figure>
     </div>
   </div>
 </div>
