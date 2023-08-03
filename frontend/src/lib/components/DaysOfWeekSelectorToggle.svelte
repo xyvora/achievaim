@@ -72,7 +72,7 @@
               >
             </div>
           </div>
-          <DaysOfWeekSelector daysOfWeek={goal.days_of_week} />
+          <DaysOfWeekSelector daysOfWeek={daysOfWeek} />
         {/if}
       </figcaption>
     </figure>
