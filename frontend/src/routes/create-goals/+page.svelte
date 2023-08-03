@@ -317,7 +317,7 @@
             {#if goal.days_of_week}
               <div class="flex justify-between items-center w-full">
                 <h2 class="card-title mb-2">Days</h2>
-            
+
                 <div class="flex items-center">
                   <label for="selectAll" class="cursor-pointer label flex items-center">
                     <input
@@ -363,8 +363,8 @@
     <div class="card w-full">
       <figure>
         <figcaption class="p-4 card-body flex flex-row items-center">
-                        <h2 class="card-title mb-2">Time</h2>
-        
+          <h2 class="card-title mb-2">Time</h2>
+
           <div class="flex-grow flex items-center">
             <input
               class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
