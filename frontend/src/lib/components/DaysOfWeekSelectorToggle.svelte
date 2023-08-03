@@ -28,7 +28,6 @@
   <div class="card">
     <figure>
       <figcaption class="p-4 card-body flex flex-col items-center">
-        {#if goal.days_of_week}
           <div class="flex justify-between items-center w-full">
             <span class="block text-xl font-bold"> Days </span>
             <div class="flex items-center">
