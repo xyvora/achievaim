@@ -52,14 +52,16 @@
 </script>
 
 <div class="page-fade-in">
+  <div class="divider" />
+
   <div class="container shadow-lg rounded-xl mb-4 mx-auto px-4 pt-5 md:max-w-xl lg:max-w-3xl z-10">
     <div class="mb-5">
-      <label class="block text-xl rounded-xl font-bold mb-2" for="goal">Goal</label>
+      <label class="block text-xl font-bold mb-2" for="goal">Goal</label>
       <input
-        class="shadow appearance-none border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+        class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
         id="goal"
         type="text"
-        placeholder="What's your SMART Goal? e.q. Exercise"
+        placeholder="What's your SMART Goal?"
         bind:value={goal.goal}
       />
       <ErrorMessage
@@ -69,7 +71,7 @@
       />
 
       <div class="mt-3 flex flex-col items-left">
-        <button id="generate" class="btn rounded-xl btn-primary">Generate</button>
+        <button id="generate" class="btn btn-primary">Generate</button>
         {#if loadingGenerate}
           <div class="mt-3 flex justify-center items-center">
             <span class="loading loading-infinity loading-md" />
@@ -88,13 +90,13 @@
               id="specific"
               class="shadow appearance-none border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
               type="text"
-              placeholder="AchievAIm's Specific suggestion. e.g. 15 min daily exercise."
+              placeholder="AchievAIm's Specific suggestion"
               bind:value={goal.specific}
             />
             <label
               class="cursor-pointer label flex items-center md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end"
             >
-              <input type="checkbox" class="toggle toggle-primary" checked />
+              <input type="checkbox" class="toggle toggle-primary" />
               <div class="dropdown dropdown-end">
                 <button tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info m-3">
                   <svg
@@ -111,10 +113,9 @@
                     />
                   </svg>
                   <button class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
-                    <div class="card-body text-left">
-                      <p>Toggle left to unsave.</p>
-                      <p>Generate Button above to give you another suggestion.</p>
-                      <p>Toggle Right to Save.</p>
+                    <div class="card-body">
+                      <h2 class="card-title">You needed more info?</h2>
+                      <p>Here is a description!</p>
                     </div>
                   </button>
                 </button>
@@ -135,13 +136,13 @@
               id="measurable"
               class="shadow appearance-none border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
               type="text"
-              placeholder="AchievAIm's Measurable suggestion. e.q. Track consecutive days."
+              placeholder="AchievAIm's Measurable suggestion"
               bind:value={goal.measurable}
             />
             <label
               class="cursor-pointer label flex items-center md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end"
             >
-              <input type="checkbox" class="toggle toggle-primary" checked />
+              <input type="checkbox" class="toggle toggle-primary" />
               <div class="dropdown dropdown-end">
                 <button tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info m-3">
                   <svg
@@ -158,12 +159,11 @@
                     />
                   </svg>
                   <button class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
-                    <div class="card-body text-left">
-                      <p>Toggle left to unsave.</p>
-                      <p>Generate Button above to give you another suggestion.</p>
-                      <p>Toggle Right to Save.</p>
-                    </div></button
-                  >
+                    <div class="card-body">
+                      <h2 class="card-title">You needed more info?</h2>
+                      <p>Here is a description!</p>
+                    </div>
+                  </button>
                 </button>
               </div>
             </label>
@@ -182,13 +182,13 @@
               id="attainable"
               class="shadow appearance-none border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
               type="text"
-              placeholder="AchievAIm's Attainable suggestion. e.g. Find enjoyable activities."
+              placeholder="AchievAIm's Attainable suggestion"
               bind:value={goal.attainable}
             />
             <label
               class="cursor-pointer label flex items-center md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end"
             >
-              <input type="checkbox" class="toggle toggle-primary" checked />
+              <input type="checkbox" class="toggle toggle-primary" />
               <div class="dropdown dropdown-end">
                 <button tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info m-3">
                   <svg
@@ -205,10 +205,9 @@
                     />
                   </svg>
                   <button class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
-                    <div class="card-body text-left">
-                      <p>Toggle left to unsave.</p>
-                      <p>Generate Button above to give you another suggestion.</p>
-                      <p>Toggle Right to Save.</p>
+                    <div class="card-body">
+                      <h2 class="card-title">You needed more info?</h2>
+                      <p>Here is a description!</p>
                     </div>
                   </button>
                 </button>
@@ -229,13 +228,13 @@
               id="relevant"
               class="shadow appearance-none border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
               type="text"
-              placeholder="AchievAIm's Relevant suggestion. e.g. Improve fitness."
+              placeholder="AchievAIm's Relevant suggestion"
               bind:value={goal.relevant}
             />
             <label
               class="cursor-pointer label flex items-center md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end"
             >
-              <input type="checkbox" class="toggle toggle-primary" checked />
+              <input type="checkbox" class="toggle toggle-primary" />
               <div class="dropdown dropdown-end">
                 <button tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info m-3">
                   <svg
@@ -252,10 +251,9 @@
                     />
                   </svg>
                   <button class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
-                    <div class="card-body text-left">
-                      <p>Toggle left to unsave.</p>
-                      <p>Generate Button above to give you another suggestion.</p>
-                      <p>Toggle Right to Save.</p>
+                    <div class="card-body">
+                      <h2 class="card-title">You needed more info?</h2>
+                      <p>Here is a description!</p>
                     </div>
                   </button>
                 </button>
@@ -276,13 +274,13 @@
               id="time-bound"
               class="shadow appearance-none border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
               type="text"
-              placeholder="AchievAIm's Time-Bound suggestion. e.g. 30 consecutive days."
+              placeholder="AchievAIm's Time-Bound suggestion"
               bind:value={goal.time_bound}
             />
             <label
               class="cursor-pointer label flex items-center md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end"
             >
-              <input type="checkbox" class="toggle toggle-primary" checked />
+              <input type="checkbox" class="toggle toggle-primary" />
               <div class="dropdown dropdown-end">
                 <button tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info m-3">
                   <svg
@@ -299,10 +297,9 @@
                     />
                   </svg>
                   <button class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
-                    <div class="card-body text-left">
-                      <p>Toggle left to unsave.</p>
-                      <p>Generate Button above to give you another suggestion.</p>
-                      <p>Toggle Right to Save.</p>
+                    <div class="card-body">
+                      <h2 class="card-title">You needed more info?</h2>
+                      <p>Here is a description!</p>
                     </div>
                   </button>
                 </button>
@@ -330,36 +327,30 @@
                       bind:checked={selectAll}
                       on:click={toggleAll}
                     />
-                    <label
-                      class="cursor-pointer label flex items-center md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end"
-                    >
-                      <div class="dropdown dropdown-end">
-                        <button tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info m-3">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            class="w-4 h-4 stroke-current"
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                          </svg>
-                          <button
-                            class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64"
-                          >
-                            <div class="card-body text-left">
-                              <p>These are the days of the week your goals repeat</p>
-                              <p>Toggle right to select all</p>
-                            </div>
-                          </button></button
-                        >
+                  </label>
+                  <div class="dropdown dropdown-end">
+                    <button tabindex="-1" class="btn btn-circle btn-ghost btn-xs text-info m-3">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        class="w-4 h-4 stroke-current"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </button>
+                    <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
+                      <div class="card-body">
+                        <h2 class="card-title">You needed more info?</h2>
+                        <p>Here is a description!</p>
                       </div>
-                    </label></label
-                  >
+                    </div>
+                  </div>
                 </div>
               </div>
               <DaysOfWeekSelector daysOfWeek={goal.days_of_week} />
@@ -385,7 +376,7 @@
             <label
               class="cursor-pointer label flex items-center md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end"
             >
-              <input type="checkbox" class="toggle toggle-primary" checked />
+              <input type="checkbox" class="toggle toggle-primary" />
               <div class="dropdown dropdown-end">
                 <button tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info m-3">
                   <svg
@@ -402,8 +393,9 @@
                     />
                   </svg>
                   <button class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
-                    <div class="card-body text-left">
-                      <p>Set the alert time for your SMART goals for selected days above.</p>
+                    <div class="card-body">
+                      <h2 class="card-title">You needed more info?</h2>
+                      <p>Here is a description!</p>
                     </div>
                   </button>
                 </button>
@@ -429,7 +421,7 @@
             <label
               class="cursor-pointer label flex items-center md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end"
             >
-              <input type="checkbox" class="toggle toggle-primary" checked />
+              <input type="checkbox" class="toggle toggle-primary" />
               <div class="dropdown dropdown-end">
                 <button tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info m-3">
                   <svg
@@ -446,8 +438,9 @@
                     />
                   </svg>
                   <button class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
-                    <div class="card-body text-left">
-                      <p>Choose the Date for Completing Your SMART Goal.</p>
+                    <div class="card-body">
+                      <h2 class="card-title">You needed more info?</h2>
+                      <p>Here is a description!</p>
                     </div>
                   </button>
                 </button>
