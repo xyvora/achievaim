@@ -282,7 +282,7 @@
             <label
               class="cursor-pointer label flex items-center md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end"
             >
-              <input type="checkbox" class="toggle toggle-primary" checked />
+              <input type="checkbox" class="toggle toggle-primary" />
               <div class="dropdown dropdown-end">
                 <button tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info m-3">
                   <svg
