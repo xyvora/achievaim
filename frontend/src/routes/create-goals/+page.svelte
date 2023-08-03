@@ -359,7 +359,6 @@
         </figure>
       </div>
     </div>
-<<<<<<< HEAD
 
     <div class="card w-full">
       <figure>
@@ -453,63 +452,6 @@
     </div>
     <div class="mt-3 flex flex-col items-left">
       <button class="btn btn-primary" on:click={handleSave}>Save Smart Goal</button>
-=======
-    <div class="card">
-      <figure>
-        <figcaption class="p-4 card-body">
-          <div class="mt-4 pd-4 flex flex-col items-center">
-            {#if goal.days_of_week}
-              <span class="block text-xl font-bold mb-2"
-                >Select the Days Your SMART Goal Repeats:</span
-              >
-              <button class="btn btn-primary mt-4" on:click={toggleAll}>
-                {#if selectAll}Deselect All{:else}Select All{/if}
-              </button>
-              <DaysOfWeekSelector daysOfWeek={goal.days_of_week} />
-            {/if}
-          </div>
-          <div class="card">
-            <figure>
-              <figcaption class="p-4 card-body">
-                <label class="block text-lg font-bold mb-2 mt-4" for="goal-time">
-                  Set the alert time for your SMART goals on selected days.
-                </label>
-                <input
-                  class="shadow m-2 appearance-none border rounded w-52 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                  id="goal-time"
-                  type="time"
-                  bind:value={goal.time_of_day}
-                />
-              </figcaption>
-            </figure>
-          </div>
-          <div class="card">
-            <figure>
-              <figcaption class="p-4 card-body">
-                <label class="block text-lg font-bold mb-2" for="goal-date">
-                  Choose the Date for Completing Your SMART Goal.
-                </label>
-                <input
-                  class="shadow w-52 appearance-none border rounded py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                  id="goal-date"
-                  type="date"
-                  bind:value={goal.date_for_achievement}
-                />
-              </figcaption>
-            </figure>
-          </div>
-          <div class="card">
-            <figure>
-              <figcaption class="p-4 card-body">
-                <div class="mt-4 flex flex-col items-center">
-                  <button class="btn btn-primary" on:click={handleSave}>Save Smart Goal</button>
-                </div>
-              </figcaption>
-            </figure>
-          </div>
-        </figcaption>
-      </figure>
->>>>>>> 8905c2ae0fb652f8cd9676c272f7bc165924b89c
     </div>
   </div>
 </div>
