@@ -49,21 +49,6 @@
       console.log(error);
     }
   }
-
-  let showModal = false; // Modal state
-
-  const openModal = () => {
-    showModal = true;
-  };
-
-  const closeModal = () => {
-    showModal = false;
-  };
-
-  const handleEdit = () => {
-    // Handle the edit logic here...
-    closeModal();
-  };
 </script>
 
 <div class="page-fade-in">
@@ -326,12 +311,13 @@
     </div>
 
     <div class="mt-3 flex flex-col items-center">
-      <div class="card">
+      <div class="card w-full">
         <figure>
           <figcaption class="p-4 card-body flex flex-col items-center">
             {#if goal.days_of_week}
               <div class="flex justify-between items-center w-full">
-                <span class="block text-xl font-bold"> Days </span>
+                <h2 class="card-title mb-2">Days</h2>
+            
                 <div class="flex items-center">
                   <label for="selectAll" class="cursor-pointer label flex items-center">
                     <input
@@ -374,10 +360,11 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card w-full">
       <figure>
         <figcaption class="p-4 card-body flex flex-row items-center">
-          <label class="text-left text-lg font-bold mb-2" for="goal-time">Time:</label>
+                        <h2 class="card-title mb-2">Time</h2>
+        
           <div class="flex-grow flex items-center">
             <input
               class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
@@ -419,10 +406,10 @@
       </figure>
     </div>
 
-    <div class="card">
+    <div class="card w-full">
       <figure>
         <figcaption class="p-4 card-body flex flex-row items-center">
-          <label class="text-left text-lg font-bold mb-2" for="goal-date">Date:</label>
+          <h2 class="card-title mb-2">Date</h2>
           <div class="flex-grow flex items-center relative">
             <input
               class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
@@ -462,6 +449,9 @@
           </div>
         </figcaption>
       </figure>
+    </div>
+    <div class="mt-3 flex flex-col items-left">
+      <button class="btn btn-primary" on:click={handleSave}>Save Smart Goal</button>
     </div>
   </div>
 </div>
