@@ -73,7 +73,6 @@
             </div>
           </div>
           <DaysOfWeekSelector daysOfWeek={daysOfWeek} />
-        {/if}
       </figcaption>
     </figure>
   </div>
