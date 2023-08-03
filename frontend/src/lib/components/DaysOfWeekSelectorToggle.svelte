@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { DaysOfWeek, GoalCreate } from '$lib/generated';
+  import type { DaysOfWeek } from '$lib/generated';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
 
   let goal: GoalCreate = {
