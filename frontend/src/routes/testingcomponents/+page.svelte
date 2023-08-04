@@ -1,8 +1,22 @@
 <script lang="ts">
-  import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
 
-  import { page } from '$app/stores';
-  let goal: GoalCreate = {
+  type DaysOfWeek = {
+    monday: boolean;
+    tuesday: boolean;
+    wednesday: boolean;
+    thursday: boolean;
+    friday: boolean;
+    saturday: boolean;
+    sunday: boolean;
+  };
+
+  type Goal = {
+    days_of_week: DaysOfWeek;
+    date_for_achievement?: string;
+    time_of_day?: string;
+  };
+
+  let goal: Goal = {
     days_of_week: {
       monday: false,
       tuesday: false,
@@ -13,6 +27,10 @@
       sunday: false
     }
   };
+
+  import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
+  import { page } from '$app/stores';
+
 </script>
 
 <div class="container shadow-lg rounded-xl mb-4 mx-auto px-4 pt-5 md:max-w-xl lg:max-w-3xl z-10">
