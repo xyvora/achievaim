@@ -6,6 +6,18 @@ class DuplicateUserNameError(Exception):
     pass
 
 
+class InvalidApiKeyError(Exception):
+    pass
+
+
+class InvalidTemperatureError(Exception):
+    pass
+
+
+class OpenAiError(Exception):
+    pass
+
+
 class NoGoalsFoundError(Exception):
     pass
 
@@ -19,4 +31,8 @@ class NoRecordsUpdatedError(Exception):
 
 
 class UserNotFoundError(Exception):
+    pass
+
+
+class QuotaExceededError(Exception):
     pass

@@ -17,6 +17,8 @@ services:
       - MONGO_PORT=27017
       - MONGO_HOST=db
       - SECRET_KEY=secret
+      - OPENAI_ORGANIZATION=${OPENAI_ORGANIZATION}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
     volumes:
       - type: bind
         source: ./backend

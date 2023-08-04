@@ -3,19 +3,24 @@ from fastapi import HTTPException
 from starlette.status import (
     HTTP_204_NO_CONTENT,
     HTTP_400_BAD_REQUEST,
+    HTTP_401_UNAUTHORIZED,
     HTTP_404_NOT_FOUND,
     HTTP_500_INTERNAL_SERVER_ERROR,
 )
 
 from app.api.deps import CurrentUser, logger
 from app.core.config import config
-from app.core.utils import APIRouter
+from app.core.utils import APIRouter, process_openai_to_smart_goal
 from app.exceptions import (
     DuplicateGoalError,
+    InvalidApiKeyError,
+    InvalidTemperatureError,
     NoGoalsFoundError,
     NoRecordsDeletedError,
     NoRecordsUpdatedError,
+    QuotaExceededError,
 )
+from app.models.smart_goal import GoalSuggestionCreate, SmartGoal
 from app.models.user import Goal, GoalCreate
 from app.services.goal_service import create_goal as create_goal_service
 from app.services.goal_service import delete_goal_by_id as delete_goal_by_id_service
@@ -24,6 +29,7 @@ from app.services.goal_service import get_goal_by_id as get_goal_by_id_service
 from app.services.goal_service import get_goal_by_name as get_goal_by_name_service
 from app.services.goal_service import get_goals_by_user_id
 from app.services.goal_service import update_goal as update_goal_service
+from app.services.openai import generate_smart_goal
 
 router = APIRouter(tags=["Goal"], prefix=f"{config.V1_API_PREFIX}/goal")
 
@@ -157,3 +163,39 @@ async def update_goal(goal: Goal, current_user: CurrentUser) -> list[Goal]:
             status_code=HTTP_400_BAD_REQUEST,
             detail=f"Goal with the name {goal.goal} already exists",
         )
+
+
+@router.post("/openai-goal")
+async def openai_goal(goal: GoalSuggestionCreate, current_user: CurrentUser) -> SmartGoal:
+    """Get goal suggestions from OpenAI."""
+    logger.info("Getting goal suggestions from OpenAI for user %s", current_user.id)
+    try:
+        response = await generate_smart_goal(
+            goal.goal, model=goal.model, temperature=goal.temperature
+        )
+    except InvalidTemperatureError as e:
+        logger.info("An error occurred %s", e)
+        raise HTTPException(
+            status_code=HTTP_400_BAD_REQUEST,
+            detail="Temperature must be between 0 and 2",
+        )
+    except InvalidApiKeyError as e:
+        logger.info("An error occurred %s", e)
+        raise HTTPException(
+            status_code=HTTP_401_UNAUTHORIZED,
+            detail="Invalid API key",
+        )
+    except QuotaExceededError as e:
+        logger.info("An error occurred %s", e)
+        raise HTTPException(
+            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An error occurred generating the goal",
+        )
+    except Exception as e:  # pragma: no cover
+        logger.error("An error occurred while generating the goal suggestions: %s", e)
+        raise HTTPException(
+            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An error occurred while generating the goal suggestions",
+        )
+
+    return process_openai_to_smart_goal(response)

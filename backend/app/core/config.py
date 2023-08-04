@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     mongo_host: str = Field("mongodb://127.0.0.1", env="MONGO_HOST")
     mongo_port: int = Field(27017, env="MONGO_PORT")
     log_level: int = Field(logging.INFO, env="LOG_LEVEL")
+    openai_api_key: str = Field("key", env="OPENAI_API_KEY")
+    openai_organization: str | None = Field(None, env="OPENAI_ORGANIZATION")
+    openai_url: str = "https://api.openai.com/v1/chat/completions"
 
     class Config:
         case_sensitive = True
