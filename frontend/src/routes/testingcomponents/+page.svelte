@@ -1,5 +1,4 @@
 <script lang="ts">
-
   type DaysOfWeek = {
     monday: boolean;
     tuesday: boolean;
@@ -30,7 +29,6 @@
 
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
   import { page } from '$app/stores';
-
 </script>
 
 <div class="container shadow-lg rounded-xl mb-4 mx-auto px-4 pt-5 md:max-w-xl lg:max-w-3xl z-10">
