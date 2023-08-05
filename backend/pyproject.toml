@@ -10,7 +10,6 @@ readme = "README.md"
 python = "^3.11"
 argon2-cffi = "21.3.0"
 beanie = "1.20.0"
-camel-converter = {version = "3.0.2", extras = ["pydantic"]}
 fastapi = {version = "0.99.1", extras = ["all"]}
 gunicorn = "21.2.0"
 httpx = "0.24.1"
