@@ -202,109 +202,126 @@
   });
 </script>
 
-<form
-  on:submit|preventDefault={handleSubmit}
-  class="w-full max-w-lg mx-auto my-10 p-5 rounded shadow"
->
-  <div class="flex flex-wrap -mx-3 mb-6">
-    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-      <Input
-        inputId="first-name"
-        labelText="First Name*"
-        placeholder="first name"
-        errorMessage="First Name is required."
-        isError={firstNameError}
-        bind:value={user.firstName}
-      />
-    </div>
-    <div class="w-full md:w-1/2 px-3">
-      <Input
-        inputId="last-name"
-        labelText="Last Name*"
-        placeholder="last name"
-        errorMessage="Last Name is required."
-        isError={lastNameError}
-        bind:value={user.lastName}
-      />
-    </div>
-  </div>
-  <div class="flex flex-wrap -mx-3 mb-6">
-    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-      <Input
-        inputId="user-name"
-        labelText="User Name*"
-        placeholder="user name"
-        errorMessage="User Name is required."
-        isError={userNameError}
-        bind:value={user.userName}
-      />
-    </div>
-    <div class="w-full md:w-1/2 px-3">
-      <Input
-        inputId="country"
-        labelText="Country"
-        placeholder="country"
-        bind:value={user.country}
-      />
-    </div>
-  </div>
-  <div class="flex flex-wrap -mx-3 mb-6">
-    <div class="w-full md:w-1/2 px-3">
-      <Input
-        inputId="password"
-        labelText="Password*"
-        placeholder="password"
-        errorMessage="Password is required."
-        isError={passwordError}
-        isPassword={true}
-        bind:value={user.password}
-      />
-    </div>
-    <div class="w-full md:w-1/2 px-3">
-      <Input
-        inputId="verify-password"
-        labelText="Verify Password*"
-        placeholder="verify password"
-        isPassword={true}
-        bind:value={user.verifyPassword}
-      />
-    </div>
-    {#if passwordVerifyError}
-      <div class="w-full text-center">
-        <ErrorMessage
-          errorMessageId="password-verify-error"
-          errorMessage="Passwords don't match"
-          showError={passwordVerifyError}
+<div class="page-fade-in">
+  <form
+    on:submit|preventDefault={handleSubmit}
+    class="w-full max-w-lg mx-auto my-10 p-5 rounded shadow"
+  >
+    <div class="flex flex-wrap -mx-3 mb-6">
+      <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+        <Input
+          inputId="first-name"
+          labelText="First Name*"
+          placeholder="first name"
+          errorMessage="First Name is required."
+          isError={firstNameError}
+          bind:value={user.firstName}
         />
       </div>
-    {/if}
-  </div>
-  <ErrorMessage
-    errorMessageId="generic-error"
-    errorMessage={genericErrorMessage}
-    showError={genericError}
-  />
-  <div class="flex items-center justify-between">
-    {#if $isLoggedIn}
-      <div class="ml-2">
-        <button class="btn btn-primary" type="submit" id="btn-save">Save</button>
+      <div class="w-full md:w-1/2 px-3">
+        <Input
+          inputId="last-name"
+          labelText="Last Name*"
+          placeholder="last name"
+          errorMessage="Last Name is required."
+          isError={lastNameError}
+          bind:value={user.lastName}
+        />
       </div>
-      <div>
-        <button class="btn btn-ghost" type="button" id="btn-log-out" on:click={() => logOut()}
-          >Log Out</button
-        >
+    </div>
+    <div class="flex flex-wrap -mx-3 mb-6">
+      <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+        <Input
+          inputId="user-name"
+          labelText="User Name*"
+          placeholder="user name"
+          errorMessage="User Name is required."
+          isError={userNameError}
+          bind:value={user.userName}
+        />
       </div>
-      <div>
-        <button class="btn btn-ghost" type="button" id="btn-delete" on:click={() => deleteUser()}
-          >Delete</button
-        >
+      <div class="w-full md:w-1/2 px-3">
+        <Input
+          inputId="country"
+          labelText="Country"
+          placeholder="country"
+          bind:value={user.country}
+        />
       </div>
-    {:else if $isLoading}
-      <div class="mt-6 text-center">
-        <span class="loading loading-spinner text-primary" id="sign-up-spinner" />
+    </div>
+    <div class="flex flex-wrap -mx-3 mb-6">
+      <div class="w-full md:w-1/2 px-3">
+        <Input
+          inputId="password"
+          labelText="Password*"
+          placeholder="password"
+          errorMessage="Password is required."
+          isError={passwordError}
+          isPassword={true}
+          bind:value={user.password}
+        />
       </div>
-    {:else}
-      <button class="btn btn-primary" type="submit" id="btn-sign-up">Sign Up</button>
-    {/if}
-  </div>
-</form>
+      <div class="w-full md:w-1/2 px-3">
+        <Input
+          inputId="verify-password"
+          labelText="Verify Password*"
+          placeholder="verify password"
+          isPassword={true}
+          bind:value={user.verifyPassword}
+        />
+      </div>
+      {#if passwordVerifyError}
+        <div class="w-full text-center">
+          <ErrorMessage
+            errorMessageId="password-verify-error"
+            errorMessage="Passwords don't match"
+            showError={passwordVerifyError}
+          />
+        </div>
+      {/if}
+    </div>
+    <ErrorMessage
+      errorMessageId="generic-error"
+      errorMessage={genericErrorMessage}
+      showError={genericError}
+    />
+    <div class="flex items-center justify-between">
+      {#if $isLoggedIn}
+        <div class="ml-2">
+          <button class="btn btn-primary" type="submit" id="btn-save">Save</button>
+        </div>
+        <div>
+          <button class="btn btn-ghost" type="button" id="btn-log-out" on:click={() => logOut()}
+            >Log Out</button
+          >
+        </div>
+        <div>
+          <button class="btn btn-ghost" type="button" id="btn-delete" on:click={() => deleteUser()}
+            >Delete</button
+          >
+        </div>
+      {:else if $isLoading}
+        <div class="mt-6 text-center">
+          <span class="loading loading-spinner text-primary" id="sign-up-spinner" />
+        </div>
+      {:else}
+        <button class="btn btn-primary" type="submit" id="btn-sign-up">Sign Up</button>
+      {/if}
+    </div>
+  </form>
+</div>
+
+<style>
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .page-fade-in {
+    animation: fadeIn 1s ease-in-out;
+  }
+</style>
