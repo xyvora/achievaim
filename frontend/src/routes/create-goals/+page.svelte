@@ -60,23 +60,16 @@
       loadingGenerate = false;
     }, 2000);
   }
-
-  import { blur } from 'svelte/transition';
-  let isOpen = false;
-
-  function toggleDropdown() {
-    isOpen = !isOpen;
-  }
 </script>
 
 <div class="page-fade-in">
-  <div class="container shadow-lg rounded-xl mb-4 mx-auto px-4 pt-5 md:max-w-xl lg:max-w-3xl z-10">
-    <div class="card w-full">
-      <div class="mb-5 flex items-center">
+  <div class="container z-10 px-4 pt-5 mx-auto mb-4 shadow-lg rounded-xl md:max-w-xl lg:max-w-3xl">
+    <div class="w-full card">
+      <div class="flex items-center mb-5">
         <!-- Flex container for alignment -->
-        <label class="block text-xl rounded-xl font-bold mb-2" for="goal">Goal</label>
+        <label class="block mb-2 text-xl font-bold rounded-xl" for="goal">Goal</label>
         <div class="dropdown dropdown-right">
-          <button tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info m-3">
+          <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -93,17 +86,21 @@
           </button>
           <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
             <!-- Removed button tag wrapping div -->
-            <div class="card-body text-primary text-left">
-              <p>Toggle left to unsave.</p>
-              <p>Generate Button above to give you another suggestion.</p>
-              <p>Toggle Right to Save.</p>
+            <div class="text-left normal-case card-body text-primary">
+              <p>Enter your SMART goal and any details e.g. Exercise to get healthier</p>
+              <p>Click Generate to have AchievAIm suggest the SMART details</p>
+              <p>Toggle Right to Lock on the details you like →</p>
+              <p>
+                ← Toggle Left to Unlock and press Generate again to give you another suggestion for
+                that specific SMART detail
+              </p>
             </div>
           </div>
         </div>
       </div>
       <!-- Flex container ends here -->
       <input
-        class="shadow appearance-none border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+        class="w-full px-3 py-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline"
         id="goal"
         type="text"
         placeholder="What's your SMART Goal? e.g. Exercise"
@@ -115,37 +112,34 @@
         showError={goalError}
       />
 
-      <div class="mt-3 flex flex-col items-left">
-        <button id="generate" class="btn btn-primary" on:click={handleClick}>Generate</button>
+      <div class="flex flex-col mt-3 items-left">
+        <button id="generate" class="btn rounded-xl btn-primary" on:click={handleClick}
+          >Generate</button
+        >
         {#if loadingGenerate}
-          <div class="mt-3 flex justify-center items-center">
+          <div class="flex items-center justify-center mt-3">
             <span class="loading loading-infinity loading-md" />
           </div>
         {/if}
       </div>
     </div>
-
     <!-- Specific card -->
-    <div class="card w-full p-4 card-body flex flex-col">
-      <h2 class="card-title mb-2">Specific</h2>
-      <div class="flex flex-col md:flex-row w-full">
+    <div class="flex flex-col w-full p-4 card card-body">
+      <h2 class="mb-2 card-title">Specific</h2>
+      <div class="flex flex-col w-full md:flex-row">
         <input
           id="specific"
-          class="shadow appearance-none border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+          class="flex-grow w-full px-3 py-2 mb-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline md:mb-0"
           type="text"
           placeholder="AchievAIm's Specific suggestion. e.g. 15 min daily exercise."
           bind:value={goal.specific}
         />
         <label
-          class="cursor-pointer label flex items-center md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end"
+          class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
         >
           <input type="checkbox" class="toggle toggle-primary" />
           <div class="dropdown dropdown-end">
-            <button
-              tabindex="0"
-              class="btn btn-circle btn-ghost btn-xs text-info m-3"
-              on:click={toggleDropdown}
-            >
+            <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -159,41 +153,38 @@
                   d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              {#if isOpen}
-                <div
-                  transition:blur
-                  class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64 absolute"
-                >
-                  <div class="card-body text-primary text-left">
-                    <p>Toggle left to unsave.</p>
-                    <p>Generate Button above to give you another suggestion.</p>
-                    <p>Toggle Right to Save.</p>
+
+              <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
+                <div class="text-left card-body text-primary normal-case">
+                  <p>← Toggle Left to unlock</p>
+                  <div class="text-right text-primary normal-case">
+                    <p>Toggle Right to Lock →</p>
                   </div>
                 </div>
-              {/if}
-            </button>
+              </div></button
+            >
           </div>
         </label>
       </div>
     </div>
 
     <!-- Measurable card -->
-    <div class="card w-full p-4 card-body flex flex-col">
-      <h2 class="card-title mb-2">Measurable</h2>
-      <div class="flex flex-col md:flex-row w-full">
+    <div class="flex flex-col w-full p-4 card card-body">
+      <h2 class="mb-2 card-title">Measurable</h2>
+      <div class="flex flex-col w-full md:flex-row">
         <input
           id="measurable"
-          class="shadow appearance-none border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+          class="flex-grow w-full px-3 py-2 mb-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline md:mb-0"
           type="text"
           placeholder="AchievAIm's Measurable suggestion. e.q. Track consecutive days."
           bind:value={goal.measurable}
         />
         <label
-          class="cursor-pointer label flex items-center md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end"
+          class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
         >
           <input type="checkbox" class="toggle toggle-primary" />
           <div class="dropdown dropdown-end">
-            <button tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info m-3">
+            <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -207,221 +198,225 @@
                   d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <button class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
-                <div class="card-body text-primary text-left">
-                  <p>Toggle left to unsave.</p>
-                  <p>Generate Button above to give you another suggestion.</p>
-                  <p>Toggle Right to Save.</p>
+              <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
+                <div class="text-left card-body text-primary normal-case">
+                  <p>← Toggle Left to unlock</p>
+                  <div class="text-right text-primary normal-case">
+                    <p>Toggle Right to Lock →</p>
+                  </div>
                 </div>
-              </button>
-            </button>
+              </div></button
+            >
           </div>
         </label>
       </div>
+    </div>
 
-      <!-- Attainable card -->
-      <div class="card w-full p-4 card-body flex flex-col">
-        <h2 class="card-title mb-2">Attainable</h2>
-        <div class="flex flex-col md:flex-row w-full">
-          <input
-            id="attainable"
-            class="shadow appearance-none border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
-            type="text"
-            placeholder="AchievAIm's Attainable suggestion. e.g. Find enjoyable activities."
-            bind:value={goal.attainable}
-          />
-          <label
-            class="cursor-pointer label flex items-center md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end"
-          >
-            <input type="checkbox" class="toggle toggle-primary" />
-            <div class="dropdown dropdown-end">
-              <button tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info m-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  class="w-4 h-4 stroke-primary"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <button class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
-                  <div class="card-body text-primary text-left">
-                    <p>Toggle left to unsave.</p>
-                    <p>Generate Button above to give you another suggestion.</p>
-                    <p>Toggle Right to Save.</p>
-                  </div>
-                </button>
-              </button>
-            </div>
-          </label>
-        </div>
-      </div>
-
-      <!-- Relevant card -->
-      <div class="card w-full p-4 card-body flex flex-col">
-        <h2 class="card-title mb-2">Relevant</h2>
-        <div class="flex flex-col md:flex-row w-full">
-          <input
-            id="relevant"
-            class="shadow appearance-none border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
-            type="text"
-            placeholder="AchievAIm's Relevant suggestion. e.g. Improve fitness."
-            bind:value={goal.relevant}
-          />
-          <label
-            class="cursor-pointer label flex items-center md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end"
-          >
-            <input type="checkbox" class="toggle toggle-primary" />
-            <div class="dropdown dropdown-end">
-              <button tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info m-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  class="w-4 h-4 stroke-primary"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <button class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
-                  <div class="card-body text-primary text-left">
-                    <p>Toggle left to unsave.</p>
-                    <p>Generate Button above to give you another suggestion.</p>
-                    <p>Toggle Right to Save.</p>
-                  </div>
-                </button>
-              </button>
-            </div>
-          </label>
-        </div>
-      </div>
-
-      <!-- Time-Bound card -->
-      <div class="card w-full p-4 card-body flex flex-col">
-        <h2 class="card-title mb-2">Time-Bound</h2>
-        <div class="flex flex-col md:flex-row w-full">
-          <input
-            id="time-bound"
-            class="shadow appearance-none border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
-            type="text"
-            placeholder="AchievAIm's Time-Bound suggestion. e.g. 30 consecutive days."
-            bind:value={goal.time_bound}
-          />
-          <label
-            class="cursor-pointer label flex items-center md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end"
-          >
-            <input type="checkbox" class="toggle toggle-primary" />
-            <div class="dropdown dropdown-end">
-              <button tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info m-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  class="w-4 h-4 stroke-primary"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <button class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
-                  <div class="card-body text-primary text-left">
-                    <p>Toggle left to unsave.</p>
-                    <p>Generate Button above to give you another suggestion.</p>
-                    <p>Toggle Right to Save.</p>
-                  </div>
-                </button>
-              </button>
-            </div>
-          </label>
-        </div>
-      </div>
-
-      <div class="mt-3 flex flex-col items-center">
-        <div class="card w-full">
-          <figure>
-            <figcaption class="p-4 card-body flex flex-col items-center">
-              {#if goal.days_of_week}
-                <div class="flex justify-between items-center w-full">
-                  <h2 class="card-title mb-2">Days</h2>
-
-                  <div class="flex items-center">
-                    <label for="selectAll" class="cursor-pointer label flex items-center">
-                      <input
-                        type="checkbox"
-                        class="toggle toggle-primary"
-                        id="selectAll"
-                        bind:checked={selectAll}
-                        on:click={toggleAll}
-                      />
-                      <label
-                        class="cursor-pointer label flex items-center md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end"
-                      >
-                        <div class="dropdown dropdown-end">
-                          <button
-                            tabindex="0"
-                            class="btn btn-circle btn-ghost btn-xs text-info m-3"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              class="w-4 h-4 stroke-primary"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
-                            </svg>
-                            <button
-                              class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64"
-                            >
-                              <div class="card-body text-primary text-left">
-                                <p>These are the days of the week your goals repeat</p>
-                                <p>Toggle right to select all</p>
-                              </div>
-                            </button></button
-                          >
-                        </div>
-                      </label></label
-                    >
+    <!-- Attainable card -->
+    <div class="flex flex-col w-full p-4 card card-body">
+      <h2 class="mb-2 card-title">Attainable</h2>
+      <div class="flex flex-col w-full md:flex-row">
+        <input
+          id="attainable"
+          class="flex-grow w-full px-3 py-2 mb-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline md:mb-0"
+          type="text"
+          placeholder="AchievAIm's Attainable suggestion. e.g. Find enjoyable activities."
+          bind:value={goal.attainable}
+        />
+        <label
+          class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
+        >
+          <input type="checkbox" class="toggle toggle-primary" />
+          <div class="dropdown dropdown-end">
+            <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="w-4 h-4 stroke-primary"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
+                <div class="text-left card-body text-primary normal-case">
+                  <p>← Toggle Left to unlock</p>
+                  <div class="text-right text-primary normal-case">
+                    <p>Toggle Right to Lock →</p>
                   </div>
                 </div>
-                <DaysOfWeekSelector daysOfWeek={goal.days_of_week} />
-              {/if}
-            </figcaption>
-          </figure>
-        </div>
+              </div></button
+            >
+          </div>
+        </label>
       </div>
+    </div>
 
-      <div class="card w-full">
+    <!-- Relevant card -->
+    <div class="flex flex-col w-full p-4 card card-body">
+      <h2 class="mb-2 card-title">Relevant</h2>
+      <div class="flex flex-col w-full md:flex-row">
+        <input
+          id="relevant"
+          class="flex-grow w-full px-3 py-2 mb-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline md:mb-0"
+          type="text"
+          placeholder="AchievAIm's Relevant suggestion. e.g. Improve fitness."
+          bind:value={goal.relevant}
+        />
+        <label
+          class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
+        >
+          <input type="checkbox" class="toggle toggle-primary" />
+          <div class="dropdown dropdown-end">
+            <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="w-4 h-4 stroke-primary"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
+                <div class="text-left card-body text-primary normal-case">
+                  <p>← Toggle Left to unlock</p>
+                  <div class="text-right text-primary normal-case">
+                    <p>Toggle Right to Lock →</p>
+                  </div>
+                </div>
+              </div></button
+            >
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Time-Bound card -->
+    <div class="flex flex-col w-full p-4 card card-body">
+      <h2 class="mb-2 card-title">Time-Bound</h2>
+      <div class="flex flex-col w-full md:flex-row">
+        <input
+          id="time-bound"
+          class="flex-grow w-full px-3 py-2 mb-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline md:mb-0"
+          type="text"
+          placeholder="AchievAIm's Time-Bound suggestion. e.g. 30 consecutive days."
+          bind:value={goal.time_bound}
+        />
+        <label
+          class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
+        >
+          <input type="checkbox" class="toggle toggle-primary" />
+          <div class="dropdown dropdown-end">
+            <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="w-4 h-4 stroke-primary"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
+                <div class="text-left card-body text-primary normal-case">
+                  <p>← Toggle Left to unlock</p>
+                  <div class="text-right text-primary normal-case">
+                    <p>Toggle Right to Lock →</p>
+                  </div>
+                </div>
+              </div></button
+            >
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="flex flex-col items-center mt-3">
+      <div class="w-full card">
         <figure>
-          <figcaption class="p-4 card-body flex flex-row items-center">
-            <h2 class="card-title mb-2">Time</h2>
-            <div class="flex-grow flex items-center">
+          <figcaption class="flex flex-col items-center p-4 card-body">
+            {#if goal.days_of_week}
+              <div class="flex items-center justify-between w-full">
+                <h2 class="mb-2 card-title">Days</h2>
+
+                <div class="flex items-center">
+                  <label for="selectAll" class="flex items-center cursor-pointer label">
+                    <input
+                      type="checkbox"
+                      class="toggle toggle-primary"
+                      id="selectAll"
+                      bind:checked={selectAll}
+                      on:click={toggleAll}
+                    />
+                    <label
+                      class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
+                    >
+                      <div class="dropdown dropdown-end">
+                        <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            class="w-4 h-4 stroke-primary"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                          <div
+                            class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64"
+                          >
+                            <div class="text-left card-body text-primary normal-case">
+                              <p>These are the days of the week your goals repeat</p>
+                              <div class="text-right text-primary normal-case">
+                                <p>Toggle right to select all →</p>
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      </div>
+                    </label>
+                  </label>
+                </div>
+              </div>
+              <DaysOfWeekSelector daysOfWeek={goal.days_of_week} />
+            {/if}
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+    <div class="flex flex-col items-center mt-3">
+      <div class="w-full card">
+        <figure>
+          <figcaption class="flex flex-row items-center p-4 card-body">
+            <h2 class="mb-2 card-title">Time</h2>
+            <div class="flex items-center flex-grow">
               <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                class="w-full px-3 py-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline"
                 id="goal-time"
                 type="time"
                 bind:value={goal.time_of_day}
                 aria-describedby="time-description"
               />
-              <div class="dropdown dropdown-end md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end">
+              <div class="justify-end w-full mt-2 dropdown dropdown-end md:ml-2 md:mt-0 md:w-auto">
                 <!-- Replaced label tag with div -->
-                <button tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info m-3">
+                <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -437,7 +432,7 @@
                   </svg>
                   <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
                     <!-- Removed button tag wrapping div -->
-                    <div class="card-body text-primary text-left">
+                    <div class="text-left card-body text-primary normal-case">
                       <p>Set the alert time for your SMART goals for selected days above.</p>
                     </div>
                   </div>
@@ -448,21 +443,21 @@
         </figure>
       </div>
 
-      <div class="card w-full">
+      <div class="w-full card">
         <figure>
-          <figcaption class="p-4 card-body flex flex-row items-center">
-            <h2 class="card-title mb-2">Date</h2>
-            <div class="flex-grow flex items-center relative">
+          <figcaption class="flex flex-row items-center p-4 card-body">
+            <h2 class="mb-2 card-title">Date</h2>
+            <div class="relative flex items-center flex-grow">
               <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                class="w-full px-3 py-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline"
                 id="goal-date"
                 type="date"
                 bind:value={goal.date_for_achievement}
                 aria-describedby="date-description"
               />
-              <div class="dropdown dropdown-end md:ml-2 mt-2 md:mt-0 w-full md:w-auto justify-end">
+              <div class="justify-end w-full mt-2 dropdown dropdown-end md:ml-2 md:mt-0 md:w-auto">
                 <!-- Replaced label tag with div -->
-                <button tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info m-3">
+                <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -478,7 +473,7 @@
                   </svg>
                   <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
                     <!-- Removed button tag wrapping div -->
-                    <div class="card-body text-primary text-left">
+                    <div class="text-left card-body text-primary normal-case">
                       <p>Choose the Date for Completing Your SMART Goal.</p>
                     </div>
                   </div>
@@ -488,13 +483,14 @@
           </figcaption>
         </figure>
       </div>
-      <div class="mt-3 flex flex-col items-left">
-        <button class="btn btn-primary" on:click={handleSave}>Save Smart Goal</button>
+      <div class="flex flex-col mt-3 items-left">
+        <button class="btn rounded-xl btn-primary" on:click={handleSave}>Save Smart Goal</button>
       </div>
     </div>
-  </div>
-  <div class="flex">
-    <div class="divider" />
+
+    <div class="flex">
+      <div class="divider" />
+    </div>
   </div>
 </div>
 
