@@ -230,3 +230,12 @@ async def test_update_goal_duplicate_goal(test_client, user_data, user_token_hea
     goal_data["goal"] = user_data["goals"][1]
     response = await test_client.put("goal/", json=goal_data, headers=user_token_headers)
     assert response.status_code == 422
+
+
+@pytest.mark.parametrize("temperature", [-1.0, 2.1])
+@pytest.mark.usefixtures("user_no_goals")
+async def test_openai_goal_invalid_temperature(temperature, test_client, user_token_headers):
+    data = {"goal": "exercise", "temperature": temperature}
+    response = await test_client.post("goal/openai-goal", headers=user_token_headers, json=data)
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Temperature must be between 0 and 2"

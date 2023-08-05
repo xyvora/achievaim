@@ -5,9 +5,11 @@
 
 export type { Body_login_access_token_api_v1_login_access_token_post } from './models/Body_login_access_token_api_v1_login_access_token_post';
 export type { DaysOfWeek } from './models/DaysOfWeek';
+export type { DesiredGoal } from './models/DesiredGoal';
 export type { Goal } from './models/Goal';
 export type { GoalCreate } from './models/GoalCreate';
 export type { HTTPValidationError } from './models/HTTPValidationError';
+export type { SmartGoal } from './models/SmartGoal';
 export type { Token } from './models/Token';
 export type { UserCreate } from './models/UserCreate';
 export type { UserNoPassword } from './models/UserNoPassword';

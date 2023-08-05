@@ -7,6 +7,8 @@ from fastapi import APIRouter as FastAPIRouter
 from fastapi.types import DecoratedCallable
 
 from app.api.deps import logger
+from app.models.openai import GoalSuggestion
+from app.models.smart_goal import SmartGoal
 
 
 class APIRouter(FastAPIRouter):
@@ -30,6 +32,29 @@ class APIRouter(FastAPIRouter):
             return add_path(func)
 
         return decorator
+
+
+def process_openai_to_smart_goal(goal: GoalSuggestion) -> SmartGoal:
+    goal_info = goal.choices[0].message.content.split("\n")
+    smart_goal: dict[str, str] = {}
+    for info in goal_info:
+        info_parts = info.split(": ", maxsplit=1)
+
+        match info_parts[0]:
+            case "SMART Goal":
+                smart_goal["goal"] = info_parts[1]
+            case "Specific":
+                smart_goal["specific"] = info_parts[1]
+            case "Measurable":
+                smart_goal["measurable"] = info_parts[1]
+            case "Achievable":
+                smart_goal["achievable"] = info_parts[1]
+            case "Relevant":
+                smart_goal["relevant"] = info_parts[1]
+            case "Time-bound":
+                smart_goal["time_bound"] = info_parts[1]
+
+    return SmartGoal(**smart_goal)
 
 
 def str_to_oid(id_str: str) -> ObjectId:
