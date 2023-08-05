@@ -1,160 +1,415 @@
 <script lang="ts">
-  import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
-  import type { DaysOfWeek } from '$lib/generated';
-
-  let daysOfWeek: DaysOfWeek = {
-    monday: false,
-    tuesday: false,
-    wednesday: false,
-    thursday: false,
-    friday: false,
-    saturday: false,
-    sunday: false
+  type DaysOfWeek = {
+    monday: boolean;
+    tuesday: boolean;
+    wednesday: boolean;
+    thursday: boolean;
+    friday: boolean;
+    saturday: boolean;
+    sunday: boolean;
   };
 
-  let goalDate: string;
-  let goalTime: string;
+  type Goal = {
+    days_of_week: DaysOfWeek;
+    date_for_achievement?: string;
+    time_of_day?: string;
+  };
+
+  let goal: Goal = {
+    days_of_week: {
+      monday: false,
+      tuesday: false,
+      wednesday: false,
+      thursday: false,
+      friday: false,
+      saturday: false,
+      sunday: false
+    }
+  };
+
+  import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
+  import { page } from '$app/stores';
 </script>
 
-<div class="grid grid-cols-2 gap-5">
-  <div
-    class="container pd-4 pb-4 rounded-xl shadow mx-auto px-4 pt-5 md:max-w-xl lg:max-w-3xl z-10"
-  >
-    <div class="card rounded-xl">
-      <figure>
-        <figcaption class="p-4 card-body">
-          <div class="mb-5 primary">
-            <label class="block text-xl font-bold mb-2" for="goal">Goal</label>
-            <div
-              class="shadow appearance-none rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-              id="goal"
-            >
-              Smart Goal
-            </div>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <!-- Specific card -->
-            <div class="card">
-              <figure>
-                <figcaption class="p-4 card-body">
-                  <h2 class="card-title">Specific</h2>
-                  <div
-                    id="specific"
-                    class="shadow appearance-none rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                  >
-                    Specific Goal Information
-                  </div>
-                </figcaption>
-              </figure>
-            </div>
-            <!-- Measurable card -->
-            <div class="card">
-              <figure>
-                <figcaption class="p-4 card-body">
-                  <h2 class="card-title">Measurable</h2>
-                  <div
-                    id="measurable"
-                    class="shadow appearance-none rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                  >
-                    Measurable Goal information
-                  </div>
-                </figcaption>
-              </figure>
-            </div>
-            <!-- Attainable card -->
-            <div class="card">
-              <figure>
-                <figcaption class="p-4 card-body">
-                  <h2 class="card-title">Attainable</h2>
-                  <div
-                    id="attainable"
-                    class="shadow appearance-none rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                  >
-                    Attainable Goal information
-                  </div>
-                </figcaption>
-              </figure>
-            </div>
-            <!-- Relevant card -->
-            <div class="card">
-              <figure>
-                <figcaption class="p-4 card-body">
-                  <h2 class="card-title">Relevant</h2>
-                  <div
-                    id="relevant"
-                    class="shadow appearance-none rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                  >
-                    Relevant Goal information
-                  </div>
-                </figcaption>
-              </figure>
-            </div>
-            <!-- Time-Bound card -->
-            <div class="card">
-              <figure>
-                <figcaption class="p-4 card-body">
-                  <h2 class="card-title">Time-Bound</h2>
-                  <div
-                    id="time-bound"
-                    class="shadow appearance-none rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                  >
-                    Time-Bound Goal information
-                  </div>
-                </figcaption>
-              </figure>
-            </div>
-          </div>
-        </figcaption>
-      </figure>
+<div class="container mx-auto px-4 py-8">
+  <!-- The 'container' class sets a max-width and centers the content horizontally -->
 
-      <div class="card">
-        <figure>
-          <figcaption class="p-4 card-body">
-            <figure class="flex flex-col md:flex-row">
-              <div class="mt-4 p-4 flex flex-col items-left">
-                <span class="block text-xl font-bold mb-2">Days Your SMART Goal Repeats:</span>
-                <DaysOfWeekSelector {daysOfWeek} />
-              </div>
+  <div class="md:flex md:space-x-4">
+    <!-- Left Column (Cards will appear above each other on smaller screens) -->
+    <div class="md:w-1/2 md:mb-0 mb-4 md:pr-2">
+      <h2 class="text-xl font-bold mb-2">Active</h2>
 
-              <div class="card">
-                <figure>
-                  <figcaption class="p-4 card-body">
-                    <div class="card">
-                      <figure>
-                        <figcaption class="p-4 card-body">
-                          <label class="block text-lg font-bold mb-2 mt-4" for="goal-time">
-                            Time for Your SMART Goal Alert:
-                          </label>
-                          <input
-                            bind:value={goalTime}
-                            class="shadow text-left appearance-none rounded-xl w-52 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                            id="goal-time"
-                            type="time"
-                          />
-
-                          <label class="block text-lg font-bold mb-2" for="goal-date">
-                            Date for Completing Your SMART Goal:
-                          </label>
-                          <input
-                            bind:value={goalDate}
-                            class="shadow appearance-none rounded-xl w-52 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                            id="goal-date"
-                            type="date"
-                          />
-                        </figcaption>
-                      </figure>
-                    </div>
-                  </figcaption>
-                </figure>
-              </div>
+      <!-- Card 1 -->
+      <div
+        class="container shadow-lg rounded-xl mb-4 mx-auto px-4 pt-5 md:max-w-xl lg:max-w-3xl z-10"
+      >
+        <div class="mb-5">
+          <div class="card w-full">
+            <figure>
+              <figcaption class="p-4 card-body flex flex-col">
+                <div class="flex items-center mb-2">
+                  <a
+                    href="/edit-goal"
+                    aria-label="edit-goal"
+                    title="Edit Goal"
+                    class="{$page.url.pathname === '/edit-goal'
+                      ? 'rounded bg-white'
+                      : ''} block text-xl font-bold mr-2"
+                  >
+                    Goal
+                  </a>
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4 stroke-current text-info mr-1"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                      />
+                    </svg>
+                    <span class="text-xs text-gray-500 italic">Click Goal to edit</span>
+                  </div>
+                </div>
+                <div
+                  class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                >
+                  What's your SMART Goal?
+                </div>
+              </figcaption>
             </figure>
-          </figcaption>
-        </figure>
+          </div>
+        </div>
+
+        <!-- Specific card -->
+        <div class="card w-full">
+          <figure>
+            <figcaption class="p-4 card-body flex flex-col">
+              <h2 class="card-title mb-2">Specific</h2>
+              <div class="flex flex-col md:flex-row w-full">
+                <div
+                  class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+                >
+                  AchievAIm's Specific suggestion
+                </div>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+
+        <!-- Measurable card -->
+        <div class="card w-full">
+          <figure>
+            <figcaption class="p-4 card-body flex flex-col">
+              <h2 class="card-title mb-2">Measurable</h2>
+              <div class="flex flex-col md:flex-row w-full">
+                <div
+                  class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+                >
+                  AchievAIm's Measurable suggestion
+                </div>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+
+        <!-- Attainable card -->
+        <div class="card w-full">
+          <figure>
+            <figcaption class="p-4 card-body flex flex-col">
+              <h2 class="card-title mb-2">Attainable</h2>
+              <div class="flex flex-col md:flex-row w-full">
+                <div
+                  class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+                >
+                  AchievAIm's Attainable suggestion
+                </div>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+
+        <!-- Relevant card -->
+        <div class="card w-full">
+          <figure>
+            <figcaption class="p-4 card-body flex flex-col">
+              <h2 class="card-title mb-2">Relevant</h2>
+              <div class="flex flex-col md:flex-row w-full">
+                <div
+                  class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+                >
+                  AchievAIm's Relevant suggestion
+                </div>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+
+        <!-- Time-Bound card -->
+        <div class="card w-full">
+          <figure>
+            <figcaption class="p-4 card-body flex flex-col">
+              <h2 class="card-title mb-2">Time-Bound</h2>
+              <div class="flex flex-col md:flex-row w-full">
+                <div
+                  class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+                >
+                  AchievAIm's Time-Bound suggestion
+                </div>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="mt-3 flex flex-col items-center">
+          <div class="card w-full">
+            <figure>
+              <figcaption class="p-4 card-body flex flex-col items-center">
+                {#if goal.days_of_week}
+                  <div class="flex justify-between items-center w-full">
+                    <h2 class="card-title mb-2">Days</h2>
+                  </div>
+                  <DaysOfWeekSelector daysOfWeek={goal.days_of_week} />
+                {/if}
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <div class="card w-full">
+          <figure>
+            <figcaption class="p-4 card-body flex flex-row items-center">
+              <h2 class="card-title mb-2">Date</h2>
+              <div class="flex-grow flex items-center relative">
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                  id="goal-date"
+                  type="date"
+                  bind:value={goal.date_for_achievement}
+                  aria-describedby="date-description"
+                  readonly
+                />
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="card w-full">
+          <figure>
+            <figcaption class="p-4 card-body flex flex-row items-center">
+              <h2 class="card-title mb-2">Time</h2>
+              <div class="flex-grow flex items-center">
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                  id="goal-time"
+                  type="time"
+                  bind:value={goal.time_of_day}
+                  aria-describedby="time-description"
+                  readonly
+                />
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="w-full bg-white rounded-xl p-4 shadow-md mb-4">
+        <!-- Content for Card 2 -->
+        <p>Card 2</p>
       </div>
     </div>
-  </div>
 
-  <div class="flex">
-    <div class="divider" />
+    <!-- Right Column -->
+    <div class="md:w-1/2 md:ml-4 md:pl-2">
+      <h2 class="text-xl font-bold mb-2">Completed</h2>
+
+      <!-- Card 3 -->
+      <div
+        class="container shadow-lg rounded-xl mb-4 mx-auto px-4 pt-5 md:max-w-xl lg:max-w-3xl z-10"
+      >
+        <div class="mb-5">
+          <div class="card w-full">
+            <figure>
+              <figcaption class="p-4 card-body flex flex-col">
+                <div class="flex items-center mb-2">
+                  <a
+                    href="/edit-goal"
+                    aria-label="edit-goal"
+                    title="Edit Goal"
+                    class="{$page.url.pathname === '/edit-goal'
+                      ? 'rounded bg-white'
+                      : ''} block text-xl font-bold mr-2"
+                  >
+                    Goal
+                  </a>
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      class="w-4 h-4 stroke-current text-info mr-1"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                      />
+                    </svg>
+                    <span class="text-xs text-gray-500 italic">Click Goal to edit</span>
+                  </div>
+                </div>
+                <div
+                  class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                >
+                  What's your SMART Goal?
+                </div>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <!-- Specific card -->
+        <div class="card w-full">
+          <figure>
+            <figcaption class="p-4 card-body flex flex-col">
+              <h2 class="card-title mb-2">Specific</h2>
+              <div class="flex flex-col md:flex-row w-full">
+                <div
+                  class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+                >
+                  AchievAIm's Specific suggestion
+                </div>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+
+        <!-- Measurable card -->
+        <div class="card w-full">
+          <figure>
+            <figcaption class="p-4 card-body flex flex-col">
+              <h2 class="card-title mb-2">Measurable</h2>
+              <div class="flex flex-col md:flex-row w-full">
+                <div
+                  class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+                >
+                  AchievAIm's Measurable suggestion
+                </div>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+
+        <!-- Attainable card -->
+        <div class="card w-full">
+          <figure>
+            <figcaption class="p-4 card-body flex flex-col">
+              <h2 class="card-title mb-2">Attainable</h2>
+              <div class="flex flex-col md:flex-row w-full">
+                <div
+                  class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+                >
+                  AchievAIm's Attainable suggestion
+                </div>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+
+        <!-- Relevant card -->
+        <div class="card w-full">
+          <figure>
+            <figcaption class="p-4 card-body flex flex-col">
+              <h2 class="card-title mb-2">Relevant</h2>
+              <div class="flex flex-col md:flex-row w-full">
+                <div
+                  class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+                >
+                  AchievAIm's Relevant suggestion
+                </div>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+
+        <!-- Time-Bound card -->
+        <div class="card w-full">
+          <figure>
+            <figcaption class="p-4 card-body flex flex-col">
+              <h2 class="card-title mb-2">Time-Bound</h2>
+              <div class="flex flex-col md:flex-row w-full">
+                <div
+                  class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+                >
+                  AchievAIm's Time-Bound suggestion
+                </div>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="mt-3 flex flex-col items-center">
+          <div class="card w-full">
+            <figure>
+              <figcaption class="p-4 card-body flex flex-col items-center">
+                {#if goal.days_of_week}
+                  <div class="flex justify-between items-center w-full">
+                    <h2 class="card-title mb-2">Days</h2>
+                  </div>
+                  <DaysOfWeekSelector daysOfWeek={goal.days_of_week} />
+                {/if}
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <div class="card w-full">
+          <figure>
+            <figcaption class="p-4 card-body flex flex-row items-center">
+              <h2 class="card-title mb-2">Date</h2>
+              <div class="flex-grow flex items-center relative">
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                  id="goal-date"
+                  type="date"
+                  bind:value={goal.date_for_achievement}
+                  aria-describedby="date-description"
+                  readonly
+                />
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="card w-full">
+          <figure>
+            <figcaption class="p-4 card-body flex flex-row items-center">
+              <h2 class="card-title mb-2">Time</h2>
+              <div class="flex-grow flex items-center">
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                  id="goal-time"
+                  type="time"
+                  bind:value={goal.time_of_day}
+                  aria-describedby="time-description"
+                  readonly
+                />
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="w-full bg-white rounded-xl p-4 shadow-md mb-4">
+        <!-- Content for Card 4 -->
+        <p>Card 4</p>
+      </div>
+    </div>
   </div>
 </div>
