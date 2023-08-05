@@ -4,7 +4,7 @@
   console.log(error);
 </script>
 
-<section class="bg-white dark:bg-gray-900">
+<section class="bg-gradient-to-b from-primary to-transparent">
   <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
     <div class="mx-auto max-w-screen-sm text-center">
       <h1
