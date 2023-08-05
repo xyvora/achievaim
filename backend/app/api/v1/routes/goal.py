@@ -198,4 +198,4 @@ async def openai_goal(goal: GoalSuggestionCreate, current_user: CurrentUser) -> 
             detail="An error occurred while generating the goal suggestions",
         )
 
-    return process_openai_to_smart_goal(response)
+    return process_openai_to_smart_goal(response, goal)
