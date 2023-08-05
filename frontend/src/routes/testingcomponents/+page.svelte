@@ -1,85 +1,207 @@
 <script lang="ts">
-  import type { Goals } from '$lib/types';
-  import { goto } from '$app/navigation';
-
-  let goals: Goals = {
-    active: [
-      {
-        name: 'Goal 1',
-        details: 'S.M.A.R.T details here',
-        date: new Date('2024-01-01T10:00:00'),
-        days: [10],
-        editing: false
-      }
-    ],
-    completed: [
-      {
-        name: 'Goal 2',
-        details: 'S.M.A.R.T details here',
-        date: new Date('2024-01-02T14:00:00'),
-        days: [15],
-        editing: false
-      }
-    ]
+  type DaysOfWeek = {
+    monday: boolean;
+    tuesday: boolean;
+    wednesday: boolean;
+    thursday: boolean;
+    friday: boolean;
+    saturday: boolean;
+    sunday: boolean;
   };
 
-  function capitalizeFirstLetter(string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
+  type Goal = {
+    days_of_week: DaysOfWeek;
+    date_for_achievement?: string;
+    time_of_day?: string;
+  };
+
+  let goal: Goal = {
+    days_of_week: {
+      monday: false,
+      tuesday: false,
+      wednesday: false,
+      thursday: false,
+      friday: false,
+      saturday: false,
+      sunday: false
+    }
+  };
+
+  import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
+  import { page } from '$app/stores';
 </script>
 
-<div class="flex flex-col items-center justify-center h-screen">
-  <div
-    class="flex flex-wrap -mx-2 overflow-hidden sm:-mx-3 md:-mx-3 lg:-mx-4 xl:-mx-4 justify-center"
-  >
-    {#each Object.entries(goals) as [category, value]}
-      <div
-        class="my-2 px-2 w-full overflow-hidden sm:my-2 sm:px-2 sm:w-1/2 md:my-3 md:px-3 md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3 xl:my-4 xl:px-4 xl:w-1/3"
-      >
-        <div class="text-lg font-bold mb-4">{capitalizeFirstLetter(category)}</div>
-        {#each value as goal (goal.name)}
-          <div class="rounded-lg p-6 mb-4 bg-white shadow-sm border border-gray-200 space-y-4">
-            <button
-              class="text-neutral font-bold text-xl mb-2 cursor-pointer"
-              on:click={() => goto(`/creategoals/${goal.name}`)}
+<div class="container shadow-lg rounded-xl mb-4 mx-auto px-4 pt-5 md:max-w-xl lg:max-w-3xl z-10">
+  <div class="mb-5">
+    <div class="card w-full">
+      <figure>
+        <figcaption class="p-4 card-body flex flex-col">
+          <div class="flex items-center mb-2">
+            <a
+              href="/edit-goal"
+              aria-label="edit-goal"
+              title="Edit Goal"
+              class="{$page.url.pathname === '/edit-goal'
+                ? 'rounded bg-white'
+                : ''} block text-xl font-bold mr-2"
             >
-              {goal.name}
-            </button>
-            <div class="text-base text-gray-900 font-bold my-2">S.M.A.R.T</div>
-            <p class="text-gray-900"><strong>Specific:</strong> {goal.specific}</p>
-            <p class="text-gray-900"><strong>Measurable:</strong> {goal.measurable}</p>
-            <p class="text-gray-900"><strong>Attainable:</strong> {goal.attainable}</p>
-            <p class="text-gray-900"><strong>Relevant:</strong> {goal.relevant}</p>
-            <p class="text-gray-900"><strong>Time-Bound:</strong> {goal.timeBound}</p>
-            <div class="grid grid-cols-2 gap-2 text-sm text-gray-500 mt-4">
-              <div><strong>Date:</strong></div>
-              <div>{goal.date}</div>
-              <div><strong>Days:</strong></div>
-              <div>
-                <div class="flex flex-row">
-                  {#each goal.days as day}<span class="mx-1">{day}</span>{/each}
-                </div>
-              </div>
-              <div><strong>Time:</strong></div>
-              <div>{goal.time}</div>
+              Goal
+            </a>
+            <div class="flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="w-4 h-4 stroke-current text-info mr-1"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                />
+              </svg>
+              <span class="text-xs text-gray-500 italic">Click Goal to edit</span>
             </div>
           </div>
-        {/each}
-      </div>
-    {/each}
+          <div
+            class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+          >
+            What's your SMART Goal?
+          </div>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Specific card -->
+  <div class="card w-full">
+    <figure>
+      <figcaption class="p-4 card-body flex flex-col">
+        <h2 class="card-title mb-2">Specific</h2>
+        <div class="flex flex-col md:flex-row w-full">
+          <div
+            class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+          >
+            AchievAIm's Specific suggestion
+          </div>
+        </div>
+      </figcaption>
+    </figure>
+  </div>
+
+  <!-- Measurable card -->
+  <div class="card w-full">
+    <figure>
+      <figcaption class="p-4 card-body flex flex-col">
+        <h2 class="card-title mb-2">Measurable</h2>
+        <div class="flex flex-col md:flex-row w-full">
+          <div
+            class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+          >
+            AchievAIm's Measurable suggestion
+          </div>
+        </div>
+      </figcaption>
+    </figure>
+  </div>
+
+  <!-- Attainable card -->
+  <div class="card w-full">
+    <figure>
+      <figcaption class="p-4 card-body flex flex-col">
+        <h2 class="card-title mb-2">Attainable</h2>
+        <div class="flex flex-col md:flex-row w-full">
+          <div
+            class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+          >
+            AchievAIm's Attainable suggestion
+          </div>
+        </div>
+      </figcaption>
+    </figure>
+  </div>
+
+  <!-- Relevant card -->
+  <div class="card w-full">
+    <figure>
+      <figcaption class="p-4 card-body flex flex-col">
+        <h2 class="card-title mb-2">Relevant</h2>
+        <div class="flex flex-col md:flex-row w-full">
+          <div
+            class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+          >
+            AchievAIm's Relevant suggestion
+          </div>
+        </div>
+      </figcaption>
+    </figure>
+  </div>
+
+  <!-- Time-Bound card -->
+  <div class="card w-full">
+    <figure>
+      <figcaption class="p-4 card-body flex flex-col">
+        <h2 class="card-title mb-2">Time-Bound</h2>
+        <div class="flex flex-col md:flex-row w-full">
+          <div
+            class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
+          >
+            AchievAIm's Time-Bound suggestion
+          </div>
+        </div>
+      </figcaption>
+    </figure>
+  </div>
+
+  <div class="mt-3 flex flex-col items-center">
+    <div class="card w-full">
+      <figure>
+        <figcaption class="p-4 card-body flex flex-col items-center">
+          {#if goal.days_of_week}
+            <div class="flex justify-between items-center w-full">
+              <h2 class="card-title mb-2">Days</h2>
+            </div>
+            <DaysOfWeekSelector daysOfWeek={goal.days_of_week} />
+          {/if}
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="card w-full">
+    <figure>
+      <figcaption class="p-4 card-body flex flex-row items-center">
+        <h2 class="card-title mb-2">Date</h2>
+        <div class="flex-grow flex items-center relative">
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            id="goal-date"
+            type="date"
+            bind:value={goal.date_for_achievement}
+            aria-describedby="date-description"
+            readonly
+          />
+        </div>
+      </figcaption>
+    </figure>
+  </div>
+
+  <div class="card w-full">
+    <figure>
+      <figcaption class="p-4 card-body flex flex-row items-center">
+        <h2 class="card-title mb-2">Time</h2>
+        <div class="flex-grow flex items-center">
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            id="goal-time"
+            type="time"
+            bind:value={goal.time_of_day}
+            aria-describedby="time-description"
+            readonly
+          />
+        </div>
+      </figcaption>
+    </figure>
   </div>
 </div>
-
-<style>
-  @keyframes fade-in-down {
-    0% {
-      opacity: 0;
-      transform: translate3d(0, -50%, 0);
-    }
-
-    100% {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
-    }
-  }
-</style>
