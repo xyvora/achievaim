@@ -290,16 +290,13 @@
         <button class="btn btn-primary" type="submit" id="btn-save">Save</button>
       </div>
       <div>
-        <button class="btn btn-primary" type="button" id="btn-log-out" on:click={() => logOut()}
+        <button class="btn btn-ghost" type="button" id="btn-log-out" on:click={() => logOut()}
           >Log Out</button
         >
       </div>
       <div>
-        <button
-          class="btn btn-secondary"
-          type="button"
-          id="btn-delete"
-          on:click={() => deleteUser()}>Delete</button
+        <button class="btn btn-ghost" type="button" id="btn-delete" on:click={() => deleteUser()}
+          >Delete</button
         >
       </div>
     {:else if $isLoading}
