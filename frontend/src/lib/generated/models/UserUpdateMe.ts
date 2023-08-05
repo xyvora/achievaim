@@ -9,5 +9,5 @@ export type UserUpdateMe = {
   user_name: string;
   first_name: string;
   last_name: string;
-  country?: string;
+  country?: string | null;
 };

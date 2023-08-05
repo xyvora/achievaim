@@ -3,17 +3,17 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { DaysOfWeek } from './DaysOfWeek';
+import type { DaysOfWeekInput } from './DaysOfWeekInput';
 
 export type GoalCreate = {
-  goal?: string;
-  specific?: string;
-  measurable?: string;
-  attainable?: string;
-  relevant?: string;
-  time_bound?: string;
-  date_for_achievement?: string;
-  days_of_week?: DaysOfWeek;
-  time_of_day?: string;
-  progress?: number;
+  goal?: string | null;
+  specific?: string | null;
+  measurable?: string | null;
+  attainable?: string | null;
+  relevant?: string | null;
+  time_bound?: string | null;
+  date_for_achievement?: string | null;
+  days_of_week?: DaysOfWeekInput | null;
+  time_of_day?: string | null;
+  progress?: number | null;
 };
