@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { DaysOfWeek } from '$lib/generated';
+  import type { DaysOfWeekInput } from '$lib/generated';
   import { toTitleCase } from '$lib/utils';
 
-  export let daysOfWeek: DaysOfWeek;
+  export let daysOfWeek: DaysOfWeekInput;
   export let readOnly = false;
 
   // Function to prevent changes to the checkbox state
