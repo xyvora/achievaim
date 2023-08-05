@@ -1,8 +1,7 @@
 from datetime import datetime
 
 from beanie import Document
-from bson import ObjectId
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from pymongo import ASCENDING, IndexModel
 
 from app.models.object_id import ObjectIdStr
@@ -27,10 +26,10 @@ class _GoalBase(BaseModel):
     time_bound: str | None = None
     date_for_achievement: datetime | None = None
     days_of_week: DaysOfWeek | None = None
-    time_of_day: str | None
+    time_of_day: str | None = None
     progress: float | None = None
 
-    @validator("time_of_day")
+    @field_validator("time_of_day")
     @classmethod
     def validate_time_of_day(cls, v: str | None) -> str | None:
         if not v:
@@ -83,9 +82,6 @@ class GoalCreate(_GoalBase):
 class GoalWithUserId(Goal):
     user_id: ObjectIdStr
 
-    class Config:
-        json_encoders = {ObjectId: lambda x: str(x)}
-
 
 class UserCreate(BaseModel):
     user_name: str
@@ -101,9 +97,6 @@ class UserNoPassword(BaseModel):
     first_name: str
     last_name: str
     country: str | None = None
-
-    class Config:
-        json_encoders = {ObjectId: lambda x: str(x)}
 
     class Settings:
         projection = {
@@ -159,9 +152,6 @@ class UserUpdateMe(BaseModel):
     last_name: str
     country: str | None = None
 
-    class Config:
-        json_encoders = {ObjectId: lambda x: str(x)}
-
 
 class UserUpdate(UserUpdateMe):
     is_active: bool
@@ -196,7 +186,7 @@ class User(Document):
             ),
         ]
 
-    @validator("goals")
+    @field_validator("goals")
     @classmethod
     def validate_goals(cls, v: list[Goal] | None) -> list[Goal] | None:
         """Validate that the goal names and ids are unique.

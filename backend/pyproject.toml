@@ -9,12 +9,13 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 argon2-cffi = "21.3.0"
-beanie = "1.20.0"
-fastapi = {version = "0.99.1", extras = ["all"]}
+beanie = "1.21.0"
+fastapi = {version = "0.101.0", extras = ["all"]}
 gunicorn = "21.2.0"
 httpx = "0.24.1"
 passlib = "1.7.4"
-pydantic = "1.10.12"
+pydantic = "2.1.1"
+pydantic-settings = "2.0.2"
 pyjwt = "2.8.0"
 
 [tool.poetry.group.dev.dependencies]
