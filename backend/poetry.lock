@@ -144,23 +144,6 @@ jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
 uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
-name = "camel-converter"
-version = "3.0.2"
-description = "Converts a string from snake case to camel case or camel case to snake case"
-optional = false
-python-versions = ">=3.8,<4.0"
-files = [
-    {file = "camel_converter-3.0.2-py3-none-any.whl", hash = "sha256:88e5d91be5b2dff9c0748ba515774c3421088922d9e77c39f8742eb41cb7db88"},
-    {file = "camel_converter-3.0.2.tar.gz", hash = "sha256:3b3d076e824ae979b271b4d497c90514c2b218811f76b0c368fb69da2556fe07"},
-]
-
-[package.dependencies]
-pydantic = {version = ">=1.8.2", optional = true, markers = "extra == \"pydantic\""}
-
-[package.extras]
-pydantic = ["pydantic (>=1.8.2)"]
-
-[[package]]
 name = "certifi"
 version = "2023.5.7"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -1499,4 +1482,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "b30b10d3b4c3d8e0f54e159db8f0a4f11a2ba98511eb4340a3b52580bcdeed1d"
+content-hash = "4a4e5ae5435d830fe16d2d8fb83cc6b8d8d9baced468ddd088de31150d0636e4"
