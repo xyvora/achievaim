@@ -1,8 +1,8 @@
 <script lang="ts">
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
-  import type { DaysOfWeek } from '$lib/generated';
+  import type { DaysOfWeekOutput } from '$lib/generated';
 
-  let daysOfWeek: DaysOfWeek = {
+  let daysOfWeek: DaysOfWeekOutput = {
     monday: false,
     tuesday: false,
     wednesday: false,

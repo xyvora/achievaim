@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { DaysOfWeek, GoalCreate } from '$lib/generated';
+  import type { DaysOfWeekInput, GoalCreate } from '$lib/generated';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
   import ErrorMessage from '$lib/components/ErrorMessage.svelte';
   import { createGoal } from '$lib/api';
@@ -27,7 +27,7 @@
         // goal.days_of_week! is because TypeScript sucks and won't believe days_of_week is not
         // undefined even when it is checked first.
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        goal.days_of_week![day as keyof DaysOfWeek] = selectAll;
+        goal.days_of_week![day as keyof DaysOfWeekInput] = selectAll;
       });
     }
   };
