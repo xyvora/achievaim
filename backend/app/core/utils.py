@@ -8,7 +8,7 @@ from fastapi.types import DecoratedCallable
 
 from app.api.deps import logger
 from app.models.openai import GoalSuggestion
-from app.models.smart_goal import SmartGoal
+from app.models.smart_goal import GoalInfo, GoalSuggestionCreate, SmartGoal
 
 
 class APIRouter(FastAPIRouter):
@@ -34,7 +34,9 @@ class APIRouter(FastAPIRouter):
         return decorator
 
 
-def process_openai_to_smart_goal(goal: GoalSuggestion) -> SmartGoal:
+def process_openai_to_smart_goal(
+    goal: GoalSuggestion, goal_create_info: GoalSuggestionCreate
+) -> SmartGoal:
     goal_info = goal.choices[0].message.content.split("\n")
     smart_goal: dict[str, str] = {}
     for info in goal_info:
@@ -44,15 +46,21 @@ def process_openai_to_smart_goal(goal: GoalSuggestion) -> SmartGoal:
             case "SMART Goal":
                 smart_goal["goal"] = info_parts[1]
             case "Specific":
-                smart_goal["specific"] = info_parts[1]
+                smart_goal["specific"] = _set_goal_info(info_parts[1], goal_create_info.specific)
             case "Measurable":
-                smart_goal["measurable"] = info_parts[1]
+                smart_goal["measurable"] = _set_goal_info(
+                    info_parts[1], goal_create_info.measurable
+                )
             case "Achievable":
-                smart_goal["achievable"] = info_parts[1]
+                smart_goal["achievable"] = _set_goal_info(
+                    info_parts[1], goal_create_info.achievable
+                )
             case "Relevant":
-                smart_goal["relevant"] = info_parts[1]
+                smart_goal["relevant"] = _set_goal_info(info_parts[1], goal_create_info.relevant)
             case "Time-bound":
-                smart_goal["time_bound"] = info_parts[1]
+                smart_goal["time_bound"] = _set_goal_info(
+                    info_parts[1], goal_create_info.time_bound
+                )
 
     return SmartGoal(**smart_goal)
 
@@ -63,3 +71,10 @@ def str_to_oid(id_str: str) -> ObjectId:
     except InvalidId:
         logger.info(f"{id_str} is not a valid ObjectId")
         raise
+
+
+def _set_goal_info(gpt_info: str, goal_info: GoalInfo | None) -> str:
+    if not goal_info or not goal_info.locked:
+        return gpt_info
+
+    return goal_info.info
