@@ -105,7 +105,7 @@
 
 @frontend-test-ci: compose-up-detached && docker-stop
   cd frontend && \
-  npm run test && \
+  npx playwright test
   cd ..
 
 @generate-types:
