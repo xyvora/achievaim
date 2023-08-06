@@ -103,7 +103,7 @@
   npm run test && \
   cd ..
 
-@frontend-test-ci:
+@frontend-test-ci: compose-up-detached && docker-stop
   cd frontend && \
   npm run test && \
   cd ..

@@ -5,8 +5,6 @@ on:
     branches:
       - main
   pull_request:
-env:
-  VITE_API_PATH: http://127.0.0.1:8000/api/v1
 jobs:
   backend-linting:
     strategy:
@@ -120,7 +118,5 @@ jobs:
         run: just install-frontend
       - name: Playwright install
         run: just playwright-install
-      - name: Start API
-        run: just api-ci
       - name: Frontend Tests
         run: just frontend-test-ci
