@@ -2,7 +2,7 @@
   -docker compose up backend db --build
 
 @api-ci: && docker-stop
-  docker compose up -d backend db --build
+  docker compose up -f docker-compose-testing.yml -d backend db --build
 
 @backend-test: ci-db && docker-stop
   -cd backend && \
