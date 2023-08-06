@@ -126,8 +126,8 @@ jobs:
         run: just frontend-test-ci
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: playwright-report
-          path: test-results
-          working-directory: frontend
+          path: frontend/test-results
+          retention-days: 1
