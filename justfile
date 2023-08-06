@@ -1,6 +1,9 @@
 @api: && docker-stop
   -docker compose up backend db --build
 
+@api-ci: && docker-stop
+  docker compose up -f docker-compose-testing.yml up -d backend db --build
+
 @backend-test: ci-db && docker-stop
   -cd backend && \
   poetry run pytest && \
