@@ -42,6 +42,7 @@ test('signup', async ({ page }) => {
   await page.locator('#password').fill('mypassword');
   await page.locator('#verify-password').fill('mypassword');
   await page.locator('#btn-sign-up').click();
+  await expect(page.locator('#btn-sign-up')).not.toBeVisible();
   await expect(page.locator('#btn-log-out')).toBeVisible();
   await expect(page.locator('#btn-delete')).toBeVisible();
   page.once('dialog', async (dialog) => {
