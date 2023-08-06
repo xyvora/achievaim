@@ -3,7 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type DaysOfWeek = {
+export type DaysOfWeekInput = {
   monday?: boolean;
   tuesday?: boolean;
   wednesday?: boolean;

@@ -58,4 +58,4 @@ async def login_access_token(
 @router.post("/test-token")
 def test_token(current_user: CurrentUser) -> UserNoPassword:
     """Test access token."""
-    return UserNoPassword(**current_user.dict())
+    return UserNoPassword(**current_user.model_dump())

@@ -8,11 +8,11 @@
   import type { Goals, UserLogin } from '$lib/types';
   import { login } from '$lib/api';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
-  import type { DaysOfWeek } from '$lib/generated';
+  import type { DaysOfWeekOutput } from '$lib/generated';
   import { toTitleCase } from '$lib/utils';
 
   // NOTE: Temporary, will be replaced will call to the API
-  const daysOfWeek: DaysOfWeek = {
+  const daysOfWeek: DaysOfWeekOutput = {
     monday: true,
     tuesday: false,
     wednesday: true,

@@ -5,8 +5,8 @@
 
 import type { DaysOfWeekInput } from './DaysOfWeekInput';
 
-export type GoalCreate = {
-  goal?: string | null;
+export type GoalInput = {
+  goal: string;
   specific?: string | null;
   measurable?: string | null;
   attainable?: string | null;
@@ -16,4 +16,5 @@ export type GoalCreate = {
   days_of_week?: DaysOfWeekInput | null;
   time_of_day?: string | null;
   progress?: number | null;
+  id: string;
 };
