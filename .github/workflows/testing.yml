@@ -120,15 +120,7 @@ jobs:
         run: just playwright-install
       - name: Start API
         run: just api-ci
-      - name: Add env file
-        run: |
-          cd frontend
-          echo "VITE_API_PATH=http://127.0.0.1:8000/api/v1" > .env
       - name: Frontend Tests
+        env:
+          VITE_API_PATH: "http://127.0.0.1:8000/api/v1"
         run: just frontend-test-ci
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: playwright-report
-          path: test-results
