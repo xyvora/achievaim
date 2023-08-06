@@ -80,7 +80,7 @@ async def get_user_no_goal(user_id: ObjectId | PydanticObjectId) -> UserNoGoals 
 
 async def get_users() -> list[UserNoPassword]:
     users = await User.find_all().to_list()
-    return [UserNoPassword(**x.dict()) for x in users]
+    return [UserNoPassword(**x.model_dump()) for x in users]
 
 
 async def update_me(update_info: UserUpdateMe) -> UserNoPassword:

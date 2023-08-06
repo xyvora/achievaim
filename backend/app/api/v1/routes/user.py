@@ -58,7 +58,7 @@ async def get_users(_: CurrentAdminUser) -> list[UserNoPassword]:
 @router.get("/me")
 async def get_me(create_user: CurrentUser) -> UserNoPassword:
     """Retriever the logged in user's information."""
-    return UserNoPassword(**create_user.dict())
+    return UserNoPassword(**create_user.model_dump())
 
 
 @router.get("/{user_id}")

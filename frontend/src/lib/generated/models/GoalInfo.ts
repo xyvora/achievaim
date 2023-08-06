@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type DesiredGoal = {
-  goal: string;
+export type GoalInfo = {
+  info: string;
+  locked?: boolean;
 };

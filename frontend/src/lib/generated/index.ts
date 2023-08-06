@@ -4,10 +4,13 @@
 /* eslint-disable */
 
 export type { Body_login_access_token_api_v1_login_access_token_post } from './models/Body_login_access_token_api_v1_login_access_token_post';
-export type { DaysOfWeek } from './models/DaysOfWeek';
-export type { DesiredGoal } from './models/DesiredGoal';
-export type { Goal } from './models/Goal';
+export type { DaysOfWeekInput } from './models/DaysOfWeekInput';
+export type { DaysOfWeekOutput } from './models/DaysOfWeekOutput';
 export type { GoalCreate } from './models/GoalCreate';
+export type { GoalInfo } from './models/GoalInfo';
+export type { GoalInput } from './models/GoalInput';
+export type { GoalOutput } from './models/GoalOutput';
+export type { GoalSuggestionCreate } from './models/GoalSuggestionCreate';
 export type { HTTPValidationError } from './models/HTTPValidationError';
 export type { SmartGoal } from './models/SmartGoal';
 export type { Token } from './models/Token';

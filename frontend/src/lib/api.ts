@@ -1,7 +1,13 @@
 import { AxiosError } from 'axios';
 import type { AxiosRequestConfig } from 'axios';
 import { axiosInstance } from '$lib/axios-config';
-import type { Goal, GoalCreate, UserCreate, UserNoPassword, UserUpdateMe } from '$lib/generated';
+import type {
+  GoalOutput,
+  GoalCreate,
+  UserCreate,
+  UserNoPassword,
+  UserUpdateMe
+} from '$lib/generated';
 import type { AccessToken, UserLogin } from '$lib/types';
 import { LoginError } from '$lib/errors';
 import { accessToken } from '$lib/stores/stores';
@@ -23,7 +29,7 @@ async function authHeaders(): Promise<AxiosRequestConfig<any>> {
   throw new Error('No access token found');
 }
 
-export const createGoal = async (payload: GoalCreate): Promise<Goal> => {
+export const createGoal = async (payload: GoalCreate): Promise<GoalOutput> => {
   const headers = await authHeaders();
   const response = await axiosInstance.post('/goal', payload, headers);
 
