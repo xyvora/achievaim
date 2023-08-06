@@ -124,7 +124,7 @@ jobs:
         env:
           VITE_API_PATH: "http://127.0.0.1:8000/api/v1"
         run: |
-          curl 'http://127.0.0.1:8000/api/v1/health"
+          curl "http://127.0.0.1:8000/api/v1/health"
           just frontend-test-ci
       - name: Upload test results
         if: failure()
