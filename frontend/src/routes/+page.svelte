@@ -129,11 +129,11 @@
 </script>
 <div class="page-fade-in">
 {#if !$isLoggedIn}
-  <div class="hero min-h-screen bg-base-200 mb-10">
+  <div class="hero min-h-screen bg-base-200">
     <div class="flex flex-col lg:flex-row justify-around items-center lg:items-start hero-content">
       <div class="text-center lg:text-left lg:w-1/2">
-        <h1 class="text-5xl font-bold">Smart Tracking Your Goals.</h1>
-        <p class="py-6">
+        <h1 class="text-5xl text-left font-bold">Smart Tracking Your Goals.</h1>
+        <p class="py-6 text-left">
           Achiev𝘼𝙄m (pronounced "AchieveAim" or "uh-cheev-aim", IPA: /əˈtʃi:v eɪm/) is a
           sophisticated tool leveraging artificial intelligence to assist users in formulating,
           tracking, and accomplishing their goals using the SMART (Specific, Measurable, Achievable,
