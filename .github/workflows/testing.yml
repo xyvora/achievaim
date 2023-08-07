@@ -13,7 +13,7 @@ jobs:
       - name: Build and export
         uses: docker/build-push-action@v4
         with:
-          context: ./backend/Dockerfile
+          context: ./backend
           tags: backend:dev
           outputs: type=docker,dest=/tmp/backend.tar
           push: false
