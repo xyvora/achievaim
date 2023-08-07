@@ -108,6 +108,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build backend
+        run: |
+          docker buildx build -f backend/Dockerfile -t dev
       - name: Install just
         uses: taiki-e/install-action@just
       - name: Setup node
