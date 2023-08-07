@@ -167,6 +167,8 @@ jobs:
         run: docker load --input /tmp/frontend.tar
       - name: List images
         run: docker image ls -a
+      - name: Start Containers
+        run: just compose-up-ci
       - name: Install just
         uses: taiki-e/install-action@just
       - name: Setup node
@@ -177,8 +179,6 @@ jobs:
         run: just install-frontend
       - name: Playwright install
         run: just playwright-install
-      - name: Start Containers
-        run: just compose-up-ci
       - name: Frontend Tests
         run: |
           just frontend-test-ci
