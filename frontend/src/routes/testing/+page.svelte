@@ -23,8 +23,8 @@
       thursday: false,
       friday: false,
       saturday: false,
-      sunday: false
-    }
+      sunday: false,
+    },
   };
 
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
