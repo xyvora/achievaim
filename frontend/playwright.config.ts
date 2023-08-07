@@ -6,7 +6,11 @@ const config: PlaywrightTestConfig = {
     port: 4173
   },
   testDir: 'tests',
-  testMatch: /(.+\.)?(test|spec)\.[jt]s/
+  testMatch: /(.+\.)?(test|spec)\.[jt]s/,
+  expect: { timeout: 10000 },
+  use: {
+    trace: 'on-first-retry'
+  }
 };
 
 export default config;

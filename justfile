@@ -1,6 +1,9 @@
 @api: && docker-stop
   -docker compose up backend db --build
 
+@api-ci:
+  docker compose -f docker-compose-testing.yml up -d backend db
+
 @backend-test: ci-db && docker-stop
   -cd backend && \
   poetry run pytest && \
@@ -50,6 +53,9 @@
 
 @compose-up:
   docker compose up --build
+
+@compose-up-ci:
+  docker compose -f docker-compose-testing.yml up -d
 
 @compose-up-detached:
   docker compose up -d --build
@@ -102,7 +108,7 @@
 
 @frontend-test-ci:
   cd frontend && \
-  npm run test && \
+  npm run test
   cd ..
 
 @generate-types:
