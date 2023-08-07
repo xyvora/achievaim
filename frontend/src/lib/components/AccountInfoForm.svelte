@@ -302,12 +302,12 @@
           <button class="btn btn-primary" type="submit" id="btn-save">Save</button>
         </div>
         <div>
-          <button class="btn btn-ghost" type="button" id="btn-log-out" on:click={() => logOut()}
+          <button class="btn btn-outline" type="button" id="btn-log-out" on:click={() => logOut()}
             >Log Out</button
           >
         </div>
         <div>
-          <button class="btn btn-ghost" type="button" id="btn-delete" on:click={() => deleteUser()}
+          <button class="btn btn-outline" type="button" id="btn-delete" on:click={() => deleteUser()}
             >Delete</button
           >
         </div>
@@ -316,7 +316,7 @@
           <span class="loading loading-spinner text-primary" id="sign-up-spinner" />
         </div>
       {:else}
-        <button class="btn btn-primary" type="submit" id="btn-sign-up">Sign Up</button>
+        <button class="btn btn-primary " type="submit" id="btn-sign-up">Sign Up</button>
       {/if}
     </div>
   </form>
