@@ -25,7 +25,7 @@
     lastName: null,
     country: null,
     password: null,
-    verifyPassword: null
+    verifyPassword: null,
   };
 
   let genericError = false;
@@ -110,7 +110,7 @@
           last_name: user.lastName,
           user_name: user.userName,
           country: user.country,
-          password: user.password
+          password: user.password,
         };
 
         try {
@@ -137,7 +137,7 @@
           first_name: user.firstName,
           last_name: user.lastName,
           user_name: user.userName,
-          password: user.password
+          password: user.password,
         };
 
         if (user.country) {
@@ -157,7 +157,7 @@
 
         let userLogin: UserLogin = {
           userName: user.userName,
-          password: user.password
+          password: user.password,
         };
 
         try {

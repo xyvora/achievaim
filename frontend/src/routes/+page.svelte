@@ -12,9 +12,41 @@
     password: string;
   }
 
+  // NOTE: Temporary, will be replaced will call to the API
+  const daysOfWeek: DaysOfWeekOutput = {
+    monday: true,
+    tuesday: false,
+    wednesday: true,
+    thursday: false,
+    friday: true,
+    saturday: false,
+    sunday: false,
+  };
+
+  let goals: Goals = {
+    active: [
+      {
+        name: 'Active Placeholder',
+        details: 'S.M.A.R.T details here',
+        date: new Date('2024-01-01T10:00:00'),
+        days: [10],
+        editing: false,
+      },
+    ],
+    completed: [
+      {
+        name: 'Completed Placeholder',
+        details: 'S.M.A.R.T details here',
+        date: new Date('2024-01-02T14:00:00'),
+        days: [15],
+        editing: false,
+      },
+    ],
+  };
+
   let userLogin: UserLogin = {
     userName: '',
-    password: ''
+    password: '',
   };
 
   type DaysOfWeek = {
@@ -41,8 +73,8 @@
       thursday: false,
       friday: false,
       saturday: false,
-      sunday: false
-    }
+      sunday: false,
+    },
   };
 
   import { page } from '$app/stores';
