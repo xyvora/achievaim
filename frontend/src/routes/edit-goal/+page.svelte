@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { DaysOfWeekOutput, GoalCreate } from '$lib/generated';
+  import type { DaysOfWeekInput, GoalCreate } from '$lib/generated';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
   import ErrorMessage from '$lib/components/ErrorMessage.svelte';
   import { createGoal } from '$lib/api';
@@ -17,7 +17,7 @@
   };
 
   let selectAll = false;
-  let loadingGenerate = false;
+
   let goalError = false;
 
   const toggleAll = () => {
@@ -27,7 +27,7 @@
         // goal.days_of_week! is because TypeScript sucks and won't believe days_of_week is not
         // undefined even when it is checked first.
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        goal.days_of_week![day as keyof DaysOfWeekOutput] = selectAll;
+        goal.days_of_week![day as keyof DaysOfWeekInput] = selectAll;
       });
     }
   };
@@ -50,230 +50,461 @@
     }
   }
 
-  let showModal = false; // Modal state
+  let loadingGenerate = false;
 
-  const openModal = () => {
-    showModal = true;
-  };
+  function handleClick() {
+    loadingGenerate = true;
 
-  const closeModal = () => {
-    showModal = false;
-  };
-
-  const handleEdit = () => {
-    // Handle the edit logic here...
-    closeModal();
-  };
+    // Simulate an async operation
+    setTimeout(() => {
+      loadingGenerate = false;
+    }, 2000);
+  }
 </script>
 
-<div class="flex">
-  <div class="divider" />
-</div>
-<div class="container mx-auto px-4 pt-5 md:max-w-xl lg:max-w-3xl z-10">
-  <div class="mb-5">
-    <label class="block text-xl font-bold mb-2" for="goal">Goal</label>
-    <input
-      class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-      id="goal"
-      type="text"
-      placeholder="What's your SMART Goal?"
-      bind:value={goal.goal}
-    />
-    <ErrorMessage
-      errorMessageId="goal-error"
-      errorMessage="SMART goal is required"
-      showError={goalError}
-    />
-
-    <div class="mt-3 flex flex-col items-left">
-      <button id="generate" class="btn btn-primary">Generate</button>
-      {#if loadingGenerate}
-        <div class="mt-3 flex justify-center items-center">
-          <span class="loading loading-infinity loading-md" />
-        </div>
-      {/if}
-    </div>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-    <!-- Specific card -->
-    <div class="card bordered">
-      <figure>
-        <figcaption class="p-4 card-body">
-          <h2 class="card-title">Specific</h2>
-          <input
-            id="specific"
-            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-            type="text"
-            placeholder="AchievAIm's Specific suggestion"
-            bind:value={goal.specific}
-          />
-          <div class="mt-3">
-            <button class="btn btn-primary">Keep Specific Suggestion</button>
-          </div>
-        </figcaption>
-      </figure>
-    </div>
-
-    <!-- Measurable card -->
-    <div class="card bordered">
-      <figure>
-        <figcaption class="p-4 card-body">
-          <h2 class="card-title">Measurable</h2>
-          <input
-            id="measurable"
-            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-            type="text"
-            placeholder="AchievAIm's Measurable suggestion"
-            bind:value={goal.measurable}
-          />
-          <div class="mt-3">
-            <button class="btn btn-primary">Keep Measurable Suggestion</button>
-          </div>
-        </figcaption>
-      </figure>
-    </div>
-
-    <!-- Attainable card -->
-    <div class="card bordered">
-      <figure>
-        <figcaption class="p-4 card-body">
-          <h2 class="card-title">Attainable</h2>
-          <input
-            id="attainable"
-            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-            type="text"
-            placeholder="AchievAIm's Attainable suggestion"
-            bind:value={goal.attainable}
-          />
-          <div class="mt-3">
-            <button class="btn btn-primary">Keep Attainable Suggestion</button>
-          </div>
-        </figcaption>
-      </figure>
-    </div>
-
-    <!-- Relevant card -->
-    <div class="card bordered">
-      <figure>
-        <figcaption class="p-4 card-body">
-          <h2 class="card-title">Relevant</h2>
-          <input
-            id="relevant"
-            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-            type="text"
-            placeholder="AchievAIm's Relevant suggestion"
-            bind:value={goal.relevant}
-          />
-          <div class="mt-3">
-            <button class="btn btn-primary">Keep Relevant Suggestion</button>
-          </div>
-        </figcaption>
-      </figure>
-    </div>
-
-    <!-- Time-Bound card -->
-    <div class="card bordered">
-      <figure>
-        <figcaption class="p-4 card-body">
-          <h2 class="card-title">Time-Bound</h2>
-          <input
-            id="time-bound"
-            class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-            type="text"
-            placeholder="AchievAIm's Time-Bound suggestion"
-            bind:value={goal.time_bound}
-          />
-          <div class="mt-3">
-            <button class="btn btn-primary">Keep Time-Bound Suggestion</button>
-          </div>
-        </figcaption>
-      </figure>
-    </div>
-  </div>
-
-  <div class="mt-4 pd-4 flex flex-col items-center">
-    {#if goal.days_of_week}
-      <span class="block text-xl font-bold mb-2">Select the Days Your SMART Goal Repeats:</span>
-      <button class="btn btn-primary mt-4" on:click={toggleAll}>
-        {#if selectAll}Deselect All{:else}Select All{/if}
-      </button>
-      <DaysOfWeekSelector daysOfWeek={goal.days_of_week} />
-    {/if}
-    <label class="block text-lg font-bold mb-2 mt-4" for="goal-time">
-      Set the alert time for your SMART goals on selected days.
-    </label>
-    <input
-      class="shadow m-2 appearance-none border rounded px-300 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-      id="goal-time"
-      type="time"
-      bind:value={goal.time_of_day}
-    />
-  </div>
-
-  <div class="mt-4 flex flex-col items-center">
-    <label class="block text-lg font-bold mb-2" for="goal-date">
-      Choose the Date for Completing Your SMART Goal.
-    </label>
-    <input
-      class="shadow m-2 appearance-none border rounded px-300 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-      id="goal-date"
-      type="date"
-      bind:value={goal.date_for_achievement}
-    />
-  </div>
-
-  <div class="mt-4 flex flex-col items-center">
-    <button class="btn btn-primary" on:click={handleSave}>Save Smart Goal</button>
-  </div>
-</div>
-
-<!-- Adding the button to open the modal -->
-<div class="mt-4 flex flex-col items-center">
-  <button class="btn btn-primary" on:click={openModal}>Edit Smart Goal</button>
-</div>
-
-{#if showModal}
-  <div class="fixed z-50 inset-0 overflow-y-auto">
-    <div
-      class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:items-center sm:justify-center sm:pt-0 sm:pb-4"
-    >
-      <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-        <div class="absolute inset-0 bg-gray-500 opacity-75" />
-      </div>
-      <div
-        class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full sm:my-8"
-      >
-        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-          <div class="sm:flex sm:items-start">
-            <!-- Modal content goes here -->
-            <div>
-              <h3 class="text-lg leading-6 font-medium text-gray-900">Edit Smart Goal</h3>
-              <div class="mt-2">
-                <!-- Add your form fields here -->
-              </div>
+<div class="page-fade-in">
+  <div class="container z-10 px-4 pt-5 mx-auto mb-4 shadow-lg rounded-xl md:max-w-xl lg:max-w-3xl">
+    <div class="w-full card">
+      <div class="flex items-center mb-5">
+        <!-- Flex container for alignment -->
+        <label class="block mb-2 text-xl font-bold rounded-xl" for="goal">Goal</label>
+        <div class="dropdown dropdown-right">
+          <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              class="w-4 h-4 stroke-primary"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </button>
+          <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
+            <!-- Removed button tag wrapping div -->
+            <div class="text-left normal-case card-body text-primary">
+              <p>Enter your SMART goal and any details e.g. Exercise to get healthier</p>
+              <p>Click Generate to have AchievAIm suggest the SMART details</p>
+              <p>Toggle Right to Lock on the details you like →</p>
+              <p>
+                ← Toggle Left to Unlock and press Generate again to give you another suggestion for
+                that specific SMART detail
+              </p>
             </div>
           </div>
         </div>
-        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-          <button
-            on:click={handleEdit}
-            class="w-full winline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary sm:ml-3 sm:w-auto sm:text-sm"
-          >
-            Edit
-          </button>
-          <button
-            on:click={closeModal}
-            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-50 sm:mt-0 sm:w-auto sm:text-sm"
-          >
-            Close
-          </button>
-        </div>
+      </div>
+      <!-- Flex container ends here -->
+      <input
+        class="w-full px-3 py-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline"
+        id="goal"
+        type="text"
+        placeholder="What's your SMART Goal? e.g. Exercise"
+        bind:value={goal.goal}
+      />
+      <ErrorMessage
+        errorMessageId="goal-error"
+        errorMessage="SMART goal is required"
+        showError={goalError}
+      />
+
+      <div class="flex flex-col mt-3 items-left">
+        <button id="generate" class="btn rounded-xl btn-primary" on:click={handleClick}
+          >Generate</button
+        >
+        {#if loadingGenerate}
+          <div class="flex items-center justify-center mt-3">
+            <span class="loading loading-infinity loading-md" />
+          </div>
+        {/if}
       </div>
     </div>
-  </div>
-{/if}
+    <!-- Specific card -->
+    <div class="flex flex-col w-full p-4 card card-body">
+      <h2 class="mb-2 card-title">Specific</h2>
+      <div class="flex flex-col w-full md:flex-row">
+        <input
+          id="specific"
+          class="flex-grow w-full px-3 py-2 mb-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline md:mb-0"
+          type="text"
+          placeholder="AchievAIm's Specific suggestion. e.g. 15 min daily exercise."
+          bind:value={goal.specific}
+        />
+        <label
+          class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
+        >
+          <input type="checkbox" class="toggle toggle-primary" />
+          <div class="dropdown dropdown-end">
+            <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="w-4 h-4 stroke-primary"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
 
-<div class="flex">
-  <div class="divider" />
+              <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
+                <div class="text-left card-body text-primary normal-case">
+                  <p>← Toggle Left to unlock</p>
+                  <div class="text-right text-primary normal-case">
+                    <p>Toggle Right to Lock →</p>
+                  </div>
+                </div>
+              </div></button
+            >
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Measurable card -->
+    <div class="flex flex-col w-full p-4 card card-body">
+      <h2 class="mb-2 card-title">Measurable</h2>
+      <div class="flex flex-col w-full md:flex-row">
+        <input
+          id="measurable"
+          class="flex-grow w-full px-3 py-2 mb-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline md:mb-0"
+          type="text"
+          placeholder="AchievAIm's Measurable suggestion. e.q. Track consecutive days."
+          bind:value={goal.measurable}
+        />
+        <label
+          class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
+        >
+          <input type="checkbox" class="toggle toggle-primary" />
+          <div class="dropdown dropdown-end">
+            <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="w-4 h-4 stroke-primary"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
+                <div class="text-left card-body text-primary normal-case">
+                  <p>← Toggle Left to unlock</p>
+                  <div class="text-right text-primary normal-case">
+                    <p>Toggle Right to Lock →</p>
+                  </div>
+                </div>
+              </div></button
+            >
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Attainable card -->
+    <div class="flex flex-col w-full p-4 card card-body">
+      <h2 class="mb-2 card-title">Attainable</h2>
+      <div class="flex flex-col w-full md:flex-row">
+        <input
+          id="attainable"
+          class="flex-grow w-full px-3 py-2 mb-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline md:mb-0"
+          type="text"
+          placeholder="AchievAIm's Attainable suggestion. e.g. Find enjoyable activities."
+          bind:value={goal.attainable}
+        />
+        <label
+          class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
+        >
+          <input type="checkbox" class="toggle toggle-primary" />
+          <div class="dropdown dropdown-end">
+            <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="w-4 h-4 stroke-primary"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
+                <div class="text-left card-body text-primary normal-case">
+                  <p>← Toggle Left to unlock</p>
+                  <div class="text-right text-primary normal-case">
+                    <p>Toggle Right to Lock →</p>
+                  </div>
+                </div>
+              </div></button
+            >
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Relevant card -->
+    <div class="flex flex-col w-full p-4 card card-body">
+      <h2 class="mb-2 card-title">Relevant</h2>
+      <div class="flex flex-col w-full md:flex-row">
+        <input
+          id="relevant"
+          class="flex-grow w-full px-3 py-2 mb-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline md:mb-0"
+          type="text"
+          placeholder="AchievAIm's Relevant suggestion. e.g. Improve fitness."
+          bind:value={goal.relevant}
+        />
+        <label
+          class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
+        >
+          <input type="checkbox" class="toggle toggle-primary" />
+          <div class="dropdown dropdown-end">
+            <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="w-4 h-4 stroke-primary"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
+                <div class="text-left card-body text-primary normal-case">
+                  <p>← Toggle Left to unlock</p>
+                  <div class="text-right text-primary normal-case">
+                    <p>Toggle Right to Lock →</p>
+                  </div>
+                </div>
+              </div></button
+            >
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Time-Bound card -->
+    <div class="flex flex-col w-full p-4 card card-body">
+      <h2 class="mb-2 card-title">Time-Bound</h2>
+      <div class="flex flex-col w-full md:flex-row">
+        <input
+          id="time-bound"
+          class="flex-grow w-full px-3 py-2 mb-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline md:mb-0"
+          type="text"
+          placeholder="AchievAIm's Time-Bound suggestion. e.g. 30 consecutive days."
+          bind:value={goal.time_bound}
+        />
+        <label
+          class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
+        >
+          <input type="checkbox" class="toggle toggle-primary" />
+          <div class="dropdown dropdown-end">
+            <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="w-4 h-4 stroke-primary"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
+                <div class="text-left card-body text-primary normal-case">
+                  <p>← Toggle Left to unlock</p>
+                  <div class="text-right text-primary normal-case">
+                    <p>Toggle Right to Lock →</p>
+                  </div>
+                </div>
+              </div></button
+            >
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="flex flex-col items-center mt-3">
+      <div class="w-full card">
+        <figure>
+          <figcaption class="flex flex-col items-center p-4 card-body">
+            {#if goal.days_of_week}
+              <div class="flex items-center justify-between w-full">
+                <h2 class="mb-2 card-title">Days</h2>
+
+                <div class="flex items-center">
+                  <label for="selectAll" class="flex items-center cursor-pointer label">
+                    <input
+                      type="checkbox"
+                      class="toggle toggle-primary"
+                      id="selectAll"
+                      bind:checked={selectAll}
+                      on:click={toggleAll}
+                    />
+                    <label
+                      class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
+                    >
+                      <div class="dropdown dropdown-end">
+                        <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            class="w-4 h-4 stroke-primary"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                          <div
+                            class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64"
+                          >
+                            <div class="text-left card-body text-primary normal-case">
+                              <p>These are the days of the week your goals repeat</p>
+                              <div class="text-right text-primary normal-case">
+                                <p>Toggle right to select all →</p>
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      </div>
+                    </label>
+                  </label>
+                </div>
+              </div>
+              <DaysOfWeekSelector daysOfWeek={goal.days_of_week} />
+            {/if}
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+    <div class="flex flex-col items-center mt-3">
+      <div class="w-full card">
+        <figure>
+          <figcaption class="flex flex-row items-center p-4 card-body">
+            <h2 class="mb-2 card-title">Time</h2>
+            <div class="flex items-center flex-grow">
+              <input
+                class="w-full px-3 py-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline"
+                id="goal-time"
+                type="time"
+                bind:value={goal.time_of_day}
+                aria-describedby="time-description"
+              />
+              <div class="justify-end w-full mt-2 dropdown dropdown-end md:ml-2 md:mt-0 md:w-auto">
+                <!-- Replaced label tag with div -->
+                <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4 stroke-primary"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
+                    <!-- Removed button tag wrapping div -->
+                    <div class="text-left card-body text-primary normal-case">
+                      <p>Set the alert time for your SMART goals for selected days above.</p>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="w-full card">
+        <figure>
+          <figcaption class="flex flex-row items-center p-4 card-body">
+            <h2 class="mb-2 card-title">Date</h2>
+            <div class="relative flex items-center flex-grow">
+              <input
+                class="w-full px-3 py-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline"
+                id="goal-date"
+                type="date"
+                bind:value={goal.date_for_achievement}
+                aria-describedby="date-description"
+              />
+              <div class="justify-end w-full mt-2 dropdown dropdown-end md:ml-2 md:mt-0 md:w-auto">
+                <!-- Replaced label tag with div -->
+                <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4 stroke-primary"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
+                    <!-- Removed button tag wrapping div -->
+                    <div class="text-left card-body text-primary normal-case">
+                      <p>Choose the Date for Completing Your SMART Goal.</p>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </figcaption>
+        </figure>
+      </div>
+      <div class="flex flex-col mt-3 items-left">
+        <button class="btn rounded-xl btn-primary" on:click={handleSave}>Save Smart Goal</button>
+      </div>
+    </div>
+
+    <div class="flex">
+      <div class="divider" />
+    </div>
+  </div>
 </div>
+
+<style>
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .page-fade-in {
+    animation: fadeIn 1s ease-in-out;
+  }
+</style>
