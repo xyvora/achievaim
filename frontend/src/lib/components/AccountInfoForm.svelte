@@ -120,11 +120,15 @@
           genericError = true;
           genericErrorMessage =
             'An error occurred trying to connect to the sever. Please try again later.';
+          isLoading.set(false);
+          return;
         }
       } else {
         genericError = true;
         genericErrorMessage =
           'An error occurred trying to create the user. Please try again later.';
+        isLoading.set(false);
+        return;
       }
     } else {
       // This is already checked, but typescript refuses to believe it without this.
@@ -147,6 +151,8 @@
           genericError = true;
           genericErrorMessage =
             'An error occurred trying to connect to the sever. Please try again later.';
+          isLoading.set(false);
+          return;
         }
 
         let userLogin: UserLogin = {
@@ -166,10 +172,13 @@
           ) {
             genericError = true;
             genericErrorMessage = 'Incorrect user name or password';
+            isLoading.set(false);
+            return;
           } else {
             genericError = true;
-            genericErrorMessage =
-              'An error occurred trying to connect to the sever. Please try again later.';
+            genericErrorMessage = `An error occurred trying to connect to the sever. Please try again later.`;
+            isLoading.set(false);
+            return;
           }
         }
         goto('/account-settings');
@@ -177,6 +186,8 @@
         genericError = true;
         genericErrorMessage =
           'An error occurred trying to create the user. Please try again later.';
+        isLoading.set(false);
+        return;
       }
     }
 
