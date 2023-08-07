@@ -54,6 +54,9 @@
 @compose-up:
   docker compose up --build
 
+@compose-up-ci:
+  docker compose -f docker-compose-testing up -d
+
 @compose-up-detached:
   docker compose up -d --build
 
