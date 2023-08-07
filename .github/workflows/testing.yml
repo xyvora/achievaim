@@ -35,7 +35,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./frontend
-          tags: backend:dev
+          tags: frontend:dev
           outputs: type=docker,dest=/tmp/frontend.tar
           push: false
       - name: Upload artifact
@@ -157,18 +157,16 @@ jobs:
           name: backend
           path: /tmp
       - name: Load Backend Image
-        run: |
-          docker load --input /tmp/backend.tar
-          docker image ls -a
+        run: docker load --input /tmp/backend.tar
       - name: Download frontend
         uses: actions/download-artifact@v3
         with:
           name: frontend
           path: /tmp
       - name: Load Frontend Image
-        run: |
-          docker load --input /tmp/frontend.tar
-          docker image ls -a
+        run: docker load --input /tmp/frontend.tar
+      - name: List images
+        run: docker image ls -a
       - name: Install just
         uses: taiki-e/install-action@just
       - name: Setup node
