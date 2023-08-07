@@ -98,7 +98,7 @@ test('sign in', async ({ page }) => {
   await page.locator('#login-button').click();
   await expect(page).toHaveURL('/');
   await expect(page.locator('#login-button')).not.toBeVisible();
-  await expect(page.getByText('Monday').first()).toBeVisible();
+  await expect(page.getByLabel('edit-goal').first()).toBeVisible();
   await expect(page.getByLabel('account-settings')).toBeVisible();
   await page.getByLabel('account-settings').click();
   await expect(page.locator('#btn-delete')).toBeVisible();
