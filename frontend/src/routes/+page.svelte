@@ -143,7 +143,7 @@
           effective and efficient platform for personal and professional growth.
         </p>
       </div>
-      <div class="card flex-shrink-0 w-full lg:w-1/3 max-w-sm shadow-2xl bg-base-100">
+      <div class="card flex-shrink-0 w-full lg:w-1/3 max-w-sm shadow-lg bg-base-100">
         <div class="card-body">
           <form
             on:submit|preventDefault={handleSubmit}
