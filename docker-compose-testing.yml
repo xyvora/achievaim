@@ -7,8 +7,6 @@ services:
       - db
     ports:
       - "8000:8000"
-    networks:
-      - achievaim
     environment:
       - MONGO_INITDB_DATABASE=test
       - MONGO_INITDB_ROOT_USERNAME=mongo
@@ -22,8 +20,6 @@ services:
       - backend
     environment:
       - VITE_API_PATH=http://localhost:8000/api/v1
-    networks:
-      - achievaim
     ports:
       - "3000:3000"
   db:
@@ -34,8 +30,6 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=mongo_password
     expose:
       - 27017
-    networks:
-      - achievaim
     ports:
       - "27017:27017"
 
