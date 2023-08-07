@@ -8,7 +8,7 @@ const config: PlaywrightTestConfig = {
   testDir: 'tests',
   testMatch: /(.+\.)?(test|spec)\.[jt]s/,
   use: {
-    trace: 'on'
+    trace: 'on-first-retry'
   }
 };
 
