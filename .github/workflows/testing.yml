@@ -25,25 +25,6 @@ jobs:
           name: backend
           path: /tmp/backend.tar
           retention-days: 1
-  build-frontend:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Build and export
-        uses: docker/build-push-action@v4
-        with:
-          context: ./frontend
-          tags: frontend:dev
-          outputs: type=docker,dest=/tmp/frontend.tar
-          push: false
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: frontend
-          path: /tmp/frontend.tar
-          retention-days: 1
   backend-linting:
     strategy:
       fail-fast: false
@@ -158,15 +139,6 @@ jobs:
           path: /tmp
       - name: Load Backend Image
         run: docker load --input /tmp/backend.tar
-      - name: Download frontend
-        uses: actions/download-artifact@v3
-        with:
-          name: frontend
-          path: /tmp
-      - name: Load Frontend Image
-        run: docker load --input /tmp/frontend.tar
-      - name: List images
-        run: docker image ls -a
       - name: Install just
         uses: taiki-e/install-action@just
       - name: Start Containers
@@ -183,7 +155,7 @@ jobs:
         env:
           VITE_API_PATH: "http://127.0.0.1:8000/api/v1"
         run: |
-          just frontend-test-ci
+          just api-ci
       - name: Upload test results
         if: failure()
         uses: actions/upload-artifact@v3
