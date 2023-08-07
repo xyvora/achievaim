@@ -149,7 +149,8 @@
         } catch (error) {
           console.log(error);
           genericError = true;
-          genericErrorMessage = `An error occurred trying to connect to the sever. Please try again later. Error: ${error}`;
+          genericErrorMessage =
+            'An error occurred trying to connect to the sever. Please try again later.';
           isLoading.set(false);
           return;
         }
