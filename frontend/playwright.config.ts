@@ -9,7 +9,7 @@ const config: PlaywrightTestConfig = {
   testMatch: /(.+\.)?(test|spec)\.[jt]s/,
   expect: { timeout: 15000 },
   use: {
-    trace: 'on-first-retry'
+    trace: 'on'
   }
 };
 
