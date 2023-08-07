@@ -8,7 +8,6 @@
   import { isLoading, isLoggedIn, accessToken } from '$lib/stores/stores';
   import Input from '$lib/components/Input.svelte';
   import ErrorMessage from '$lib/components/ErrorMessage.svelte';
-  import { API } from '$lib/variables';
 
   interface User {
     id?: string;
@@ -150,7 +149,8 @@
         } catch (error) {
           console.log(error);
           genericError = true;
-          genericErrorMessage = `An error occurred trying to connect to the sever. Please try again later. ${API}`;
+          genericErrorMessage =
+            'An error occurred trying to connect to the sever. Please try again later.';
           isLoading.set(false);
           return;
         }
