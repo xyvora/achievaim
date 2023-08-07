@@ -307,8 +307,11 @@
           >
         </div>
         <div>
-          <button class="btn btn-outline" type="button" id="btn-delete" on:click={() => deleteUser()}
-            >Delete</button
+          <button
+            class="btn btn-outline"
+            type="button"
+            id="btn-delete"
+            on:click={() => deleteUser()}>Delete</button
           >
         </div>
       {:else if $isLoading}
@@ -316,7 +319,7 @@
           <span class="loading loading-spinner text-primary" id="sign-up-spinner" />
         </div>
       {:else}
-        <button class="btn btn-primary " type="submit" id="btn-sign-up">Sign Up</button>
+        <button class="btn btn-primary" type="submit" id="btn-sign-up">Sign Up</button>
       {/if}
     </div>
   </form>
