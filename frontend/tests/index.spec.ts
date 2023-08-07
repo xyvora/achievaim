@@ -12,12 +12,14 @@ test('navbar link is active', async ({ page }) => {
 
 test('user name is required', async ({ page }) => {
   await page.goto('/');
+  await expect(page.locator('#user-name')).toBeVisible();
   await page.locator('#login-button').click();
   await expect(page.locator('#user-name-error')).toBeVisible();
 });
 
 test('password is required', async ({ page }) => {
   await page.goto('/');
+  await expect(page.locator('#password')).toBeVisible();
   await page.locator('#login-button').click();
   await expect(page.locator('#password-error')).toBeVisible();
 });
