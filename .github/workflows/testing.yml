@@ -125,9 +125,7 @@ jobs:
     strategy:
       fail-fast: false
     runs-on: ubuntu-latest
-    needs:
-      - build-backend
-      - build-frontend
+    needs: build-backend
     steps:
       - uses: actions/checkout@v3
       - name: Set up Docker Buildx
