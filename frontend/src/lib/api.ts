@@ -6,7 +6,7 @@ import type {
   GoalCreate,
   UserCreate,
   UserNoPassword,
-  UserUpdateMe
+  UserUpdateMe,
 } from '$lib/generated';
 import type { AccessToken, UserLogin } from '$lib/types';
 import { LoginError } from '$lib/errors';
@@ -21,8 +21,8 @@ async function authHeaders(): Promise<AxiosRequestConfig<any>> {
   if (token) {
     return {
       headers: {
-        Authorization: `Bearer ${token.access_token}`
-      }
+        Authorization: `Bearer ${token.access_token}`,
+      },
     };
   }
 
@@ -83,8 +83,8 @@ export const login = async (loginInfo: UserLogin): Promise<AccessToken> => {
   try {
     const response = await axiosInstance.post('/login/access-token', formData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+        'Content-Type': 'multipart/form-data',
+      },
     });
     if (response.status === 200) {
       return response.data;

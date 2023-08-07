@@ -12,8 +12,8 @@
       thursday: false,
       friday: false,
       saturday: false,
-      sunday: false
-    }
+      sunday: false,
+    },
   };
 
   let selectAll = false;

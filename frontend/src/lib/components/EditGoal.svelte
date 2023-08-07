@@ -9,7 +9,7 @@
     { name: 'Thursday', selected: false },
     { name: 'Friday', selected: false },
     { name: 'Saturday', selected: false },
-    { name: 'Sunday', selected: false }
+    { name: 'Sunday', selected: false },
   ];
 
   let selectAll = false;

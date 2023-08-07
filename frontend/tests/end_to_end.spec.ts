@@ -6,7 +6,7 @@ test('signup', async ({ page }) => {
 
   await page.goto('/');
   await expect(
-    page.getByRole('link', { name: 'Are your Goals Smart yet? Sign up here!' })
+    page.getByRole('link', { name: 'Are your Goals Smart yet? Sign up here!' }),
   ).toBeVisible();
   await page.getByRole('link', { name: 'Are your Goals Smart yet? Sign up here!' }).click();
   await expect(page.locator('#first-name')).toBeVisible();
@@ -37,7 +37,7 @@ test('update user info', async ({ page }) => {
 
   await page.goto('/');
   await expect(
-    page.getByRole('link', { name: 'Are your Goals Smart yet? Sign up here!' })
+    page.getByRole('link', { name: 'Are your Goals Smart yet? Sign up here!' }),
   ).toBeVisible();
   await page.getByRole('link', { name: 'Are your Goals Smart yet? Sign up here!' }).click();
   await expect(page.locator('#first-name')).toBeVisible();
@@ -74,7 +74,7 @@ test('sign in', async ({ page }) => {
 
   await page.goto('/');
   await expect(
-    page.getByRole('link', { name: 'Are your Goals Smart yet? Sign up here!' })
+    page.getByRole('link', { name: 'Are your Goals Smart yet? Sign up here!' }),
   ).toBeVisible();
   await page.getByRole('link', { name: 'Are your Goals Smart yet? Sign up here!' }).click();
   await expect(page.locator('#first-name')).toBeVisible();
