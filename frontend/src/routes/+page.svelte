@@ -1,9 +1,8 @@
 <script lang="ts">
-  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+  import Message from '$lib/components/Message.svelte';
   import Input from '$lib/components/Input.svelte';
   import { LoginError } from '$lib/errors';
   import { accessToken, isLoading, isLoggedIn } from '$lib/stores/stores';
-
   import { login } from '$lib/api';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
 
@@ -139,14 +138,17 @@
                 isPassword={true}
               />
 
-              <ErrorMessage
-                errorMessageId="generic-error"
-                errorMessage={genericErrorMessage}
-                showError={genericError}
+              <Message
+                messageId="generic-error"
+                message={genericErrorMessage}
+                showMessage={genericError}
+                isError={true}
               />
 
               <div class="form-control">
-                <a href={'#'} class="label-text-alt link link-hover mt-4 mb-4">Forgot password?</a>
+                <a href="/forgot-password" class="label-text-alt link link-hover mt-4 mb-4"
+                  >Forgot password?</a
+                >
                 <a
                   href="signup"
                   class="label-text-alt link link-hover"

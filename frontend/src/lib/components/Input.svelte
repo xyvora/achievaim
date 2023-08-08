@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+  import Message from '$lib/components/Message.svelte';
 
   export let inputId: string;
   export let labelText: string;
@@ -38,6 +38,6 @@
     <input type="text" {placeholder} id={inputId} class="input input-bordered" bind:value />
   {/if}
   {#if isError && errorMessage !== null}
-    <ErrorMessage errorMessageId="{inputId}-error" {errorMessage} showError={true} />
+    <Message messageId="{inputId}-error" message={errorMessage} showMessage={true} isError={true} />
   {/if}
 </div>
