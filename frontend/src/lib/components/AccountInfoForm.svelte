@@ -117,7 +117,6 @@
           user_name: user.userName,
           country: user.country,
           password: user.password,
-          secuitry_question_answer: user.securityQuestionAnswer,
         };
 
         try {
