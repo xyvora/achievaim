@@ -219,7 +219,6 @@
       user.firstName = info.first_name;
       user.lastName = info.last_name;
       user.userName = info.user_name;
-      user.securityQuestionAnswer = info.security_question_answer;
 
       if (info.country) {
         user.country = info.country;
