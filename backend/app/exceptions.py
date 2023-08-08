@@ -30,6 +30,10 @@ class NoRecordsUpdatedError(Exception):
     pass
 
 
+class SecurityQuestionMismatch(Exception):
+    pass
+
+
 class UserNotFoundError(Exception):
     pass
 

@@ -11,6 +11,7 @@ async def test_create_user(country, test_client):
         "first_name": "Imma",
         "last_name": "User",
         "password": "immapassword",
+        "security_question_answer": "my answer",
     }
     if country:
         user_data["country"] = country
@@ -27,6 +28,7 @@ async def test_create_user_duplicate(user_with_goals, test_client):
         "last_name": "User",
         "country": "USA",
         "password": "immapassword",
+        "security_question_answer": "my answer",
     }
     response = await test_client.post("user/", json=user_data)
 
@@ -224,6 +226,7 @@ async def test_update_me_different_user(user_data, test_client, user_token_heade
             "last_name": "User",
             "country": "USA",
             "password": "abc",
+            "security_question_answer": "my answer",
         },
     )
     assert response.status_code == 200
@@ -245,6 +248,7 @@ async def test_update_me_duplicate_user_name(test_client, user_with_goals, user_
         "last_name": "User",
         "country": "USA",
         "password": "some_password",
+        "security_question_answer": "my answer",
     }
     response = await test_client.post("user/", json=user_data)
     assert response.status_code == 200
@@ -263,3 +267,42 @@ async def test_update_me_not_authenticated(user_with_goals, user_data, test_clie
     response = await test_client.put("user/me", json=user_data)
 
     assert response.status_code == 401
+
+
+@pytest.mark.usefixtures("user_no_goals")
+async def test_forgot_password(user_data, test_client):
+    reset_info = {
+        "user_name": user_data["user_name"],
+        "security_question_answer": user_data["security_question_answer"],
+        "new_password": "new",
+    }
+
+    response = await test_client.patch("user/forgot-password", json=reset_info)
+
+    assert response.status_code == 200
+
+
+@pytest.mark.usefixtures("user_no_goals")
+async def test_forgot_password_wrong_answer(user_data, test_client):
+    reset_info = {
+        "user_name": user_data["user_name"],
+        "security_question_answer": "bad",
+        "new_password": "new",
+    }
+
+    response = await test_client.patch("user/forgot-password", json=reset_info)
+
+    assert response.status_code == 400
+
+
+@pytest.mark.usefixtures("user_no_goals")
+async def test_forgot_password_not_found(user_data, test_client):
+    reset_info = {
+        "user_name": "unknown",
+        "security_question_answer": user_data["security_question_answer"],
+        "new_password": "new",
+    }
+
+    response = await test_client.patch("user/forgot-password", json=reset_info)
+
+    assert response.status_code == 404

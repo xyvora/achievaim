@@ -53,6 +53,7 @@ def user_data():
         "last_name": "User",
         "country": "USA",
         "hashed_password": get_password_hash("test_password", _rounds=1),
+        "security_question_answer": "my answer",
         "goals": [
             {
                 "id": str(uuid4()),
@@ -113,6 +114,7 @@ async def admin_user():
         last_name="User",
         country="USA",
         hashed_password=get_password_hash("test_password", _rounds=1),
+        security_question_answer="my answer",
         is_admin=True,
     ).insert()
 

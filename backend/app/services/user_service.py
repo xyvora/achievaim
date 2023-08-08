@@ -9,9 +9,18 @@ from app.exceptions import (
     DuplicateUserNameError,
     NoRecordsDeletedError,
     NoRecordsUpdatedError,
+    SecurityQuestionMismatch,
     UserNotFoundError,
 )
-from app.models.user import User, UserCreate, UserNoGoals, UserNoPassword, UserUpdate, UserUpdateMe
+from app.models.user import (
+    PasswordReset,
+    User,
+    UserCreate,
+    UserNoGoals,
+    UserNoPassword,
+    UserUpdate,
+    UserUpdateMe,
+)
 
 
 async def create_user(user: UserCreate) -> UserNoPassword:
@@ -23,13 +32,15 @@ async def create_user(user: UserCreate) -> UserNoPassword:
     first_name = user.first_name.strip()
     last_name = user.last_name.strip()
     country = user.country.strip() if user.country else None
-    hashed_password = get_password_hash(user.password)
+    hashed_password = get_password_hash(user.password.strip())
+    security_question_answer = user.security_question_answer.lower().strip()
     user_info = User(
         user_name=user_name,
         first_name=first_name,
         last_name=last_name,
         country=country,
         hashed_password=hashed_password,
+        security_question_answer=security_question_answer,
     )
 
     await user_info.save()
@@ -54,6 +65,39 @@ async def delete_user_by_user_name(user_name: str) -> None:
 
     if not delete_result or delete_result.deleted_count < 1:
         raise NoRecordsDeletedError(f"User with user name {user_name} not found")
+
+
+async def forgot_password(reset_info: PasswordReset) -> UserNoPassword:
+    user = await User.find_one(User.user_name == reset_info.user_name.lower().strip())
+
+    if not user:
+        raise UserNotFoundError(f"User with user name {reset_info.user_name} not found")
+
+    if user.security_question_answer != reset_info.security_question_answer.lower().strip():
+        raise SecurityQuestionMismatch("The user's security question answer does not match")
+
+    update_result = await User.find_one(
+        User.user_name == reset_info.user_name.lower().strip()
+    ).update(
+        Set(
+            {
+                User.hashed_password: get_password_hash(reset_info.new_password.strip()),
+                User.last_update: datetime.now(),
+            }
+        )
+    )
+
+    if update_result.modified_count < 1:  # pragma: no cover
+        raise NoRecordsUpdatedError(f"Error resetting password for user {reset_info.user_name}")
+
+    updated_user = await User.find_one(
+        User.user_name == reset_info.user_name, projection_model=UserNoPassword
+    )
+
+    if not updated_user:  # pragma: no cover
+        raise UserNotFoundError("User not found after update")
+
+    return updated_user
 
 
 async def get_full_user(user_id: ObjectId | PydanticObjectId) -> User | None:

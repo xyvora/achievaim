@@ -41,6 +41,7 @@ async def test_get_access_token_inactivate_user(test_client, user_with_goals):
             last_name=user_with_goals.last_name,
             country=user_with_goals.country,
             password="test_password",
+            security_question_answer="my answer",
             is_active=False,
             is_admin=user_with_goals.is_admin,
         ),
