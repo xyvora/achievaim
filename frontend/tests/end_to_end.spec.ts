@@ -152,8 +152,8 @@ test('forgot password', async ({ page }) => {
   await page.locator('#last-name').fill('User');
   await page.locator('#user-name').fill(userName);
   await page.locator('#security-question-answer').fill(securityAnswer);
-  await page.locator('#password').fill('mypassword');
-  await page.locator('#verify-password').fill('mypassword');
+  await page.locator('#password').fill(password);
+  await page.locator('#verify-password').fill(password);
   await page.locator('#btn-sign-up').click();
   await expect(page.locator('#btn-log-out')).toBeVisible();
   await page.locator('#btn-log-out').click();

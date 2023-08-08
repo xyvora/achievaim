@@ -152,6 +152,12 @@
           message="Password successfully reset"
           showMessage={showSuccess}
         />
+        <Message
+          messageId="generic-error"
+          message={genericErrorMessage}
+          showMessage={genericError}
+          isError={true}
+        />
       </figcaption>
     </figure>
   </form>
