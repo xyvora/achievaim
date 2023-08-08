@@ -7,7 +7,7 @@
   import { LoginError } from '$lib/errors';
   import { isLoading, isLoggedIn, accessToken } from '$lib/stores/stores';
   import Input from '$lib/components/Input.svelte';
-  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+  import Message from '$lib/components/Message.svelte';
 
   interface User {
     id?: string;
@@ -310,18 +310,20 @@
         </div>
         {#if passwordVerifyError}
           <div class="w-full text-center">
-            <ErrorMessage
-              errorMessageId="password-verify-error"
-              errorMessage="Passwords don't match"
-              showError={passwordVerifyError}
+            <Message
+              messageId="password-verify-error"
+              message="Passwords don't match"
+              showMessage={passwordVerifyError}
+              isError={true}
             />
           </div>
         {/if}
       </div>
-      <ErrorMessage
-        errorMessageId="generic-error"
-        errorMessage={genericErrorMessage}
-        showError={genericError}
+      <Message
+        messageId="generic-error"
+        message={genericErrorMessage}
+        showMessage={genericError}
+        isError={true}
       />
       <div class="flex w-full items-center justify-between">
         {#if $isLoggedIn}

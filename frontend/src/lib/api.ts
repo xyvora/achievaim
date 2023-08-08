@@ -4,6 +4,7 @@ import { axiosInstance } from '$lib/axios-config';
 import type {
   GoalOutput,
   GoalCreate,
+  PasswordReset,
   UserCreate,
   UserNoPassword,
   UserUpdateMe,
@@ -57,6 +58,17 @@ export const deleteMe = async () => {
   const response = await axiosInstance.delete('/user/me', headers);
 
   if (response.status !== 204) {
+    throw new Error(response.statusText);
+  }
+};
+
+export const forgotPassword = async (payload: PasswordReset): Promise<UserNoPassword> => {
+  // TODO: Better handle errors
+  const response = await axiosInstance.patch('/user/forgot-password', payload);
+
+  if (response.status === 200) {
+    return response.data;
+  } else {
     throw new Error(response.statusText);
   }
 };

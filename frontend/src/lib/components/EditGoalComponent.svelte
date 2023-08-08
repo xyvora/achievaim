@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { DaysOfWeekInput, GoalCreate } from '$lib/generated';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
-  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+  import Message from '$lib/components/Message.svelte';
   import { createGoal } from '$lib/api';
 
   let goal: GoalCreate = {
@@ -64,10 +64,11 @@
         placeholder="What's your SMART Goal?"
         bind:value={goal.goal}
       />
-      <ErrorMessage
-        errorMessageId="goal-error"
-        errorMessage="SMART goal is required"
-        showError={goalError}
+      <Message
+        messageId="goal-error"
+        message="SMART goal is required"
+        showMessage={goalError}
+        isError={true}
       />
 
       <div class="mt-3 flex flex-col items-left">
