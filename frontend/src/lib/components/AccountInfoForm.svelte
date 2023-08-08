@@ -279,10 +279,10 @@
       <div class="flex flex-wrap w-full mx-3 mb-6">
         <div class="w-full px-3 mb-6 md:mb-0">
           <Input
-            inputId="security-quesiton-answer"
+            inputId="security-question-answer"
             labelText="If you could have any superpower, what would it be?*"
             placeholder="superpower"
-            errorMessage="Secuitry question is required."
+            errorMessage="Security question is required."
             isError={securityQuestionAnswerError}
             bind:value={user.securityQuestionAnswer}
           />
