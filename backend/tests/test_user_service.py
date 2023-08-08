@@ -16,6 +16,7 @@ async def test_update_me_not_found():
                 country="USA",
                 password="test",
                 user_name="test",
+                security_question_answer="my answer",
             )
         )
 
@@ -30,6 +31,7 @@ async def test_update_user_not_found():
                 first_name="Some",
                 last_name="Person",
                 country="USA",
+                security_question_answer="my answer",
                 is_active=True,
                 is_admin=False,
             )

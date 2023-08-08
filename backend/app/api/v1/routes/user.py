@@ -13,11 +13,18 @@ from starlette.status import (
 from app.api.deps import CurrentAdminUser, CurrentUser, logger
 from app.core.config import config
 from app.core.utils import APIRouter, str_to_oid
-from app.exceptions import DuplicateUserNameError, NoRecordsDeletedError, NoRecordsUpdatedError
-from app.models.user import UserCreate, UserNoPassword, UserUpdateMe
+from app.exceptions import (
+    DuplicateUserNameError,
+    NoRecordsDeletedError,
+    NoRecordsUpdatedError,
+    SecurityQuestionMismatch,
+    UserNotFoundError,
+)
+from app.models.user import PasswordReset, UserCreate, UserNoPassword, UserUpdateMe
 from app.services.user_service import create_user as create_user_service
 from app.services.user_service import delete_user_by_id as delete_user_by_id_service
 from app.services.user_service import delete_user_by_user_name as delete_user_by_user_name_service
+from app.services.user_service import forgot_password as forgot_password_service
 from app.services.user_service import get_user_by_id as get_user_by_id_service
 from app.services.user_service import get_user_by_user_name as get_user_by_user_name_service
 from app.services.user_service import get_users as get_user_service
@@ -46,6 +53,49 @@ async def create_user(user: UserCreate) -> UserNoPassword:
         )
 
     return created_user
+
+
+@router.patch("/forgot-password")
+async def forgot_password(reset_info: PasswordReset) -> UserNoPassword:
+    """Reset a forgotten password."""
+    logger.info("Resetting the password")
+
+    try:
+        update_result = await forgot_password_service(reset_info)
+    except UserNotFoundError:
+        logger.info(
+            f"Error resetting the password for user {reset_info.user_name}: user was not found"
+        )
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND,
+            detail=f"No user with the user name {reset_info.user_name} found",
+        )
+    except SecurityQuestionMismatch:
+        logger.info(
+            f"Error resetting the password for user {reset_info.user_name}: the security question answer does not match"
+        )
+        raise HTTPException(
+            status_code=HTTP_400_BAD_REQUEST,
+            detail="The security question answer does not match",
+        )
+    except NoRecordsUpdatedError:  # pragma: no cover
+        logger.info("Error resetting the password for user %s", reset_info.user_name)
+        raise HTTPException(
+            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error resetting the password for user {reset_info.user_name}",
+        )
+    except Exception as e:  # pragma: no cover
+        logger.info(
+            "An error occurred while resetting the password for user %s: %s",
+            reset_info.user_name,
+            e,
+        )
+        raise HTTPException(
+            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An error occurred while updatingg user",
+        )
+
+    return update_result
 
 
 @router.get("/")

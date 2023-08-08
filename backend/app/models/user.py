@@ -83,12 +83,19 @@ class GoalWithUserId(Goal):
     user_id: ObjectIdStr
 
 
+class PasswordReset(BaseModel):
+    user_name: str
+    security_question_answer: str
+    new_password: str
+
+
 class UserCreate(BaseModel):
     user_name: str
     first_name: str
     last_name: str
     country: str | None = None
     password: str
+    security_question_answer: str
 
 
 class UserNoPassword(BaseModel):
@@ -150,6 +157,7 @@ class UserUpdateMe(BaseModel):
     user_name: str
     first_name: str
     last_name: str
+    security_question_answer: str
     country: str | None = None
 
 
@@ -165,6 +173,7 @@ class User(Document):
     country: str | None = None
     hashed_password: str
     goals: list[Goal] | None = None
+    security_question_answer: str
     is_active: bool = True
     is_admin: bool = False
     date_created: datetime = Field(default_factory=datetime.now)

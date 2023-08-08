@@ -3,11 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type UserCreate = {
+export type PasswordReset = {
   user_name: string;
-  first_name: string;
-  last_name: string;
-  country?: string | null;
-  password: string;
   security_question_answer: string;
+  new_password: string;
 };
