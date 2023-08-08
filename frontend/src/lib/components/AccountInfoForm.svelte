@@ -17,6 +17,7 @@
     country: string | null;
     password: string | null;
     verifyPassword: string | null;
+    securityQuestionAnswer: string | null;
   }
 
   let user: User = {
@@ -26,6 +27,7 @@
     country: null,
     password: null,
     verifyPassword: null,
+    securityQuestionAnswer: null,
   };
 
   let genericError = false;
@@ -35,6 +37,7 @@
   let lastNameError = false;
   let userNameError = false;
   let passwordError = false;
+  let securityQuestionAnswerError = false;
 
   function isMissing(check: string | null): boolean {
     if (check == null || check.trim() === '') {
@@ -71,6 +74,7 @@
     lastNameError = isMissing(user.lastName);
     userNameError = isMissing(user.userName);
     passwordError = isMissing(user.password);
+    securityQuestionAnswerError = isMissing(user.securityQuestionAnswer);
 
     if (!passwordError && user.password !== user.verifyPassword) {
       isLoading.set(false);
@@ -84,7 +88,8 @@
       lastNameError === true ||
       userNameError === true ||
       passwordError === true ||
-      passwordVerifyError === true
+      passwordVerifyError === true ||
+      securityQuestionAnswerError === true
     ) {
       isLoading.set(false);
       return;
@@ -102,7 +107,8 @@
         user.lastName &&
         user.userName &&
         user.country &&
-        user.password
+        user.password &&
+        user.securityQuestionAnswer
       ) {
         const userUpdate: UserUpdateMe = {
           id: user.id,
@@ -111,6 +117,7 @@
           user_name: user.userName,
           country: user.country,
           password: user.password,
+          secuitry_question_answer: user.securityQuestionAnswer,
         };
 
         try {
@@ -132,12 +139,19 @@
       }
     } else {
       // This is already checked, but typescript refuses to believe it without this.
-      if (user.firstName && user.lastName && user.userName && user.password) {
+      if (
+        user.firstName &&
+        user.lastName &&
+        user.userName &&
+        user.password &&
+        user.securityQuestionAnswer
+      ) {
         const userCreate: UserCreate = {
           first_name: user.firstName,
           last_name: user.lastName,
           user_name: user.userName,
           password: user.password,
+          security_question_answer: user.securityQuestionAnswer,
         };
 
         if (user.country) {
@@ -205,6 +219,7 @@
       user.firstName = info.first_name;
       user.lastName = info.last_name;
       user.userName = info.user_name;
+      user.securityQuestionAnswer = info.security_question_answer;
 
       if (info.country) {
         user.country = info.country;
@@ -241,86 +256,100 @@
       </div>
     </div>
     <div class="flex flex-wrap -mx-3 mb-6">
-      <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-        <Input
-          inputId="user-name"
-          labelText="User Name*"
-          placeholder="user name"
-          errorMessage="User Name is required."
-          isError={userNameError}
-          bind:value={user.userName}
-        />
-      </div>
-      <div class="w-full md:w-1/2 px-3">
-        <Input
-          inputId="country"
-          labelText="Country"
-          placeholder="country"
-          bind:value={user.country}
-        />
-      </div>
-    </div>
-    <div class="flex flex-wrap -mx-3 mb-6">
-      <div class="w-full md:w-1/2 px-3">
-        <Input
-          inputId="password"
-          labelText="Password*"
-          placeholder="password"
-          errorMessage="Password is required."
-          isError={passwordError}
-          isPassword={true}
-          bind:value={user.password}
-        />
-      </div>
-      <div class="w-full md:w-1/2 px-3">
-        <Input
-          inputId="verify-password"
-          labelText="Verify Password*"
-          placeholder="verify password"
-          isPassword={true}
-          bind:value={user.verifyPassword}
-        />
-      </div>
-      {#if passwordVerifyError}
-        <div class="w-full text-center">
-          <ErrorMessage
-            errorMessageId="password-verify-error"
-            errorMessage="Passwords don't match"
-            showError={passwordVerifyError}
+      <div class="flex flex-wrap -mx-3 mb-6">
+        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+          <Input
+            inputId="user-name"
+            labelText="User Name*"
+            placeholder="user name"
+            errorMessage="User Name is required."
+            isError={userNameError}
+            bind:value={user.userName}
           />
         </div>
-      {/if}
-    </div>
-    <ErrorMessage
-      errorMessageId="generic-error"
-      errorMessage={genericErrorMessage}
-      showError={genericError}
-    />
-    <div class="flex items-center justify-between">
-      {#if $isLoggedIn}
-        <div class="ml-2">
-          <button class="btn btn-primary" type="submit" id="btn-save">Save</button>
+        <div class="w-full md:w-1/2 px-3">
+          <Input
+            inputId="country"
+            labelText="Country"
+            placeholder="country"
+            bind:value={user.country}
+          />
         </div>
-        <div>
-          <button class="btn btn-outline" type="button" id="btn-log-out" on:click={() => logOut()}
-            >Log Out</button
-          >
+      </div>
+      <div class="flex flex-wrap w-full mx-3 mb-6">
+        <div class="w-full px-3 mb-6 md:mb-0">
+          <Input
+            inputId="security-quesiton-answer"
+            labelText="If you could have any superpower, what would it be?*"
+            placeholder="superpower"
+            errorMessage="Secuitry question is required."
+            isError={securityQuestionAnswerError}
+            bind:value={user.securityQuestionAnswer}
+          />
         </div>
-        <div>
-          <button
-            class="btn btn-outline"
-            type="button"
-            id="btn-delete"
-            on:click={() => deleteUser()}>Delete</button
-          >
+      </div>
+      <div class="flex flex-wrap -mx-3 mb-6">
+        <div class="w-full md:w-1/2 px-3">
+          <Input
+            inputId="password"
+            labelText="Password*"
+            placeholder="password"
+            errorMessage="Password is required."
+            isError={passwordError}
+            isPassword={true}
+            bind:value={user.password}
+          />
         </div>
-      {:else if $isLoading}
-        <div class="mt-6 text-center">
-          <span class="loading loading-spinner text-primary" id="sign-up-spinner" />
+        <div class="w-full md:w-1/2 px-3">
+          <Input
+            inputId="verify-password"
+            labelText="Verify Password*"
+            placeholder="verify password"
+            isPassword={true}
+            bind:value={user.verifyPassword}
+          />
         </div>
-      {:else}
-        <button class="btn btn-primary" type="submit" id="btn-sign-up">Sign Up</button>
-      {/if}
+        {#if passwordVerifyError}
+          <div class="w-full text-center">
+            <ErrorMessage
+              errorMessageId="password-verify-error"
+              errorMessage="Passwords don't match"
+              showError={passwordVerifyError}
+            />
+          </div>
+        {/if}
+      </div>
+      <ErrorMessage
+        errorMessageId="generic-error"
+        errorMessage={genericErrorMessage}
+        showError={genericError}
+      />
+      <div class="flex items-center justify-between">
+        {#if $isLoggedIn}
+          <div class="ml-2">
+            <button class="btn btn-primary" type="submit" id="btn-save">Save</button>
+          </div>
+          <div>
+            <button class="btn btn-outline" type="button" id="btn-log-out" on:click={() => logOut()}
+              >Log Out</button
+            >
+          </div>
+          <div>
+            <button
+              class="btn btn-outline"
+              type="button"
+              id="btn-delete"
+              on:click={() => deleteUser()}>Delete</button
+            >
+          </div>
+        {:else if $isLoading}
+          <div class="mt-6 text-center">
+            <span class="loading loading-spinner text-primary" id="sign-up-spinner" />
+          </div>
+        {:else}
+          <button class="btn btn-primary" type="submit" id="btn-sign-up">Sign Up</button>
+        {/if}
+      </div>
     </div>
   </form>
 </div>
