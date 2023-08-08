@@ -324,7 +324,7 @@
         errorMessage={genericErrorMessage}
         showError={genericError}
       />
-      <div class="flex items-center justify-between">
+      <div class="flex w-full items-center justify-between">
         {#if $isLoggedIn}
           <div class="ml-2">
             <button class="btn btn-primary" type="submit" id="btn-save">Save</button>
