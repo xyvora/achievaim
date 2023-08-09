@@ -226,7 +226,6 @@
     }
   });
 </script>
-
 <div class="page-fade-in">
   <form
     on:submit|preventDefault={handleSubmit}
