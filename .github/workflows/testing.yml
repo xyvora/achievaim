@@ -16,6 +16,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./backend
+          target: prod
           tags: backend:dev
           outputs: type=docker,dest=/tmp/backend.tar
           push: false
