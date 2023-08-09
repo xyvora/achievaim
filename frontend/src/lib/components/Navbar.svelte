@@ -111,7 +111,7 @@
           <li>
             <a
               href="/account-settings"
-              aria-label="account-settings"
+              aria-label="account settings"
               title="Account Settings"
               class={$page.url.pathname === '/account-settings' ? 'rounded bg-white' : ''}
               on:click={animateSVG}
