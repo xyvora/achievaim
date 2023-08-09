@@ -95,13 +95,10 @@
     isLoading.set(false);
   }
 </script>
-
 <div class="page-fade-in">
   {#if !$isLoggedIn}
-    <div class="hero min-h-screen bg-base-200">
-      <div
-        class="flex flex-col lg:flex-row justify-around items-center lg:items-start hero-content"
-      >
+    <div class="hero min-h-screen">
+      <div class="flex flex-col lg:flex-row justify-around items-center lg:items-start hero-content">
         <div class="text-center lg:text-left lg:w-1/2">
           <h1 class="text-5xl text-left font-bold">Smart Tracking Your Goals.</h1>
           <p class="py-6 text-left">
@@ -146,13 +143,17 @@
               />
 
               <div class="form-control">
-                <a href={'#'} class="label-text-alt link link-hover mt-4 mb-4">Forgot password?</a>
+                <a 
+               
+                href="forgot-password"
+                class="label-text-alt link link-hover m-3"
+                class:active={$page.url.pathname === '/forgot-password'}
+              >Forgot Password</a>
                 <a
                   href="signup"
-                  class="label-text-alt link link-hover"
+                  class="label-text-alt link link-hover m-3"
                   class:active={$page.url.pathname === '/signup'}
-                  >Are your Goals Smart yet? Sign up here!</a
-                >
+                >Are your Goals Smart yet? Sign up here!</a>
               </div>
               {#if $isLoading}
                 <div class="mt-6 text-center">
@@ -160,7 +161,13 @@
                 </div>
               {:else}
                 <div class="form-control mt-6">
-                  <button class="btn btn-primary" type="submit" id="login-button">Login</button>
+                  <button class="btn btn-primary mb-4" type="submit" id="login-button">Login</button>
+                  <button class="btn btn-primary" type="button">
+                    <span class="inline-flex items-center bg-white p-1 rounded-full">
+                        <img class="w-4 h-4" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo">
+                    </span>
+                    <span>Login with Google</span>
+                </button>
                 </div>
               {/if}
               <div class="form-control mt-6 text-center text-lg font-bold" />
@@ -170,6 +177,7 @@
       </div>
     </div>
   {:else}
+ 
     <div class="container mx-auto px-4 py-8">
       <!-- The 'container' class sets a max-width and centers the content horizontally -->
 
