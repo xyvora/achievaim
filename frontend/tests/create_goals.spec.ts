@@ -14,7 +14,6 @@ test('goal is required', async ({ page }) => {
 });
 
 test('end to end create goal', async ({ page }) => {
-  // TODO: This doesn't yet test saving the goal
   const userName = uuidv4();
   const password = 'mypassword';
   const securityAnswer = 'my answer';
@@ -59,6 +58,9 @@ test('end to end create goal', async ({ page }) => {
   await page.locator('#attainable').fill(attainable);
   await page.locator('#relevant').fill(relevant);
   await page.locator('#time-bound').fill(timeBound);
+  await page.locator('#save-goal-button').click();
+  await expect(page.locator('#toast-message')).toBeVisible();
+  await expect(page).toHaveURL('/');
 
   await page.getByLabel('account settings').click();
   await expect(page.locator('#btn-delete')).toBeVisible();

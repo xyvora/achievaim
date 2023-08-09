@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import type { DaysOfWeekInput, GoalCreate } from '$lib/generated';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
   import Message from '$lib/components/Message.svelte';
@@ -17,8 +18,8 @@
   };
 
   let selectAll = false;
-
   let goalError = false;
+  let showToast = false;
 
   const toggleAll = () => {
     selectAll = !selectAll;
@@ -31,6 +32,10 @@
       });
     }
   };
+
+  function delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 
   async function handleSave() {
     goalError = false;
@@ -45,8 +50,13 @@
 
     try {
       await createGoal(goal);
+      showToast = true;
+      await delay(3000);
+      showToast = false;
+      goto('/');
     } catch (error) {
       console.log(error);
+      showToast = false;
     }
   }
 
@@ -489,6 +499,13 @@
           >Save Smart Goal</button
         >
       </div>
+      {#if showToast}
+        <div class="toast" id="toast-message">
+          <div class="alert alert-info">
+            <span>Goal successfully saved, returning home.</span>
+          </div>
+        </div>
+      {/if}
     </div>
 
     <div class="flex">
