@@ -485,7 +485,9 @@
         </figure>
       </div>
       <div class="flex flex-col mt-3 items-left">
-        <button class="btn rounded-xl btn-primary" on:click={handleSave}>Save Smart Goal</button>
+        <button class="btn rounded-xl btn-primary" id="save-goal-button" on:click={handleSave}
+          >Save Smart Goal</button
+        >
       </div>
     </div>
 
