@@ -7,7 +7,7 @@
   import { LoginError } from '$lib/errors';
   import { isLoading, isLoggedIn, accessToken } from '$lib/stores/stores';
   import Input from '$lib/components/Input.svelte';
-  import Message from '$lib/components/Message.svelte';
+  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 
   interface User {
     id?: string;
@@ -226,7 +226,6 @@
     }
   });
 </script>
-
 <div class="page-fade-in">
   <form
     on:submit|preventDefault={handleSubmit}
@@ -310,20 +309,18 @@
         </div>
         {#if passwordVerifyError}
           <div class="w-full text-center">
-            <Message
-              messageId="password-verify-error"
-              message="Passwords don't match"
-              showMessage={passwordVerifyError}
-              isError={true}
+            <ErrorMessage
+              errorMessageId="password-verify-error"
+              errorMessage="Passwords don't match"
+              showError={passwordVerifyError}
             />
           </div>
         {/if}
       </div>
-      <Message
-        messageId="generic-error"
-        message={genericErrorMessage}
-        showMessage={genericError}
-        isError={true}
+      <ErrorMessage
+        errorMessageId="generic-error"
+        errorMessage={genericErrorMessage}
+        showError={genericError}
       />
       <div class="flex w-full items-center justify-between">
         {#if $isLoggedIn}
