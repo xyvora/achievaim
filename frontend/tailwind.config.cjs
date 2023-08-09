@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 module.exports = {
-  purge: ['./src/**/*.svelte', './src/**/*.html'],
+  content: ['./src/**/*.svelte', './src/**/*.html'],
   darkMode: 'class', // or 'media'
   theme: {
     extend: {},
