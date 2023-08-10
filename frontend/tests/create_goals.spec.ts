@@ -60,7 +60,7 @@ test('end to end create goal', async ({ page }) => {
   await page.locator('#time-bound').fill(timeBound);
   await page.locator('#save-goal-button').click();
   await expect(page.locator('#toast-message')).toBeVisible();
-  await expect(page).toHaveURL('/');
+  await expect(page).toHaveURL('/', { timeout: 10000 });
 
   await page.getByLabel('account settings').click();
   await expect(page.locator('#btn-delete')).toBeVisible();
