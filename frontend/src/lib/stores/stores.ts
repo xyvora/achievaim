@@ -48,3 +48,26 @@ export const isLoading = writable<boolean>(false);
 isLoading.subscribe((value: boolean) => {
   return value;
 });
+
+export const showToast = writable<boolean>(false);
+
+showToast.subscribe((value: boolean) => {
+  return value;
+});
+
+export const toastMessage = writable<string>();
+
+toastMessage.subscribe((value: string) => {
+  return value;
+});
+
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export async function setToast(message: string, timeout = 5000) {
+  toastMessage.set(message);
+  showToast.set(true);
+  await delay(timeout);
+  showToast.set(false);
+}
