@@ -228,10 +228,7 @@
 </script>
 
 <div class="page-fade-in">
-  <form
-    on:submit|preventDefault={handleSubmit}
-    class="w-full max-w-lg mx-auto my-10 p-5 rounded shadow"
-  >
+  <form on:submit|preventDefault={handleSubmit} class="w-full max-w-lg mx-auto m-3 rounded shadow">
     <div class="md:flex mb-6">
       <div class="w-full md:w-1/2 md:mr-4 mb-6 md:mb-0">
         <Input
@@ -321,34 +318,49 @@
       </div>
     {/if}
   </form>
-</div>
-<Message
-  messageId="generic-error"
-  message={genericErrorMessage}
-  showMessage={genericError}
-  isError={true}
-/>
 
-<div class="flex flex-col md:flex-row md:justify-between mb-6 space-y-2 md:space-y-0 md:space-x-2">
-  {#if $isLoggedIn}
-    <button class="btn btn-primary mb-2 md:mb-0" type="submit" id="btn-save">Save</button>
-    <button
-      class="btn btn-outline mb-2 md:mb-0 mx-auto md:mx-0"
-      type="button"
-      id="btn-log-out"
-      on:click={() => logOut()}>Log Out</button
-    >
-    <button
-      class="btn btn-outline mb-2 md:mb-0 ml-auto md:ml-0"
-      type="button"
-      id="btn-delete"
-      on:click={() => deleteUser()}>Delete</button
-    >
-  {:else if $isLoading}
-    <span class="loading loading-spinner text-primary mt-6 md:mt-0" id="sign-up-spinner" />
-  {:else}
-    <button class="btn btn-primary mb-2 md:mb-0" type="submit" id="btn-sign-up">Sign Up</button>
-  {/if}
+  <Message
+    messageId="generic-error"
+    message={genericErrorMessage}
+    showMessage={genericError}
+    isError={true}
+  />
+
+  <div class="w-full max-w-lg mx-auto my-4 p-5 mb-2 rounded shadow">
+    {#if $isLoggedIn}
+      <div class="flex flex-col md:flex-row justify-between mb-2">
+        <div class="mb-1 md:mb-0 md:w-1/3 md:pr-2">
+          <button class="btn btn-primary w-full" type="submit" id="btn-save">Save</button>
+        </div>
+        <div class="mb-1 md:mb-0 md:w-1/3 md:px-1">
+          <button
+            class="btn btn-outline w-full"
+            type="button"
+            id="btn-log-out"
+            on:click={() => logOut()}
+          >
+            Log Out
+          </button>
+        </div>
+        <div class="mb-1 md:mb-0 md:w-1/3 md:pl-2">
+          <button
+            class="btn btn-outline w-full"
+            type="button"
+            id="btn-delete"
+            on:click={() => deleteUser()}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    {:else if $isLoading}
+      <span class="loading loading-spinner text-primary mt-6 md:mt-0" id="sign-up-spinner" />
+    {:else}
+      <button class="btn btn-primary w-full md:w-auto" type="submit" id="btn-sign-up"
+        >Sign Up</button
+      >
+    {/if}
+  </div>
 </div>
 
 <style>
