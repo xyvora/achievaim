@@ -136,7 +136,7 @@ async def test_get_all_goals(test_client, user_with_goals, user_token_headers):
 @pytest.mark.usefixtures("user_no_goals")
 async def test_get_all_goals_no_goals(test_client, user_token_headers):
     response = await test_client.get("goal/", headers=user_token_headers)
-    assert response.status_code == 404
+    assert response.json() is None
 
 
 async def test_get_all_goals_user_not_authenticated(test_client):

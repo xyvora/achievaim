@@ -10,6 +10,7 @@ export type { GoalCreate } from './models/GoalCreate';
 export type { GoalInfo } from './models/GoalInfo';
 export type { GoalInput } from './models/GoalInput';
 export type { GoalOutput } from './models/GoalOutput';
+export { GoalStatus } from './models/GoalStatus';
 export type { GoalSuggestionCreate } from './models/GoalSuggestionCreate';
 export type { HTTPValidationError } from './models/HTTPValidationError';
 export type { PasswordReset } from './models/PasswordReset';

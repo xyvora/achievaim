@@ -11,7 +11,7 @@ from app.core.config import config
 from app.core.security import get_password_hash
 from app.db import init_db
 from app.main import app
-from app.models.user import User
+from app.models.user import GoalStatus, User
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -67,6 +67,7 @@ def user_data():
                 "days_of_week": None,
                 "time_of_day": None,
                 "progress": 41.0,
+                "status": GoalStatus.ACTIVE,
             },
             {
                 "id": str(uuid4()),
@@ -88,6 +89,7 @@ def user_data():
                 },
                 "time_of_day": "14:41",
                 "progress": 42.0,
+                "status": GoalStatus.ACTIVE,
             },
         ],
     }

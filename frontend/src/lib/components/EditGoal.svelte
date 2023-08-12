@@ -1,6 +1,8 @@
 <script lang="ts">
-  // import axios from 'axios';
+  import { page } from '$app/stores';
   import { onMount, createEventDispatcher } from 'svelte';
+
+  const goalId = $page.url.searchParams.get('id');
 
   let daysOfWeek = [
     { name: 'Monday', selected: false },

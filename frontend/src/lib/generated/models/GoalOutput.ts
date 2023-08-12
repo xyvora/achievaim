@@ -4,6 +4,7 @@
 /* eslint-disable */
 
 import type { DaysOfWeekOutput } from './DaysOfWeekOutput';
+import type { GoalStatus } from './GoalStatus';
 
 export type GoalOutput = {
   goal: string;
@@ -16,5 +17,6 @@ export type GoalOutput = {
   days_of_week: DaysOfWeekOutput | null;
   time_of_day: string | null;
   progress: number | null;
+  status: GoalStatus;
   id: string;
 };

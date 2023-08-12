@@ -1,10 +1,16 @@
 from datetime import datetime
+from enum import Enum
 
 from beanie import Document
 from pydantic import BaseModel, Field, field_validator
 from pymongo import ASCENDING, IndexModel
 
 from app.models.object_id import ObjectIdStr
+
+
+class GoalStatus(str, Enum):
+    ACTIVE = "active"
+    COMPLTED = "completed"
 
 
 class DaysOfWeek(BaseModel):
@@ -28,6 +34,7 @@ class _GoalBase(BaseModel):
     days_of_week: DaysOfWeek | None = None
     time_of_day: str | None = None
     progress: float | None = None
+    status: GoalStatus = GoalStatus.ACTIVE
 
     @field_validator("time_of_day")
     @classmethod
@@ -72,6 +79,7 @@ class Goal(_GoalBase):
             "days_of_week": "$days_of_week",
             "time_of_day": "$time_of_day",
             "progress": "$prograss",
+            "status": "$status",
         }
 
 

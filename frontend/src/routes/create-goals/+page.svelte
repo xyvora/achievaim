@@ -4,7 +4,7 @@
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
   import Message from '$lib/components/Message.svelte';
   import { createGoal } from '$lib/api';
-  import { setToast } from '$lib/stores/stores';
+  import { goals, setToast } from '$lib/stores/stores';
 
   let goal: GoalCreate = {
     days_of_week: {
@@ -45,7 +45,8 @@
     }
 
     try {
-      await createGoal(goal);
+      const response = await createGoal(goal);
+      goals.set(response);
       await setToast('Goal successfully saved, returning home.');
       goto('/');
     } catch (error) {
