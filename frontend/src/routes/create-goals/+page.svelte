@@ -1,9 +1,9 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import type { DaysOfWeekInput, GoalCreate } from '$lib/generated';
+  import type { DaysOfWeekInput, GoalCreate, GoalInfo, GoalSuggestionCreate } from '$lib/generated';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
   import Message from '$lib/components/Message.svelte';
-  import { createGoal } from '$lib/api';
+  import { createGoal, createOpenAiSuggestion } from '$lib/api';
   import { goals, setToast } from '$lib/stores/stores';
 
   let goal: GoalCreate = {
@@ -20,6 +20,11 @@
 
   let selectAll = false;
   let goalError = false;
+  let specificLocked = false;
+  let measurableLocked = false;
+  let achievableLocked = false;
+  let relevantLocked = false;
+  let timeBoundLocked = false;
 
   const toggleAll = () => {
     selectAll = !selectAll;
@@ -56,13 +61,53 @@
 
   let loadingGenerate = false;
 
-  function handleClick() {
+  async function handleGenerate() {
     loadingGenerate = true;
+    goalError = false;
 
-    // Simulate an async operation
-    setTimeout(() => {
-      loadingGenerate = false;
-    }, 2000);
+    if (!goal.goal) {
+      goalError = true;
+    }
+
+    if (goalError) {
+      return;
+    }
+
+    let goalSuggestionCreate: GoalSuggestionCreate = { goal: goal.goal };
+    if (goal.suggestion) {
+      const specific: GoalInfo = { info: goal.suggestion, locked: specificLocked };
+      goalSuggestionCreate.suggestion = specific;
+    }
+    if (goal.measurable) {
+      const measurable: GoalInfo = { info: goal.measurable, locked: measurableLocked };
+      goalSuggestionCreate.measurable = measurable;
+    }
+    if (goal.achievable) {
+      const achievable: GoalInfo = { info: goal.achievable, locked: achievableLocked };
+      goalSuggestionCreate.achievable = achievable;
+    }
+    if (goal.relevant) {
+      const relevant: GoalInfo = { info: goal.relevant, locked: relevantLocked };
+      goalSuggestionCreate.relevant = relevant;
+    }
+    if (goal.time_bound) {
+      const timeBound: GoalInfo = { info: goal.time_bound, locked: timeBoundLocked };
+      goalSuggestionCreate.time_bound = timeBound;
+    }
+
+    try {
+      const suggestion = await createOpenAiSuggestion(goalSuggestionCreate);
+      goal.goal = suggestion.goal;
+      goal.specific = suggestion.specific;
+      goal.measurable = suggestion.measurable;
+      goal.achievable = suggestion.achievable;
+      goal.relevant = suggestion.relevant;
+      goal.time_bound = suggestion.time_bound;
+    } catch (error) {
+      console.log(error);
+    }
+
+    loadingGenerate = false;
   }
 </script>
 
@@ -118,7 +163,7 @@
       />
 
       <div class="flex flex-col mt-3 items-left">
-        <button id="generate" class="btn rounded-xl btn-primary" on:click={handleClick}
+        <button id="generate" class="btn rounded-xl btn-primary" on:click={handleGenerate}
           >Generate</button
         >
         {#if loadingGenerate}
@@ -142,7 +187,7 @@
         <label
           class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
         >
-          <input type="checkbox" class="toggle toggle-primary" />
+          <input type="checkbox" class="toggle toggle-primary" bind:checked={specificLocked} />
           <div class="dropdown dropdown-end">
             <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
               <svg
@@ -187,7 +232,7 @@
         <label
           class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
         >
-          <input type="checkbox" class="toggle toggle-primary" />
+          <input type="checkbox" class="toggle toggle-primary" bind:checked={measurableLocked} />
           <div class="dropdown dropdown-end">
             <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
               <svg
@@ -219,19 +264,19 @@
 
     <!-- Attainable card -->
     <div class="flex flex-col w-full p-4 card card-body">
-      <h2 class="mb-2 card-title">Attainable</h2>
+      <h2 class="mb-2 card-title">Achievable</h2>
       <div class="flex flex-col w-full md:flex-row">
         <input
-          id="attainable"
+          id="achievable"
           class="flex-grow w-full px-3 py-2 mb-2 leading-tight border shadow appearance-none rounded-xl focus:outline-none focus:shadow-outline md:mb-0"
           type="text"
-          placeholder="AchievAIm's Attainable suggestion. e.g. Find enjoyable activities."
-          bind:value={goal.attainable}
+          placeholder="AchievAIm's Achievable suggestion. e.g. Find enjoyable activities."
+          bind:value={goal.achievable}
         />
         <label
           class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
         >
-          <input type="checkbox" class="toggle toggle-primary" />
+          <input type="checkbox" class="toggle toggle-primary" bind:checked={achievableLocked} />
           <div class="dropdown dropdown-end">
             <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
               <svg
@@ -275,7 +320,7 @@
         <label
           class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
         >
-          <input type="checkbox" class="toggle toggle-primary" />
+          <input type="checkbox" class="toggle toggle-primary" bind:checked={relevantLocked} />
           <div class="dropdown dropdown-end">
             <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
               <svg
@@ -319,7 +364,7 @@
         <label
           class="flex items-center justify-end w-full mt-2 cursor-pointer label md:ml-2 md:mt-0 md:w-auto"
         >
-          <input type="checkbox" class="toggle toggle-primary" />
+          <input type="checkbox" class="toggle toggle-primary" bind:checked={timeBoundLocked} />
           <div class="dropdown dropdown-end">
             <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
               <svg

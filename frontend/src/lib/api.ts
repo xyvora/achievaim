@@ -4,7 +4,9 @@ import { axiosInstance } from '$lib/axios-config';
 import type {
   GoalOutput,
   GoalCreate,
+  GoalSuggestionCreate,
   PasswordReset,
+  SmartGoal,
   UserCreate,
   UserNoPassword,
   UserUpdateMe,
@@ -29,6 +31,21 @@ async function authHeaders(): Promise<AxiosRequestConfig<any>> {
 
   throw new Error('No access token found');
 }
+
+export const createOpenAiSuggestion = async (payload: GoalSuggestionCreate): Promise<SmartGoal> => {
+  const headers = await authHeaders();
+  // Give a long timeout here becausee OpenAI is SLOW
+  const response = await axiosInstance.post('/goal/openai-goal', payload, {
+    ...headers,
+    timeout: 30000,
+  });
+
+  if (response.status === 200) {
+    return response.data;
+  }
+
+  throw new Error(response.statusText);
+};
 
 export const createGoal = async (payload: GoalCreate): Promise<GoalOutput[]> => {
   const headers = await authHeaders();
