@@ -143,9 +143,6 @@ jobs:
         run: docker load --input /tmp/backend.tar
       - name: Install just
         uses: taiki-e/install-action@just
-      - name: Env file
-        # Dummy .env file to make docker compose happy
-        run: touch .env
       - name: Start Containers
         run: just api-ci
       - name: Setup node
