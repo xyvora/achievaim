@@ -27,7 +27,7 @@ class _GoalBase(BaseModel):
     goal: str | None = None
     specific: str | None = None
     measurable: str | None = None
-    attainable: str | None = None
+    achievable: str | None = None
     relevant: str | None = None
     time_bound: str | None = None
     date_for_achievement: datetime | None = None
@@ -72,7 +72,7 @@ class Goal(_GoalBase):
             "goal": "$goal",
             "specific": "$specific",
             "measurable": "$measurable",
-            "attainable": "$attainable",
+            "achievable": "$achievable",
             "relevant": "$relevant",
             "time_bound": "$time_bound",
             "date_for_achievement": "$date_for_achievement",

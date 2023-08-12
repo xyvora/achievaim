@@ -99,17 +99,17 @@
         </figure>
       </div>
 
-      <!-- Attainable card -->
+      <!-- achievable card -->
       <div class="card w-full">
         <figure>
           <figcaption class="p-4 card-body flex flex-col">
-            <h2 class="card-title mb-2">Attainable</h2>
+            <h2 class="card-title mb-2">achievable</h2>
             <div class="flex flex-col md:flex-row w-full">
               <div
                 class="border rounded-xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline flex-grow mb-2 md:mb-0"
               >
-                {#if goal.attainable}
-                  {goal.attainable}
+                {#if goal.achievable}
+                  {goal.achievable}
                 {:else}
                   Not set
                 {/if}

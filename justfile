@@ -1,5 +1,5 @@
 @api: && docker-stop
-  -docker compose up backend db --build
+  -docker compose --env-file .env up backend db --build
 
 @api-ci:
   docker compose -f docker-compose-testing.yml up -d backend db

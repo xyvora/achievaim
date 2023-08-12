@@ -120,20 +120,20 @@
         </figure>
       </div>
 
-      <!-- Attainable card -->
+      <!-- achievable card -->
       <div class="card">
         <figure>
           <figcaption class="p-4 card-body">
-            <h2 class="card-title">Attainable</h2>
+            <h2 class="card-title">Achievable</h2>
             <input
-              id="attainable"
+              id="achievable"
               class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
-              placeholder="AchievAIm's Attainable suggestion"
-              bind:value={goal.attainable}
+              placeholder="AchievAIm's achievable suggestion"
+              bind:value={goal.achievable}
             />
             <div class="mt-3">
-              <button class="btn btn-primary">Keep Attainable Suggestion</button>
+              <button class="btn btn-primary">Keep Achievable Suggestion</button>
             </div>
           </figcaption>
         </figure>
