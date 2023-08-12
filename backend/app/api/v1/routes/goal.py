@@ -104,16 +104,10 @@ async def delete_goal_by_name(goal_name: str, current_user: CurrentUser) -> None
 
 
 @router.get("/")
-async def get_user_goals(current_user: CurrentUser) -> list[Goal]:
+async def get_user_goals(current_user: CurrentUser) -> list[Goal] | None:
     """Get goals for a user."""
     logger.info("Getting goals for user %s", current_user.id)
     goals = await get_goals_by_user_id(ObjectId(current_user.id))
-
-    if not goals:
-        logger.info("No goals found for user %s", current_user.id)
-        raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND, detail=f"No goals found for user {current_user.id}"
-        )
 
     return goals
 

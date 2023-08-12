@@ -1,6 +1,8 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
+import { getGoals } from '$lib/api';
 import type { AccessToken } from '$lib/types';
+import type { GoalOutput } from '$lib/generated';
 
 const getToken = (): AccessToken | null => {
   if (!browser) {
@@ -70,4 +72,15 @@ export async function setToast(message: string, timeout = 5000) {
   showToast.set(true);
   await delay(timeout);
   showToast.set(false);
+}
+
+export const goals = writable<GoalOutput[] | null>(null);
+
+goals.subscribe((value: GoalOutput[] | null) => {
+  return value;
+});
+
+export async function loadGoals() {
+  const goalInfo = await getGoals();
+  goals.set(goalInfo);
 }

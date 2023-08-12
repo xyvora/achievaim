@@ -28,6 +28,7 @@ test('password is required', async ({ page }) => {
 test('end to end sign in', async ({ page }) => {
   const userName = uuidv4();
   const password = 'mypassword';
+  const goal = 'Some Goal';
 
   await page.goto('/');
   await expect(
@@ -57,8 +58,15 @@ test('end to end sign in', async ({ page }) => {
   await page.locator('#login-button').click();
   await expect(page).toHaveURL('/');
   await expect(page.locator('#login-button')).not.toBeVisible();
-  await expect(page.getByLabel('edit-goal').first()).toBeVisible();
+  await expect(page.getByText('No active goals')).toBeVisible();
   await expect(page.getByLabel('account settings')).toBeVisible();
+  await page.getByLabel('create goal').click();
+  await expect(page).toHaveURL('/create-goals');
+  await page.locator('#goal').fill(goal);
+  await page.locator('#save-goal-button').click();
+  await expect(page).toHaveURL('/', { timeout: 10000 });
+  await expect(page.getByText(goal)).toBeVisible();
+
   await page.getByLabel('account settings').click();
   await expect(page.locator('#btn-delete')).toBeVisible();
   await page.locator('#btn-delete').click();

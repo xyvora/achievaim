@@ -30,7 +30,7 @@ async function authHeaders(): Promise<AxiosRequestConfig<any>> {
   throw new Error('No access token found');
 }
 
-export const createGoal = async (payload: GoalCreate): Promise<GoalOutput> => {
+export const createGoal = async (payload: GoalCreate): Promise<GoalOutput[]> => {
   const headers = await authHeaders();
   const response = await axiosInstance.post('/goal', payload, headers);
 
@@ -65,6 +65,18 @@ export const deleteMe = async () => {
 export const forgotPassword = async (payload: PasswordReset): Promise<UserNoPassword> => {
   // TODO: Better handle errors
   const response = await axiosInstance.patch('/user/forgot-password', payload);
+
+  if (response.status === 200) {
+    return response.data;
+  } else {
+    throw new Error(response.statusText);
+  }
+};
+
+export const getGoals = async (): Promise<GoalOutput[] | null> => {
+  // TODO: Better handle errors
+  const headers = await authHeaders();
+  const response = await axiosInstance.get('/goal', headers);
 
   if (response.status === 200) {
     return response.data;
