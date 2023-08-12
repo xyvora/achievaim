@@ -5,7 +5,7 @@
   import type { UserCreate, UserUpdateMe } from '$lib/generated';
   import type { AccessToken, UserLogin } from '$lib/types';
   import { LoginError } from '$lib/errors';
-  import { isLoading, isLoggedIn, accessToken } from '$lib/stores/stores';
+  import { accessToken, isLoading, isLoggedIn, setToast } from '$lib/stores/stores';
   import Input from '$lib/components/Input.svelte';
   import Message from '$lib/components/Message.svelte';
 
@@ -195,6 +195,7 @@
             return;
           }
         }
+        setToast('Account successfully created.');
         goto('/account-settings');
       } else {
         genericError = true;

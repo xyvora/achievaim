@@ -74,6 +74,7 @@ test('end to end signup', async ({ page }) => {
   await page.locator('#password').fill(password);
   await page.locator('#verify-password').fill(password);
   await page.locator('#btn-sign-up').click();
+  await expect(page.locator('#toast-message')).toBeVisible();
   await expect(page.locator('#btn-sign-up')).not.toBeVisible();
   await expect(page.locator('#btn-log-out')).toBeVisible();
   await expect(page.locator('#btn-delete')).toBeVisible();
