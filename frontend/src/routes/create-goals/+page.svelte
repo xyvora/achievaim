@@ -67,16 +67,14 @@
 
     if (!goal.goal) {
       goalError = true;
-    }
-
-    if (goalError) {
       return;
     }
 
     let goalSuggestionCreate: GoalSuggestionCreate = { goal: goal.goal };
-    if (goal.suggestion) {
-      const specific: GoalInfo = { info: goal.suggestion, locked: specificLocked };
-      goalSuggestionCreate.suggestion = specific;
+
+    if (goal.specific) {
+      const specific: GoalInfo = { info: goal.specific, locked: specificLocked };
+      goalSuggestionCreate.specific = specific;
     }
     if (goal.measurable) {
       const measurable: GoalInfo = { info: goal.measurable, locked: measurableLocked };
@@ -262,7 +260,7 @@
       </div>
     </div>
 
-    <!-- Attainable card -->
+    <!-- achievable card -->
     <div class="flex flex-col w-full p-4 card card-body">
       <h2 class="mb-2 card-title">Achievable</h2>
       <div class="flex flex-col w-full md:flex-row">

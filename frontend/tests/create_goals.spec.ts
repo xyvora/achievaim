@@ -20,7 +20,7 @@ test('end to end create goal', async ({ page }) => {
   const goal = 'my goal';
   const specific = 'specific';
   const measurable = 'measurable';
-  const attainable = 'attainable';
+  const achievable = 'achievable';
   const relevant = 'relevant';
   const timeBound = 'time bound';
 
@@ -49,13 +49,13 @@ test('end to end create goal', async ({ page }) => {
   await expect(page.locator('#goal')).toBeVisible();
   await expect(page.locator('#specific')).toBeVisible();
   await expect(page.locator('#measurable')).toBeVisible();
-  await expect(page.locator('#attainable')).toBeVisible();
+  await expect(page.locator('#achievable')).toBeVisible();
   await expect(page.locator('#relevant')).toBeVisible();
   await expect(page.locator('#time-bound')).toBeVisible();
   await page.locator('#goal').fill(goal);
   await page.locator('#specific').fill(specific);
   await page.locator('#measurable').fill(measurable);
-  await page.locator('#attainable').fill(attainable);
+  await page.locator('#achievable').fill(achievable);
   await page.locator('#relevant').fill(relevant);
   await page.locator('#time-bound').fill(timeBound);
   await page.locator('#save-goal-button').click();

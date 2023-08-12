@@ -140,13 +140,13 @@
       </figure>
     </div>
 
-    <!-- Attainable card -->
+    <!-- achievable card -->
     <div class="card bordered">
       <figure>
         <figcaption class="p-4 card-body">
-          <h2 class="card-title">Attainable</h2>
-          <p id="attainable" class="text-gray-600" contenteditable="true">
-            SmartGoalAI's Attainable suggestion
+          <h2 class="card-title">achievable</h2>
+          <p id="achievable" class="text-gray-600" contenteditable="true">
+            SmartGoalAI's achievable suggestion
           </p>
           <div class="mt-3">
             <button on:click={regenerate} class="btn btn-primary">Regenerate</button>

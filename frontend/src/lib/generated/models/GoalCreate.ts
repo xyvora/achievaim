@@ -10,7 +10,7 @@ export type GoalCreate = {
   goal?: string | null;
   specific?: string | null;
   measurable?: string | null;
-  attainable?: string | null;
+  achievable?: string | null;
   relevant?: string | null;
   time_bound?: string | null;
   date_for_achievement?: string | null;
