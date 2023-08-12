@@ -2,7 +2,8 @@
   import { page } from '$app/stores';
   import { onMount, createEventDispatcher } from 'svelte';
 
-  const goalId = $page.url.searchParams.get('id');
+  // NOTE: goalId will be used to get the goal to edit once this is setup
+  // const goalId = $page.url.searchParams.get('id');
 
   let daysOfWeek = [
     { name: 'Monday', selected: false },
