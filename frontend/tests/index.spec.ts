@@ -66,6 +66,8 @@ test('end to end sign in', async ({ page }) => {
   await page.locator('#save-goal-button').click();
   await expect(page).toHaveURL('/', { timeout: 10000 });
   await expect(page.getByText(goal)).toBeVisible();
+  await page.locator('.collapse-title').first().click();
+  await expect(page.getByRole('heading', { name: 'Specific' })).toBeVisible();
 
   await page.getByLabel('account settings').click();
   await expect(page.locator('#btn-delete')).toBeVisible();
