@@ -52,7 +52,7 @@
     try {
       const response = await createGoal(goal);
       goals.set(response);
-      await setToast('Goal successfully saved, returning home.');
+      setToast('Goal successfully saved.');
       goto('/');
     } catch (error) {
       console.log(error);
