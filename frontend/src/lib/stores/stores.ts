@@ -63,15 +63,12 @@ toastMessage.subscribe((value: string) => {
   return value;
 });
 
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-export async function setToast(message: string, timeout = 5000) {
+export function setToast(message: string, timeout = 5000) {
   toastMessage.set(message);
   showToast.set(true);
-  await delay(timeout);
-  showToast.set(false);
+  setTimeout(() => {
+    showToast.set(false);
+  }, timeout);
 }
 
 export const goals = writable<GoalOutput[] | null>(null);
