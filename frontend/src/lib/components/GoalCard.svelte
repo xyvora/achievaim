@@ -6,6 +6,7 @@
 </script>
 
 <div
+  tabindex="-1"
   class="collapse md:ml-3 mb-3 bg-primary text-primary-content focus:bg-secondary focus:text-secondary-content"
 >
   <div class="collapse-title">
