@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  // import { page } from '$app/stores';
   import { onMount, createEventDispatcher } from 'svelte';
 
   // NOTE: goalId will be used to get the goal to edit once this is setup
