@@ -1,19 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { v4 as uuidv4 } from 'uuid';
 
-test('page loads', async ({ page }) => {
-  await page.goto('/create-goals');
-  await expect(page.locator('#navbar')).toBeVisible();
-});
-
-test('goal is required', async ({ page }) => {
-  await page.goto('/create-goals');
-  await expect(page.locator('#goal')).toBeVisible();
-  await page.locator('#save-goal-button').click();
-  await expect(page.locator('#goal-error')).toBeVisible();
-});
-
-test('end to end create goal', async ({ page }) => {
+test('end to end edit goal', async ({ page }) => {
   const userName = uuidv4();
   const password = 'mypassword';
   const securityAnswer = 'my answer';
