@@ -146,6 +146,18 @@ export const login = async (loginInfo: UserLogin): Promise<AccessToken> => {
   }
 };
 
+export const updateGoal = async (payload: GoalOutput): Promise<GoalOutput[]> => {
+  // TODO: Better handle errors
+  const headers = await authHeaders();
+  const response = await axiosInstance.put('/goal', payload, headers);
+
+  if (response.status === 200) {
+    return response.data;
+  } else {
+    throw new Error(response.statusText);
+  }
+};
+
 export const updateMe = async (payload: UserUpdateMe): Promise<UserNoPassword> => {
   // TODO: Better handle errors
   const headers = await authHeaders();
