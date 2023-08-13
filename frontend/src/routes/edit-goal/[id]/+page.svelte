@@ -2,6 +2,7 @@
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import type { DaysOfWeekInput, GoalInfo, GoalOutput, GoalSuggestionCreate } from '$lib/generated';
+  import { GoalStatus } from '$lib/generated';
   import type { PageData } from './$types';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
   import Message from '$lib/components/Message.svelte';
@@ -56,6 +57,8 @@
       setToast('Goal was not found.');
       goto('/');
       return;
+    } else {
+      goal.status = isComplete ? GoalStatus.COMPLETED : GoalStatus.ACTIVE;
     }
 
     if (!goal.goal) {
@@ -65,9 +68,6 @@
     if (goalError) {
       return;
     }
-
-    goal.status = isComplete ? 'completed' : 'active';
-    console.log(goal.status);
 
     try {
       const response = await updateGoal(goal);
@@ -132,7 +132,9 @@
   }
 
   onMount(() => {
-    isComplete = goal.status === 'completed' ? true : false;
+    if (goal !== undefined) {
+      isComplete = goal.status === GoalStatus.COMPLETED ? true : false;
+    }
   });
 </script>
 
