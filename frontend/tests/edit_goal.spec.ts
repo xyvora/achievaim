@@ -76,7 +76,7 @@ test('end to end edit goal', async ({ page }) => {
   await expect(page.getByText(goalUpdate)).toBeVisible();
 
   await page
-    .getByRole('figure', { name: `edit-goal ${goal}` })
+    .getByRole('figure', { name: `edit-goal ${goalUpdate}` })
     .getByLabel('edit-goal')
     .click();
   await page.locator('#delete-goal-button').click();
