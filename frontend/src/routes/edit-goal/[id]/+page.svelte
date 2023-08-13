@@ -6,7 +6,7 @@
   import type { PageData } from './$types';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
   import Message from '$lib/components/Message.svelte';
-  import { createOpenAiSuggestion, updateGoal } from '$lib/api';
+  import { createOpenAiSuggestion, deleteGoal, updateGoal } from '$lib/api';
   import { goals, setToast } from '$lib/stores/stores';
 
   // Have I mentioned I hate TypeScript? There is a ton of unnecessary redundant code in this
@@ -75,6 +75,16 @@
       setToast('Goal successfully updated.');
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async function handleDelete() {
+    try {
+      await deleteGoal(data.goalId);
+      setToast('Goal successfully deleted.');
+      goto('/');
+    } catch (e) {
+      console.log(e);
     }
   }
 
@@ -586,6 +596,11 @@
         <div class="flex flex-col mt-3 items-left">
           <button class="btn rounded-xl btn-primary" id="save-goal-button" on:click={handleSave}
             >Save Smart Goal</button
+          >
+        </div>
+        <div class="flex flex-col mt-3 items-left">
+          <button class="btn rounded-xl btn-primary" id="delete-goal-button" on:click={handleDelete}
+            >Delete Smart Goal</button
           >
         </div>
       </div>
