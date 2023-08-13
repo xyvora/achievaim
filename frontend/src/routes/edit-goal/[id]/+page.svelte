@@ -1,6 +1,8 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { onMount } from 'svelte';
   import type { DaysOfWeekInput, GoalInfo, GoalOutput, GoalSuggestionCreate } from '$lib/generated';
+  import { GoalStatus } from '$lib/generated';
   import type { PageData } from './$types';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
   import Message from '$lib/components/Message.svelte';
@@ -25,6 +27,7 @@
   }
 
   let selectAll = false;
+  let isComplete = false;
   let goalError = false;
   let specificLocked = false;
   let measurableLocked = false;
@@ -54,6 +57,8 @@
       setToast('Goal was not found.');
       goto('/');
       return;
+    } else {
+      goal.status = isComplete ? GoalStatus.COMPLETED : GoalStatus.ACTIVE;
     }
 
     if (!goal.goal) {
@@ -125,6 +130,12 @@
 
     loadingGenerate = false;
   }
+
+  onMount(() => {
+    if (goal !== undefined) {
+      isComplete = goal.status === GoalStatus.COMPLETED ? true : false;
+    }
+  });
 </script>
 
 <div class="page-fade-in">
@@ -558,6 +569,19 @@
               </div>
             </figcaption>
           </figure>
+        </div>
+        <div class="flex flex-col mt-3 items-left">
+          <div class="flex items-center">
+            <label for="completed" class="flex items-center cursor-pointer label">
+              <input
+                type="checkbox"
+                class="toggle toggle-primary"
+                id="completed"
+                bind:checked={isComplete}
+              />
+              <span class="ml-2 text-md">Completed</span>
+            </label>
+          </div>
         </div>
         <div class="flex flex-col mt-3 items-left">
           <button class="btn rounded-xl btn-primary" id="save-goal-button" on:click={handleSave}
