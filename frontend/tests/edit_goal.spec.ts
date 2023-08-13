@@ -70,6 +70,20 @@ test('end to end edit goal', async ({ page }) => {
   await page.locator('#time-bound').fill(timeBound);
   await page.locator('#save-goal-button').click();
   await expect(page.locator('#toast-message')).toBeVisible();
+  await page.getByLabel('home').click();
+  await expect(page).toHaveURL('/');
+  await expect(page.getByText(goal)).not.toBeVisible();
+  await expect(page.getByText(goalUpdate)).toBeVisible();
+
+  await page
+    .getByRole('figure', { name: `edit-goal ${goal}` })
+    .getByLabel('edit-goal')
+    .click();
+  await page.locator('#delete-goal-button').click();
+  await expect(page.locator('#toast-message')).toBeVisible();
+  await page.getByLabel('home').click();
+  await expect(page).toHaveURL('/');
+  await expect(page.getByText(updateGoal)).not.toBeVisible();
 
   await page.getByLabel('account settings').click();
   await expect(page.locator('#btn-delete')).toBeVisible();
