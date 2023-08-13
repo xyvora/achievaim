@@ -83,7 +83,7 @@ test('end to end edit goal', async ({ page }) => {
   await expect(page.locator('#toast-message')).toBeVisible();
   await page.getByLabel('home').click();
   await expect(page).toHaveURL('/');
-  await expect(page.getByText(updateGoal)).not.toBeVisible();
+  await expect(page.getByText(goalUpdate)).not.toBeVisible();
 
   await page.getByLabel('account settings').click();
   await expect(page.locator('#btn-delete')).toBeVisible();
