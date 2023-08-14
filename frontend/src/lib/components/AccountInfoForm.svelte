@@ -230,7 +230,7 @@
 
 <div class="page-fade-in">
   <form on:submit|preventDefault={handleSubmit} class="w-full max-w-lg mx-auto m-3 rounded shadow">
-    <div class="md:flex mb-6">
+    <div class="md:flex m-3">
       <div class="w-full md:w-1/2 md:mr-4 mb-6 md:mb-0">
         <Input
           inputId="first-name"
@@ -253,7 +253,7 @@
       </div>
     </div>
 
-    <div class="md:flex mb-6">
+    <div class="md:flex m-3">
       <div class="w-full md:w-1/2 md:mr-4 mb-6 md:mb-0">
         <Input
           inputId="user-name"
@@ -274,7 +274,7 @@
       </div>
     </div>
 
-    <div class="mb-6">
+    <div class="md:flex m-3">
       <Input
         inputId="security-question-answer"
         labelText="If you could have any superpower, what would it be?*"
@@ -285,7 +285,7 @@
       />
     </div>
 
-    <div class="md:flex mb-6">
+    <div class="md:flex m-3">
       <div class="w-full md:w-1/2 md:mr-4 mb-6 md:mb-0">
         <Input
           inputId="password"

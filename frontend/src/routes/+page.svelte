@@ -191,10 +191,8 @@
     </div>
   {:else}
     <div class="container mx-auto px-4 py-8">
-      <!-- The 'container' class sets a max-width and centers the content horizontally -->
-
       <div class="md:flex md:space-x-4">
-        <!-- Left Column (Cards will appear above each other on smaller screens) -->
+        <!-- Left Column -->
         <div class="md:w-1/2 md:mb-0 mb-4 md:pr-2">
           <h2 class="text-xl font-bold mb-2">Active</h2>
           {#if activeGoals}
@@ -205,10 +203,25 @@
             <div class="card w-full bg-primary">
               <figure>
                 <figcaption class="p-4 card-body flex flex-col">
-                  <div class="flex items-center mb-2">
-                    No active goals. Create one &nbsp; <a href="create-goals" class="text-base-200"
-                      >here</a
+                  <div class="flex text-xl items-center space-x-2">
+                    <span>No active goals. Click the plus button to get SMART goals.</span>
+                    <a
+                      href="create-goals"
+                      class="text-base-200 hover:text-base-100 transition duration-300 flex items-center"
                     >
+                      <svg
+                        class="icon-pulse items-center m-3"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M8 0a8 8 0 100 16A8 8 0 008 0zM4 7h3V4a1 1 0 012 0v3h3a1 1 0 010 2H9v3a1 1 0 01-2 0V9H4a1 1 0 010-2z"
+                        />
+                      </svg>
+                    </a>
                   </div>
                 </figcaption>
               </figure>
@@ -228,7 +241,9 @@
             <div class="card w-full bg-primary">
               <figure>
                 <figcaption class="p-4 card-body flex flex-col">
-                  <div class="flex items-center mb-2">No completed goals</div>
+                  <div class="flex text-xl items-center space-x-2">
+                    <span>No completed goals</span>
+                  </div>
                 </figcaption>
               </figure>
             </div>
@@ -238,3 +253,19 @@
     </div>
   {/if}
 </div>
+
+<style>
+  @keyframes pulse {
+    0%,
+    100% {
+      transform: scale(0.75);
+    }
+    50% {
+      transform: scale(1.25);
+    }
+  }
+
+  .icon-pulse {
+    animation: pulse 4s linear infinite;
+  }
+</style>

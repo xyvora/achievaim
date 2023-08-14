@@ -581,34 +581,66 @@
             </figcaption>
           </figure>
         </div>
-        <div class="flex flex-col mt-3 items-left">
-          <div class="flex items-center">
-            <label for="completed" class="flex items-center cursor-pointer label">
-              <input
-                type="checkbox"
-                class="toggle toggle-primary"
-                id="completed"
-                bind:checked={isComplete}
-              />
-              <span class="ml-2 text-md">Completed</span>
-            </label>
+        <div class="flex flex-col w-full p-4 card card-body">
+          <!-- ... other content ... -->
+          <div class="flex flex-col mt-3 items-left">
+            <div class="flex items-center justify-center">
+              <label class="flex items-center justify-center cursor-pointer label">
+                <input
+                  type="checkbox"
+                  class="toggle toggle-primary"
+                  id="completed"
+                  bind:checked={isComplete}
+                />
+                <span class="ml-2 text-md">Completed</span>
+              </label>
+              <div class="dropdown dropdown-end">
+                <button tabindex="0" class="m-3 btn btn-circle btn-ghost btn-xs text-info">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4 stroke-primary"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <div class="card compact dropdown-content z-[1] bg-base-100 rounded-box w-64">
+                    <div class="text-left card-body text-primary normal-case">
+                      <p>Toggle Right to Complete your Goal! →</p>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="flex flex-col mt-3 items-left">
-          <button class="btn rounded-xl btn-primary" id="save-goal-button" on:click={handleSave}
-            >Save Smart Goal</button
-          >
-        </div>
-        <div class="flex flex-col mt-3 items-left">
-          <button class="btn rounded-xl btn-primary" id="delete-goal-button" on:click={handleDelete}
-            >Delete Smart Goal</button
-          >
         </div>
       </div>
 
-      <div class="flex">
-        <div class="divider" />
+      <div class="flex flex-col mt-3 items-left md:flex-row md:justify-between">
+        <button
+          class="btn rounded-xl btn-primary m-3 md:mb-0"
+          id="save-goal-button"
+          on:click={handleSave}
+        >
+          Save Smart Goal
+        </button>
+        <button
+          class="btn rounded-xl btn-primary m-3 md:mb-0"
+          id="delete-goal-button"
+          on:click={handleDelete}
+        >
+          Delete Smart Goal
+        </button>
       </div>
+    </div>
+
+    <div class="flex">
+      <div class="divider" />
     </div>
   {/if}
 </div>
