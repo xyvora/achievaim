@@ -73,6 +73,7 @@
       const response = await updateGoal(goal);
       goals.set(response);
       setToast('Goal successfully updated.');
+      goto('/');
     } catch (error) {
       console.log(error);
     }
