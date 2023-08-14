@@ -70,7 +70,6 @@ test('end to end edit goal', async ({ page }) => {
   await page.locator('#time-bound').fill(timeBound);
   await page.locator('#save-goal-button').click();
   await expect(page.locator('#toast-message')).toBeVisible();
-  await page.getByLabel('home').click();
   await expect(page).toHaveURL('/');
   await expect(page.getByText(goal)).not.toBeVisible();
   await expect(page.getByText(goalUpdate)).toBeVisible();
