@@ -69,6 +69,7 @@
     }
     try {
       await loadGoals();
+      setActiveCompleted();
     } catch (error) {
       genericError = true;
       genericErrorMessage =
@@ -81,14 +82,7 @@
     isLoading.set(false);
   }
 
-  onMount(async () => {
-    activeGoals = null;
-    completedGoals = null;
-
-    if ($accessToken !== null) {
-      await loadGoals();
-    }
-
+  function setActiveCompleted() {
     if ($goals !== null) {
       for (let goal of $goals) {
         if (goal.status === GoalStatus.ACTIVE) {
@@ -106,6 +100,16 @@
         }
       }
     }
+  }
+
+  onMount(async () => {
+    activeGoals = null;
+    completedGoals = null;
+
+    if ($accessToken !== null) {
+      await loadGoals();
+    }
+    setActiveCompleted();
   });
 </script>
 
