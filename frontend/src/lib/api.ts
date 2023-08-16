@@ -103,13 +103,7 @@ export const forgotPassword = async (payload: PasswordReset): Promise<UserNoPass
 export const getGoals = async (): Promise<GoalOutput[] | null> => {
   // TODO: Better handle errors
   const headers = await authHeaders();
-  const response = await axiosInstance.get('/goal', headers);
-
-  if (response.status === 200) {
-    return response.data;
-  } else {
-    throw new Error(response.statusText);
-  }
+  return await axiosInstance.get('/goal', headers);
 };
 
 export const getMe = async (): Promise<UserNoPassword> => {
@@ -131,29 +125,11 @@ export const login = async (loginInfo: UserLogin): Promise<AccessToken> => {
   const formData = new FormData();
   formData.append('username', loginInfo.userName);
   formData.append('password', loginInfo.password);
-  try {
-    const response = await axiosInstance.post('/login/access-token', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    if (response.status === 200) {
-      return response.data;
-    } else {
-      throw new LoginError(response.statusText);
-    }
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      if (
-        error.response !== undefined &&
-        error.response.data !== undefined &&
-        error.response.data.detail !== undefined
-      ) {
-        throw new LoginError(error.response.data.detail);
-      }
-    }
-    throw error;
-  }
+  return await axiosInstance.post('/login/access-token', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 };
 
 export const updateGoal = async (payload: GoalOutput): Promise<GoalOutput[]> => {
