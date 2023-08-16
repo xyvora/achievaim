@@ -2,7 +2,8 @@
 
 ## Where to start
 
-All contributions, bug reports, bug fixes, documentation improvements, enhancements, and ideas are welcome.
+All contributions, bug reports, bug fixes, documentation improvements, enhancements, and ideas are
+welcome.
 
 The best place to start is to check the [issues](https://github.com/iLevyTate/SMARTGoalPT/issues)
 for something that interests you.
@@ -29,12 +30,13 @@ cd SMARTGoalPT
 git remote add upstream https://github.com/iLevyTate/SMARTGoalPT
 ```
 
-This creates the directory SMARTGoalPT and connects your repository to the upstream (main project) repository.
+This creates the directory SMARTGoalPT and connects your repository to the upstream (main project)
+repository.
 
 ### Working with the code
 
 This project uses Poetry to manage Python dependencies, and Node/NPM for the frontend. If you
-do not already have Poetry installed you will need to install it with the instuctions
+do not already have Poetry installed you will need to install it with the instructions
 [here](https://python-poetry.org/docs/#installation). Node can be installed with the instrustions
 [here](https://nodejs.org/en/download).
 
@@ -83,7 +85,8 @@ To see a full list of `just` commands run `just --list`
 
 SMARTGoalPT uses [ruff](https://github.com/charliermarsh/ruff),
 [Black](https://github.com/psf/black), [mypy](https://mypy.readthedocs.io/en/stable/),
-[prettier](https://prettier.io/), and [eslint](https://eslint.org/) to ensure consistant code formmating.
+[prettier](https://prettier.io/), and [eslint](https://eslint.org/) to ensure consistent code
+formatting.
 
 You can run linting on your code at any time with `just`:
 
@@ -117,7 +120,7 @@ def my_function(argument: str) -> None:
     ...
 
 
-def another_funciton(num: int) -> int:
+def another_function(num: int) -> int:
     return num + 1
 ```
 
@@ -167,7 +170,8 @@ tests are passing before submitting a pull request.
 
 ## Committing your code
 
-Once you have made changes to the code on your branch you can see which files have changed by running:
+Once you have made changes to the code on your branch you can see which files have changed by
+running:
 
 ```sh
 git status
@@ -191,13 +195,13 @@ fix any errors. Once the errors are fixed you can run the same git commit comman
 ## Push your changes
 
 Once your changes are ready and all linting/tests are passing you can push your changes to your
-forked repositry:
+forked repository:
 
 ```sh
 git push origin my-new-feature
 ```
 
-origin is the default name of your remote repositry on GitHub. You can see all of your remote
+origin is the default name of your remote repository on GitHub. You can see all of your remote
 repositories by running:
 
 ```sh
@@ -227,8 +231,8 @@ This request then goes to the repository maintainers, and they will review the c
 ### Updating your pull request
 
 Changes to your code may be needed based on the review of your pull request. If this is the case you
-can make them in your branch, add a new commit to that branch, push it to GitHub, and the pull request
-will be automatically updated. Pushing them to GitHub again is done by:
+can make them in your branch, add a new commit to that branch, push it to GitHub, and the pull
+request will be automatically updated. Pushing them to GitHub again is done by:
 
 ```sh
 git push origin my-new-feature
