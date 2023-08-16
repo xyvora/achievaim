@@ -1,5 +1,4 @@
-import { AxiosError } from 'axios';
-import type { AxiosRequestConfig } from 'axios';
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { axiosInstance } from '$lib/axios-config';
 import type {
   GoalOutput,
@@ -12,7 +11,6 @@ import type {
   UserUpdateMe,
 } from '$lib/generated';
 import type { AccessToken, UserLogin } from '$lib/types';
-import { LoginError } from '$lib/errors';
 import { accessToken } from '$lib/stores/stores';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -125,11 +123,17 @@ export const login = async (loginInfo: UserLogin): Promise<AccessToken> => {
   const formData = new FormData();
   formData.append('username', loginInfo.userName);
   formData.append('password', loginInfo.password);
-  return await axiosInstance.post('/login/access-token', formData, {
+  const response = await axiosInstance.post('/login/access-token', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
   });
+
+  if (response.status === 200) {
+    return response.data;
+  }
+
+  throw response;
 };
 
 export const updateGoal = async (payload: GoalOutput): Promise<GoalOutput[]> => {

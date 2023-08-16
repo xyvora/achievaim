@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { isAxiosError } from 'axios';
   import { onMount } from 'svelte';
   import GoalCard from '$lib/components/GoalCard.svelte';
   import Message from '$lib/components/Message.svelte';
@@ -49,13 +50,10 @@
     }
 
     try {
-      const response = await login(userLogin);
-
-      if (response.status === 200) {
-        accessToken.set(response.data);
-      }
+      const token = await login(userLogin);
+      accessToken.set(token);
     } catch (error) {
-      if (error.response && error.response.status === 400) {
+      if (isAxiosError(error) && error.response && error.response.status === 400) {
         genericErrorMessage = 'Incorrect user name or password';
         genericError = true;
       } else {
@@ -72,7 +70,7 @@
       await loadGoals();
       setActiveCompleted();
     } catch (error) {
-      if (error.response && error.response.status === 403) {
+      if (isAxiosError(error) && error.response && error.response.status === 403) {
         genericErrorMessage =
           'An error occurred trying to connect to the sever. Please try again later.';
         genericError = true;
@@ -121,8 +119,7 @@
         await loadGoals();
         setActiveCompleted();
       } catch (error) {
-        console.log(error);
-        if (error.response && error.response.status === 403) {
+        if (isAxiosError(error) && error.response && error.response.status === 403) {
           genericErrorMessage = 'Please log in again.';
           genericError = true;
         } else {
