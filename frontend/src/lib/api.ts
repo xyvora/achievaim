@@ -99,9 +99,14 @@ export const forgotPassword = async (payload: PasswordReset): Promise<UserNoPass
 };
 
 export const getGoals = async (): Promise<GoalOutput[] | null> => {
-  // TODO: Better handle errors
   const headers = await authHeaders();
-  return await axiosInstance.get('/goal', headers);
+  const response = await axiosInstance.get('/goal', headers);
+
+  if (response.status === 200) {
+    return response.data;
+  }
+
+  throw response;
 };
 
 export const getMe = async (): Promise<UserNoPassword> => {
