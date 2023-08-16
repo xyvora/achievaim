@@ -75,7 +75,7 @@ just install
 Create a .env file in the root directory and provide the necessary environment variables:
 
 ```sh
-API_KEY=<your-openai-api-key>
+OPENAI_API_KEY=<your-openai-api-key>
 ```
 
 Usage
