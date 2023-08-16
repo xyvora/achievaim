@@ -57,7 +57,7 @@ Models (LLMs) to provide personalized goal recommendations and progress tracking
 Clone the repository:
 
 ```sh
-git clone git@github.com:xyzvora/achievaim
+git clone git@github.com:xyvora/achievaim
 ```
 
 Navigate to the project directory:
