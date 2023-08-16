@@ -1,4 +1,4 @@
-import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 import { axiosInstance } from '$lib/axios-config';
 import type {
   GoalOutput,
