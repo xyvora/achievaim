@@ -1,9 +1,10 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
+  import { isAxiosError } from 'axios';
   import { onMount } from 'svelte';
   import GoalCard from '$lib/components/GoalCard.svelte';
   import Message from '$lib/components/Message.svelte';
   import Input from '$lib/components/Input.svelte';
-  import { LoginError } from '$lib/errors';
   import { accessToken, goals, isLoading, isLoggedIn, loadGoals } from '$lib/stores/stores';
   import { login } from '$lib/api';
   import type { GoalOutput } from '$lib/generated';
@@ -52,29 +53,36 @@
       const token = await login(userLogin);
       accessToken.set(token);
     } catch (error) {
-      if (
-        error instanceof LoginError &&
-        error.message !== undefined &&
-        error.message === 'Incorrect user name or password'
-      ) {
-        genericError = true;
+      if (isAxiosError(error) && error.response && error.response.status === 400) {
         genericErrorMessage = 'Incorrect user name or password';
-      } else {
         genericError = true;
+      } else {
         genericErrorMessage =
           'An error occurred trying to connect to the sever. Please try again later.';
+        genericError = true;
       }
+
       isLoading.set(false);
       return;
     }
+
     try {
       await loadGoals();
       setActiveCompleted();
     } catch (error) {
-      genericError = true;
-      genericErrorMessage =
-        'An error occurred trying to connect to the sever. Please try again later.';
-      isLoading.set(false);
+      if (isAxiosError(error) && error.response && error.response.status === 403) {
+        genericErrorMessage =
+          'An error occurred trying to connect to the sever. Please try again later.';
+        genericError = true;
+        accessToken.set(null);
+        isLoading.set(false);
+        goto('/');
+      } else {
+        genericErrorMessage =
+          'An error occurred trying to connect to the sever. Please try again later.';
+        genericError = true;
+      }
+
       return;
     }
     userLogin.userName = '';
@@ -107,9 +115,28 @@
     completedGoals = null;
 
     if ($accessToken !== null) {
-      await loadGoals();
+      try {
+        await loadGoals();
+        setActiveCompleted();
+      } catch (error) {
+        if (isAxiosError(error) && error.response && error.response.status === 403) {
+          genericErrorMessage = 'Please log in again.';
+          genericError = true;
+        } else {
+          genericErrorMessage =
+            'An error occurred trying to connect to the sever. Please try again later.';
+          genericError = true;
+        }
+
+        accessToken.set(null);
+        isLoading.set(false);
+        goto('/');
+        return;
+      }
+      userLogin.userName = '';
+      userLogin.password = '';
+      isLoading.set(false);
     }
-    setActiveCompleted();
   });
 </script>
 
