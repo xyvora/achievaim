@@ -137,7 +137,6 @@
       userLogin.password = '';
       isLoading.set(false);
     }
-    setActiveCompleted();
   });
 </script>
 
