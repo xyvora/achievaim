@@ -1,9 +1,9 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
+  import type { PageData } from './$types';
   import type { DaysOfWeekInput, GoalInfo, GoalOutput, GoalSuggestionCreate } from '$lib/generated';
   import { GoalStatus } from '$lib/generated';
-  import type { PageData } from './$types';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
   import Message from '$lib/components/Message.svelte';
   import { createOpenAiSuggestion, deleteGoal, updateGoal } from '$lib/api';
@@ -143,6 +143,10 @@
   }
 
   onMount(() => {
+    if (!data.isAuthenticated) {
+      goto('/');
+    }
+
     if (goal !== undefined) {
       isComplete = goal.status === GoalStatus.COMPLETED ? true : false;
     }
