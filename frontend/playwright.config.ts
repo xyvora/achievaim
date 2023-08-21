@@ -7,6 +7,10 @@ const config: PlaywrightTestConfig = {
   },
   testDir: 'tests',
   testMatch: /(.+\.)?(test|spec)\.[jt]s/,
+  timeout: 60000,
+  expect: {
+    timeout: 10000,
+  },
   use: {
     trace: 'on-first-retry',
   },

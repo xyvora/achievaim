@@ -38,8 +38,7 @@ test('first name required', async ({ page }) => {
   await page.locator('#password').fill(password);
   await page.locator('#verify-password').fill(password);
   await page.locator('#btn-sign-up').click();
-
-  await page.goto('/account-settings');
+  await expect(page).toHaveURL('/account-settings');
   await page.locator('#first-name').fill('');
   await page.locator('#btn-save').click();
   await expect(page.locator('#first-name-error')).toBeVisible();

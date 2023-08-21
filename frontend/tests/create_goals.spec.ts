@@ -41,6 +41,7 @@ test('goal is required', async ({ page }) => {
 
   await page.goto('/create-goals');
   await expect(page.locator('#goal')).toBeVisible();
+  await expect(page.locator('#save-goal-button')).toBeVisible();
   await page.locator('#save-goal-button').click();
   await expect(page.locator('#goal-error')).toBeVisible();
 });
