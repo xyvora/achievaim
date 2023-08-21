@@ -1,10 +1,20 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+  import type { PageData } from './$types';
   import { goto } from '$app/navigation';
   import type { DaysOfWeekInput, GoalCreate, GoalInfo, GoalSuggestionCreate } from '$lib/generated';
   import DaysOfWeekSelector from '$lib/components/DaysOfWeekSelector.svelte';
   import Message from '$lib/components/Message.svelte';
   import { createGoal, createOpenAiSuggestion } from '$lib/api';
   import { goals, setToast } from '$lib/stores/stores';
+
+  export let data: PageData;
+
+  onMount(() => {
+    if (!data.isAuthenticated) {
+      goto('/');
+    }
+  });
 
   let goal: GoalCreate = {
     days_of_week: {

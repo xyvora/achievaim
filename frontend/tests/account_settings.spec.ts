@@ -82,6 +82,11 @@ test('not logged in buttons', async ({ page }) => {
   await expect(page.locator('#btn-delete')).not.toBeVisible();
 });
 
+test('not logged in', async ({ page }) => {
+  await page.goto('/account-settings');
+  await expect(page).toHaveURL('/');
+});
+
 test('end to end update user info', async ({ page }) => {
   const userName = uuidv4();
   const password = 'mypassword';

@@ -13,6 +13,11 @@ test('goal is required', async ({ page }) => {
   await expect(page.locator('#goal-error')).toBeVisible();
 });
 
+test('not logged in', async ({ page }) => {
+  await page.goto('/create-goals');
+  await expect(page).toHaveURL('/');
+});
+
 test('end to end create goal', async ({ page }) => {
   const userName = uuidv4();
   const password = 'mypassword';

@@ -32,6 +32,21 @@ async function authHeaders(): Promise<AxiosRequestConfig<any>> {
   throw new Error('No access token found');
 }
 
+export const isValidToken = async (): Promise<boolean> => {
+  try {
+    const headers = await authHeaders();
+    const response = await axiosInstance.post('/login/test-token', {}, headers);
+
+    if (response.status === 200) {
+      return true;
+    }
+  } catch (e) {
+    return false;
+  }
+
+  return false;
+};
+
 export const createOpenAiSuggestion = async (payload: GoalSuggestionCreate): Promise<SmartGoal> => {
   const headers = await authHeaders();
   // Give a long timeout here becausee OpenAI is SLOW
