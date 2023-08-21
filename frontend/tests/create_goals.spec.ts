@@ -2,11 +2,43 @@ import { expect, test } from '@playwright/test';
 import { v4 as uuidv4 } from 'uuid';
 
 test('page loads', async ({ page }) => {
+  const userName = uuidv4();
+  const password = 'mypassword';
+
+  await page.goto('/');
+  await expect(
+    page.getByRole('link', { name: 'Are your Goals Smart yet? Sign up here!' }),
+  ).toBeVisible();
+  await page.getByRole('link', { name: 'Are your Goals Smart yet? Sign up here!' }).click();
+  await page.locator('#first-name').fill('Imma');
+  await page.locator('#last-name').fill('User');
+  await page.locator('#user-name').fill(userName);
+  await page.locator('#security-question-answer').fill('my answer');
+  await page.locator('#password').fill(password);
+  await page.locator('#verify-password').fill(password);
+  await page.locator('#btn-sign-up').click();
+
   await page.goto('/create-goals');
   await expect(page.locator('#navbar')).toBeVisible();
 });
 
 test('goal is required', async ({ page }) => {
+  const userName = uuidv4();
+  const password = 'mypassword';
+
+  await page.goto('/');
+  await expect(
+    page.getByRole('link', { name: 'Are your Goals Smart yet? Sign up here!' }),
+  ).toBeVisible();
+  await page.getByRole('link', { name: 'Are your Goals Smart yet? Sign up here!' }).click();
+  await page.locator('#first-name').fill('Imma');
+  await page.locator('#last-name').fill('User');
+  await page.locator('#user-name').fill(userName);
+  await page.locator('#security-question-answer').fill('my answer');
+  await page.locator('#password').fill(password);
+  await page.locator('#verify-password').fill(password);
+  await page.locator('#btn-sign-up').click();
+
   await page.goto('/create-goals');
   await expect(page.locator('#goal')).toBeVisible();
   await page.locator('#save-goal-button').click();
