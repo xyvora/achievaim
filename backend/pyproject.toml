@@ -14,7 +14,7 @@ fastapi = {version = "0.101.1", extras = ["all"]}
 gunicorn = "21.2.0"
 httpx = "0.24.1"
 passlib = "1.7.4"
-pydantic = "2.2.1"
+pydantic = "2.3.0"
 pydantic-settings = "2.0.3"
 pyjwt = "2.8.0"
 
