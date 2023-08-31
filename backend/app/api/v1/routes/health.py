@@ -10,7 +10,9 @@ async def health(mongo_client: MongoClient, _: CurrentAdminUser) -> dict[str, st
     """Check if the servers are up and running."""
     logger.info("Checking MongoDb health")
     try:
-        await mongo_client.server_info()
+        # motor 3.3.0 broke types see: https://www.mongodb.com/community/forums/t/motor-3-3-0-released/241116
+        # and https://jira.mongodb.org/browse/MOTOR-1177
+        await mongo_client.server_info()  # type: ignore[attr-defined]
         return {"db": "healthy"}
     except Exception as e:
         logger.error("%s: %s", type(e).__name__, e)

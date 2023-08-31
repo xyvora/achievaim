@@ -29,7 +29,9 @@ def get_config() -> Settings:
     return config
 
 
-def get_db_client() -> AsyncIOMotorClient:
+# motor 3.3.0 broke types see: https://www.mongodb.com/community/forums/t/motor-3-3-0-released/241116
+# and https://jira.mongodb.org/browse/MOTOR-1177
+def get_db_client() -> AsyncIOMotorClient:  # type: ignore
     return db_client
 
 
@@ -92,4 +94,7 @@ async def get_current_user(token: Annotated[str, Depends(_oauth2_scheme)]) -> Us
 Config = Annotated[Settings, Depends(get_config)]
 CurrentUser = Annotated[UserNoGoals, Depends(get_current_user)]
 CurrentAdminUser = Annotated[UserNoGoals, Depends(get_current_admin_user)]
-MongoClient = Annotated[AsyncIOMotorClient, Depends(get_db_client)]
+
+# motor 3.3.0 broke types see: https://www.mongodb.com/community/forums/t/motor-3-3-0-released/241116
+# and https://jira.mongodb.org/browse/MOTOR-1177
+MongoClient = Annotated[AsyncIOMotorClient, Depends(get_db_client)]  # type: ignore
