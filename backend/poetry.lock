@@ -90,27 +90,26 @@ tests = ["pytest"]
 
 [[package]]
 name = "beanie"
-version = "1.21.0"
+version = "1.22.6"
 description = "Asynchronous Python ODM for MongoDB"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "beanie-1.21.0-py3-none-any.whl", hash = "sha256:180a6d5e854297be2da84689b03509e7dc4f40f00c58a894a17ad40a00630838"},
-    {file = "beanie-1.21.0.tar.gz", hash = "sha256:df1bcac1d5834730d3a1e461814fd0dfa173d91daca047b4d8ddcbf54343b4fd"},
+    {file = "beanie-1.22.6-py3-none-any.whl", hash = "sha256:9721e3b0dc435e5a42b64e58d4f88bb9a447eb94c489de7ceb75854f45ec2a19"},
+    {file = "beanie-1.22.6.tar.gz", hash = "sha256:2b03cfe43ff383526d8ec67a88d8f0e60e251f2631af180c30fb4ac1fb9d900b"},
 ]
 
 [package.dependencies]
 click = ">=7"
-lazy-model = "0.1.0b0"
+lazy-model = "0.2.0"
 motor = ">=2.5.0,<4.0.0"
 pydantic = ">=1.10,<3.0"
 toml = "*"
-typing-extensions = ">=4.7"
 
 [package.extras]
 doc = ["Markdown (>=3.3)", "Pygments (>=2.8.0)", "jinja2 (>=3.0.3)", "mkdocs (>=1.4)", "mkdocs-material (>=9.0)", "pydoc-markdown (>=4.8)"]
 queue = ["beanie-batteries-queue (>=0.2)"]
-test = ["asgi-lifespan (>=1.0.1)", "dnspython (>=2.1.0)", "fastapi (>=0.100)", "flake8 (>=3)", "httpx (>=0.23.0)", "pre-commit (>=2.3.0)", "pydantic-settings (>=2.0)", "pyright (>=0)", "pytest (>=6.0.0)", "pytest-asyncio (>=0.21.0)", "pytest-cov (>=2.8.1)"]
+test = ["asgi-lifespan (>=1.0.1)", "dnspython (>=2.1.0)", "fastapi (>=0.100)", "flake8 (>=3)", "httpx (>=0.23.0)", "pre-commit (>=2.3.0)", "pydantic-extra-types (>=2)", "pydantic-settings (>=2)", "pyright (>=0)", "pytest (>=6.0.0)", "pytest-asyncio (>=0.21.0)", "pytest-cov (>=2.8.1)"]
 
 [[package]]
 name = "black"
@@ -571,13 +570,13 @@ i18n = ["Babel (>=2.7)"]
 
 [[package]]
 name = "lazy-model"
-version = "0.1.0b0"
+version = "0.2.0"
 description = ""
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "lazy-model-0.1.0b0.tar.gz", hash = "sha256:90dd0b26d3033fadc18f697ab9cdd66cdf8e55469f32f2d88efd92610468e2d6"},
-    {file = "lazy_model-0.1.0b0-py3-none-any.whl", hash = "sha256:74406bd54cf96a89b73570d8409b538c660ae4d0bfb4b30bbe46db2658a5937d"},
+    {file = "lazy-model-0.2.0.tar.gz", hash = "sha256:57c0e91e171530c4fca7aebc3ac05a163a85cddd941bf7527cc46c0ddafca47c"},
+    {file = "lazy_model-0.2.0-py3-none-any.whl", hash = "sha256:5a3241775c253e36d9069d236be8378288a93d4fc53805211fd152e04cc9c342"},
 ]
 
 [package.dependencies]
@@ -1642,4 +1641,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "df5a2be95a6483c00ccc6e98693f37c439e425d69b02f64bfcc1ceee69e01802"
+content-hash = "d10a49ef8fa7ae5956939b6af0ca68c4a0b6c17e3e41f10406347ce8f2ec72cd"
