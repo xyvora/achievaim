@@ -10,7 +10,7 @@ readme = "README.md"
 python = "^3.11"
 argon2-cffi = "23.1.0"
 beanie = "1.23.0"
-fastapi = {version = "0.103.2", extras = ["all"]}
+fastapi = {version = "0.104.0", extras = ["all"]}
 gunicorn = "21.2.0"
 httpx = "0.25.0"
 passlib = "1.7.4"
