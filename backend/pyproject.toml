@@ -9,7 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 argon2-cffi = "23.1.0"
-beanie = "1.23.0"
+beanie = "1.23.1"
 fastapi = {version = "0.104.0", extras = ["all"]}
 gunicorn = "21.2.0"
 httpx = "0.25.0"
