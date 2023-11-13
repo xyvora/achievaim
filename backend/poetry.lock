@@ -90,13 +90,13 @@ tests = ["pytest"]
 
 [[package]]
 name = "beanie"
-version = "1.23.1"
+version = "1.23.6"
 description = "Asynchronous Python ODM for MongoDB"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "beanie-1.23.1-py3-none-any.whl", hash = "sha256:d8a397fa08caecbf189743f67d63ddd4b1d75a48e92dce5e4c0d046e29f834c2"},
-    {file = "beanie-1.23.1.tar.gz", hash = "sha256:9dfeef31dede0c2da3b80213521319d7f90e21686cfd163640ba79643570178b"},
+    {file = "beanie-1.23.6-py3-none-any.whl", hash = "sha256:c780e0f951ee40faa688e7b0e56dc963486087c7e3970cd5a3d99cb47703e677"},
+    {file = "beanie-1.23.6.tar.gz", hash = "sha256:9a9a36936188a44dcf16aa8930b450249eaa5c7ebc0edc056ad194bdec3539ca"},
 ]
 
 [package.dependencies]
@@ -1638,4 +1638,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "c35e37596fae19f203776b52da70da788b5fd2676c3024411c4f8aeba7f7378e"
+content-hash = "1374d6233b828a0dd67e08c0996b43dc2cb9ee90137385fc78b035567fc40d2c"
