@@ -21,7 +21,7 @@ jobs:
           outputs: type=docker,dest=/tmp/backend.tar
           push: false
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: backend
           path: /tmp/backend.tar
@@ -162,7 +162,7 @@ jobs:
           just frontend-test-ci
       - name: Upload test results
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: frontend/test-results
