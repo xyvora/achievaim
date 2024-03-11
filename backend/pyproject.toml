@@ -17,7 +17,7 @@ passlib = "1.7.4"
 pydantic = "2.4.2"
 pydantic-settings = "2.0.3"
 pyjwt = "2.8.0"
-uvicorn = {version = "0.24.0.post1", extras = ["standard"]}
+uvicorn = {version = "0.28.0", extras = ["standard"]}
 
 [tool.poetry.group.dev.dependencies]
 black = "23.10.1"
